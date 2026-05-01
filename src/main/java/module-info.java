@@ -2,6 +2,8 @@ module com.modex.modex {
     requires javafx.controls;
     requires javafx.fxml;
 
+    requires org.json;
+
     requires com.almasb.fxgl.all;
 
     opens com.modex.modex to javafx.fxml;

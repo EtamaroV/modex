@@ -1,0 +1,2973 @@
+[
+  {
+    "id": 1,
+    "name_en": "BANGKOK",
+    "name_th": "กรุงเทพมหานคร",
+    "coordinates": {
+      "lat": 13.7278956,
+      "lon": 100.52412349999997
+    },
+    "adjacent": [
+      {
+        "id": 59,
+        "name_en": "SAMUT SAKHON",
+        "name_th": "สมุทรสาคร",
+        "distance_km": 33.62
+      },
+      {
+        "id": 58,
+        "name_en": "NAKHON PATHOM",
+        "name_th": "นครปฐม",
+        "distance_km": 50.93
+      },
+      {
+        "id": 3,
+        "name_en": "NONTHABURI",
+        "name_th": "นนทบุรี",
+        "distance_km": 14.96
+      },
+      {
+        "id": 4,
+        "name_en": "PATHUM THANI",
+        "name_th": "ปทุมธานี",
+        "distance_km": 32.57
+      },
+      {
+        "id": 15,
+        "name_en": "CHACHOENGSAO",
+        "name_th": "ฉะเชิงเทรา",
+        "distance_km": 59.97
+      },
+      {
+        "id": 2,
+        "name_en": "SAMUT PRAKAN",
+        "name_th": "สมุทรปราการ",
+        "distance_km": 16.49
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name_en": "SAMUT PRAKAN",
+    "name_th": "สมุทรปราการ",
+    "coordinates": {
+      "lat": 13.5990961,
+      "lon": 100.59983190000003
+    },
+    "adjacent": [
+      {
+        "id": 15,
+        "name_en": "CHACHOENGSAO",
+        "name_th": "ฉะเชิงเทรา",
+        "distance_km": 52.65
+      },
+      {
+        "id": 1,
+        "name_en": "BANGKOK",
+        "name_th": "กรุงเทพมหานคร",
+        "distance_km": 16.49
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name_en": "NONTHABURI",
+    "name_th": "นนทบุรี",
+    "coordinates": {
+      "lat": 13.8621125,
+      "lon": 100.51435279999998
+    },
+    "adjacent": [
+      {
+        "id": 1,
+        "name_en": "BANGKOK",
+        "name_th": "กรุงเทพมหานคร",
+        "distance_km": 14.96
+      },
+      {
+        "id": 58,
+        "name_en": "NAKHON PATHOM",
+        "name_th": "นครปฐม",
+        "distance_km": 49.05
+      },
+      {
+        "id": 5,
+        "name_en": "PHRA NAKHON SI AYUTTHAYA",
+        "name_th": "พระนครศรีอยุธยา",
+        "distance_km": 54.92
+      },
+      {
+        "id": 4,
+        "name_en": "PATHUM THANI",
+        "name_th": "ปทุมธานี",
+        "distance_km": 17.69
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name_en": "PATHUM THANI",
+    "name_th": "ปทุมธานี",
+    "coordinates": {
+      "lat": 14.0208391,
+      "lon": 100.52502759999993
+    },
+    "adjacent": [
+      {
+        "id": 1,
+        "name_en": "BANGKOK",
+        "name_th": "กรุงเทพมหานคร",
+        "distance_km": 32.57
+      },
+      {
+        "id": 3,
+        "name_en": "NONTHABURI",
+        "name_th": "นนทบุรี",
+        "distance_km": 17.69
+      },
+      {
+        "id": 5,
+        "name_en": "PHRA NAKHON SI AYUTTHAYA",
+        "name_th": "พระนครศรีอยุธยา",
+        "distance_km": 37.26
+      },
+      {
+        "id": 10,
+        "name_en": "SARABURI",
+        "name_th": "สระบุรี",
+        "distance_km": 70.1
+      },
+      {
+        "id": 17,
+        "name_en": "NAKHON NAYOK",
+        "name_th": "นครนายก",
+        "distance_km": 77.03
+      },
+      {
+        "id": 15,
+        "name_en": "CHACHOENGSAO",
+        "name_th": "ฉะเชิงเทรา",
+        "distance_km": 70.09
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name_en": "PHRA NAKHON SI AYUTTHAYA",
+    "name_th": "พระนครศรีอยุธยา",
+    "coordinates": {
+      "lat": 14.3532128,
+      "lon": 100.56895989999998
+    },
+    "adjacent": [
+      {
+        "id": 4,
+        "name_en": "PATHUM THANI",
+        "name_th": "ปทุมธานี",
+        "distance_km": 37.26
+      },
+      {
+        "id": 10,
+        "name_en": "SARABURI",
+        "name_th": "สระบุรี",
+        "distance_km": 41.61
+      },
+      {
+        "id": 7,
+        "name_en": "LOPBURI",
+        "name_th": "ลพบุรี",
+        "distance_km": 50.45
+      },
+      {
+        "id": 6,
+        "name_en": "ANG THONG",
+        "name_th": "อ่างทอง",
+        "distance_km": 29.01
+      },
+      {
+        "id": 57,
+        "name_en": "SUPHAN BURI",
+        "name_th": "สุพรรณบุรี",
+        "distance_km": 50.43
+      },
+      {
+        "id": 58,
+        "name_en": "NAKHON PATHOM",
+        "name_th": "นครปฐม",
+        "distance_km": 80.65
+      },
+      {
+        "id": 3,
+        "name_en": "NONTHABURI",
+        "name_th": "นนทบุรี",
+        "distance_km": 54.92
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name_en": "ANG THONG",
+    "name_th": "อ่างทอง",
+    "coordinates": {
+      "lat": 14.5896054,
+      "lon": 100.45505200000002
+    },
+    "adjacent": [
+      {
+        "id": 57,
+        "name_en": "SUPHAN BURI",
+        "name_th": "สุพรรณบุรี",
+        "distance_km": 38.5
+      },
+      {
+        "id": 5,
+        "name_en": "PHRA NAKHON SI AYUTTHAYA",
+        "name_th": "พระนครศรีอยุธยา",
+        "distance_km": 29.01
+      },
+      {
+        "id": 7,
+        "name_en": "LOPBURI",
+        "name_th": "ลพบุรี",
+        "distance_km": 31.62
+      },
+      {
+        "id": 8,
+        "name_en": "SING BURI",
+        "name_th": "สิงห์บุรี",
+        "distance_km": 34.38
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name_en": "LOPBURI",
+    "name_th": "ลพบุรี",
+    "coordinates": {
+      "lat": 14.7995081,
+      "lon": 100.65337060000002
+    },
+    "adjacent": [
+      {
+        "id": 10,
+        "name_en": "SARABURI",
+        "name_th": "สระบุรี",
+        "distance_km": 40.84
+      },
+      {
+        "id": 19,
+        "name_en": "NAKHON RATCHASIMA",
+        "name_th": "นครราชสีมา",
+        "distance_km": 156.51
+      },
+      {
+        "id": 25,
+        "name_en": "CHAIYAPHUM",
+        "name_th": "ชัยภูมิ",
+        "distance_km": 185.45
+      },
+      {
+        "id": 54,
+        "name_en": "PHETCHABUN",
+        "name_th": "เพชรบูรณ์",
+        "distance_km": 187.92
+      },
+      {
+        "id": 47,
+        "name_en": "NAKHON SAWAN",
+        "name_th": "นครสวรรค์",
+        "distance_km": 114.52
+      },
+      {
+        "id": 8,
+        "name_en": "SING BURI",
+        "name_th": "สิงห์บุรี",
+        "distance_km": 29.5
+      },
+      {
+        "id": 6,
+        "name_en": "ANG THONG",
+        "name_th": "อ่างทอง",
+        "distance_km": 31.62
+      },
+      {
+        "id": 5,
+        "name_en": "PHRA NAKHON SI AYUTTHAYA",
+        "name_th": "พระนครศรีอยุธยา",
+        "distance_km": 50.45
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name_en": "SING BURI",
+    "name_th": "สิงห์บุรี",
+    "coordinates": {
+      "lat": 14.8936253,
+      "lon": 100.39673140000002
+    },
+    "adjacent": [
+      {
+        "id": 6,
+        "name_en": "ANG THONG",
+        "name_th": "อ่างทอง",
+        "distance_km": 34.38
+      },
+      {
+        "id": 7,
+        "name_en": "LOPBURI",
+        "name_th": "ลพบุรี",
+        "distance_km": 29.5
+      },
+      {
+        "id": 47,
+        "name_en": "NAKHON SAWAN",
+        "name_th": "นครสวรรค์",
+        "distance_km": 93.63
+      },
+      {
+        "id": 9,
+        "name_en": "CHAI NAT",
+        "name_th": "ชัยนาท",
+        "distance_km": 43.61
+      },
+      {
+        "id": 57,
+        "name_en": "SUPHAN BURI",
+        "name_th": "สุพรรณบุรี",
+        "distance_km": 55.43
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name_en": "CHAI NAT",
+    "name_th": "ชัยนาท",
+    "coordinates": {
+      "lat": 15.1851971,
+      "lon": 100.12512500000003
+    },
+    "adjacent": [
+      {
+        "id": 8,
+        "name_en": "SING BURI",
+        "name_th": "สิงห์บุรี",
+        "distance_km": 43.61
+      },
+      {
+        "id": 47,
+        "name_en": "NAKHON SAWAN",
+        "name_th": "นครสวรรค์",
+        "distance_km": 56.47
+      },
+      {
+        "id": 48,
+        "name_en": "UTHAI THANI",
+        "name_th": "อุทัยธานี",
+        "distance_km": 24.55
+      },
+      {
+        "id": 57,
+        "name_en": "SUPHAN BURI",
+        "name_th": "สุพรรณบุรี",
+        "distance_km": 79.03
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name_en": "SARABURI",
+    "name_th": "สระบุรี",
+    "coordinates": {
+      "lat": 14.5289154,
+      "lon": 100.91014210000003
+    },
+    "adjacent": [
+      {
+        "id": 17,
+        "name_en": "NAKHON NAYOK",
+        "name_th": "นครนายก",
+        "distance_km": 48.44
+      },
+      {
+        "id": 19,
+        "name_en": "NAKHON RATCHASIMA",
+        "name_th": "นครราชสีมา",
+        "distance_km": 137.2
+      },
+      {
+        "id": 7,
+        "name_en": "LOPBURI",
+        "name_th": "ลพบุรี",
+        "distance_km": 40.84
+      },
+      {
+        "id": 5,
+        "name_en": "PHRA NAKHON SI AYUTTHAYA",
+        "name_th": "พระนครศรีอยุธยา",
+        "distance_km": 41.61
+      },
+      {
+        "id": 4,
+        "name_en": "PATHUM THANI",
+        "name_th": "ปทุมธานี",
+        "distance_km": 70.1
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "name_en": "CHON BURI",
+    "name_th": "ชลบุรี",
+    "coordinates": {
+      "lat": 13.3611431,
+      "lon": 100.98467170000004
+    },
+    "adjacent": [
+      {
+        "id": 12,
+        "name_en": "RAYONG",
+        "name_th": "ระยอง",
+        "distance_km": 80.19
+      },
+      {
+        "id": 13,
+        "name_en": "CHANTHABURI",
+        "name_th": "จันทบุรี",
+        "distance_km": 147.16
+      },
+      {
+        "id": 15,
+        "name_en": "CHACHOENGSAO",
+        "name_th": "ฉะเชิงเทรา",
+        "distance_km": 37.98
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "name_en": "RAYONG",
+    "name_th": "ระยอง",
+    "coordinates": {
+      "lat": 12.6833115,
+      "lon": 101.23742949999996
+    },
+    "adjacent": [
+      {
+        "id": 11,
+        "name_en": "CHON BURI",
+        "name_th": "ชลบุรี",
+        "distance_km": 80.19
+      },
+      {
+        "id": 13,
+        "name_en": "CHANTHABURI",
+        "name_th": "จันทบุรี",
+        "distance_km": 94.34
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "name_en": "CHANTHABURI",
+    "name_th": "จันทบุรี",
+    "coordinates": {
+      "lat": 12.61134,
+      "lon": 102.10385459999998
+    },
+    "adjacent": [
+      {
+        "id": 14,
+        "name_en": "TRAT",
+        "name_th": "ตราด",
+        "distance_km": 60.8
+      },
+      {
+        "id": 12,
+        "name_en": "RAYONG",
+        "name_th": "ระยอง",
+        "distance_km": 94.34
+      },
+      {
+        "id": 18,
+        "name_en": "SA KAEO",
+        "name_th": "สระแก้ว",
+        "distance_km": 134.91
+      },
+      {
+        "id": 11,
+        "name_en": "CHON BURI",
+        "name_th": "ชลบุรี",
+        "distance_km": 147.16
+      },
+      {
+        "id": 15,
+        "name_en": "CHACHOENGSAO",
+        "name_th": "ฉะเชิงเทรา",
+        "distance_km": 163.51
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "name_en": "TRAT",
+    "name_th": "ตราด",
+    "coordinates": {
+      "lat": 12.2427563,
+      "lon": 102.51747339999997
+    },
+    "adjacent": [
+      {
+        "id": 13,
+        "name_en": "CHANTHABURI",
+        "name_th": "จันทบุรี",
+        "distance_km": 60.8
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "name_en": "CHACHOENGSAO",
+    "name_th": "ฉะเชิงเทรา",
+    "coordinates": {
+      "lat": 13.6904194,
+      "lon": 101.07795959999999
+    },
+    "adjacent": [
+      {
+        "id": 11,
+        "name_en": "CHON BURI",
+        "name_th": "ชลบุรี",
+        "distance_km": 37.98
+      },
+      {
+        "id": 13,
+        "name_en": "CHANTHABURI",
+        "name_th": "จันทบุรี",
+        "distance_km": 163.51
+      },
+      {
+        "id": 18,
+        "name_en": "SA KAEO",
+        "name_th": "สระแก้ว",
+        "distance_km": 107.59
+      },
+      {
+        "id": 16,
+        "name_en": "PRACHIN BURI",
+        "name_th": "ปราจีนบุรี",
+        "distance_km": 51.19
+      },
+      {
+        "id": 17,
+        "name_en": "NAKHON NAYOK",
+        "name_th": "นครนายก",
+        "distance_km": 59.26
+      },
+      {
+        "id": 4,
+        "name_en": "PATHUM THANI",
+        "name_th": "ปทุมธานี",
+        "distance_km": 70.09
+      },
+      {
+        "id": 1,
+        "name_en": "BANGKOK",
+        "name_th": "กรุงเทพมหานคร",
+        "distance_km": 59.97
+      },
+      {
+        "id": 2,
+        "name_en": "SAMUT PRAKAN",
+        "name_th": "สมุทรปราการ",
+        "distance_km": 52.65
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "name_en": "PRACHIN BURI",
+    "name_th": "ปราจีนบุรี",
+    "coordinates": {
+      "lat": 14.0509704,
+      "lon": 101.37274389999993
+    },
+    "adjacent": [
+      {
+        "id": 15,
+        "name_en": "CHACHOENGSAO",
+        "name_th": "ฉะเชิงเทรา",
+        "distance_km": 51.19
+      },
+      {
+        "id": 18,
+        "name_en": "SA KAEO",
+        "name_th": "สระแก้ว",
+        "distance_km": 78.81
+      },
+      {
+        "id": 19,
+        "name_en": "NAKHON RATCHASIMA",
+        "name_th": "นครราชสีมา",
+        "distance_km": 129.46
+      },
+      {
+        "id": 17,
+        "name_en": "NAKHON NAYOK",
+        "name_th": "นครนายก",
+        "distance_km": 24.44
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "name_en": "NAKHON NAYOK",
+    "name_th": "นครนายก",
+    "coordinates": {
+      "lat": 14.2069466,
+      "lon": 101.21305110000003
+    },
+    "adjacent": [
+      {
+        "id": 15,
+        "name_en": "CHACHOENGSAO",
+        "name_th": "ฉะเชิงเทรา",
+        "distance_km": 59.26
+      },
+      {
+        "id": 16,
+        "name_en": "PRACHIN BURI",
+        "name_th": "ปราจีนบุรี",
+        "distance_km": 24.44
+      },
+      {
+        "id": 19,
+        "name_en": "NAKHON RATCHASIMA",
+        "name_th": "นครราชสีมา",
+        "distance_km": 128.26
+      },
+      {
+        "id": 10,
+        "name_en": "SARABURI",
+        "name_th": "สระบุรี",
+        "distance_km": 48.44
+      },
+      {
+        "id": 4,
+        "name_en": "PATHUM THANI",
+        "name_th": "ปทุมธานี",
+        "distance_km": 77.03
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "name_en": "SA KAEO",
+    "name_th": "สระแก้ว",
+    "coordinates": {
+      "lat": 13.824038,
+      "lon": 102.0645839
+    },
+    "adjacent": [
+      {
+        "id": 13,
+        "name_en": "CHANTHABURI",
+        "name_th": "จันทบุรี",
+        "distance_km": 134.91
+      },
+      {
+        "id": 15,
+        "name_en": "CHACHOENGSAO",
+        "name_th": "ฉะเชิงเทรา",
+        "distance_km": 107.59
+      },
+      {
+        "id": 16,
+        "name_en": "PRACHIN BURI",
+        "name_th": "ปราจีนบุรี",
+        "distance_km": 78.81
+      },
+      {
+        "id": 19,
+        "name_en": "NAKHON RATCHASIMA",
+        "name_th": "นครราชสีมา",
+        "distance_km": 128.58
+      },
+      {
+        "id": 20,
+        "name_en": "BURI RAM",
+        "name_th": "บุรีรัมย์",
+        "distance_km": 171.46
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "name_en": "NAKHON RATCHASIMA",
+    "name_th": "นครราชสีมา",
+    "coordinates": {
+      "lat": 14.9798997,
+      "lon": 102.09776929999998
+    },
+    "adjacent": [
+      {
+        "id": 28,
+        "name_en": "KHON KAEN",
+        "name_th": "ขอนแก่น",
+        "distance_km": 180.76
+      },
+      {
+        "id": 20,
+        "name_en": "BURI RAM",
+        "name_th": "บุรีรัมย์",
+        "distance_km": 107.98
+      },
+      {
+        "id": 25,
+        "name_en": "CHAIYAPHUM",
+        "name_th": "ชัยภูมิ",
+        "distance_km": 92.22
+      },
+      {
+        "id": 7,
+        "name_en": "LOPBURI",
+        "name_th": "ลพบุรี",
+        "distance_km": 156.51
+      },
+      {
+        "id": 10,
+        "name_en": "SARABURI",
+        "name_th": "สระบุรี",
+        "distance_km": 137.2
+      },
+      {
+        "id": 17,
+        "name_en": "NAKHON NAYOK",
+        "name_th": "นครนายก",
+        "distance_km": 128.26
+      },
+      {
+        "id": 16,
+        "name_en": "PRACHIN BURI",
+        "name_th": "ปราจีนบุรี",
+        "distance_km": 129.46
+      },
+      {
+        "id": 18,
+        "name_en": "SA KAEO",
+        "name_th": "สระแก้ว",
+        "distance_km": 128.58
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "name_en": "BURI RAM",
+    "name_th": "บุรีรัมย์",
+    "coordinates": {
+      "lat": 14.9930017,
+      "lon": 103.10291910000001
+    },
+    "adjacent": [
+      {
+        "id": 21,
+        "name_en": "SURIN",
+        "name_th": "สุรินทร์",
+        "distance_km": 43.73
+      },
+      {
+        "id": 32,
+        "name_en": "MAHA SARAKHAM",
+        "name_th": "มหาสารคาม",
+        "distance_km": 134.27
+      },
+      {
+        "id": 28,
+        "name_en": "KHON KAEN",
+        "name_th": "ขอนแก่น",
+        "distance_km": 163.63
+      },
+      {
+        "id": 19,
+        "name_en": "NAKHON RATCHASIMA",
+        "name_th": "นครราชสีมา",
+        "distance_km": 107.98
+      },
+      {
+        "id": 18,
+        "name_en": "SA KAEO",
+        "name_th": "สระแก้ว",
+        "distance_km": 171.46
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "name_en": "SURIN",
+    "name_th": "สุรินทร์",
+    "coordinates": {
+      "lat": 14.882905,
+      "lon": 103.49371070000007
+    },
+    "adjacent": [
+      {
+        "id": 22,
+        "name_en": "SI SA KET",
+        "name_th": "ศรีสะเกษ",
+        "distance_km": 92.74
+      },
+      {
+        "id": 33,
+        "name_en": "ROI ET",
+        "name_th": "ร้อยเอ็ด",
+        "distance_km": 131.3
+      },
+      {
+        "id": 32,
+        "name_en": "MAHA SARAKHAM",
+        "name_th": "มหาสารคาม",
+        "distance_km": 146.24
+      },
+      {
+        "id": 20,
+        "name_en": "BURI RAM",
+        "name_th": "บุรีรัมย์",
+        "distance_km": 43.73
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "name_en": "SI SA KET",
+    "name_th": "ศรีสะเกษ",
+    "coordinates": {
+      "lat": 15.1186009,
+      "lon": 104.32200949999992
+    },
+    "adjacent": [
+      {
+        "id": 23,
+        "name_en": "UBON RATCHATHANI",
+        "name_th": "อุบลราชธานี",
+        "distance_km": 58.64
+      },
+      {
+        "id": 24,
+        "name_en": "YASOTHON",
+        "name_th": "ยโสธร",
+        "distance_km": 77.31
+      },
+      {
+        "id": 33,
+        "name_en": "ROI ET",
+        "name_th": "ร้อยเอ็ด",
+        "distance_km": 126.35
+      },
+      {
+        "id": 21,
+        "name_en": "SURIN",
+        "name_th": "สุรินทร์",
+        "distance_km": 92.74
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "name_en": "UBON RATCHATHANI",
+    "name_th": "อุบลราชธานี",
+    "coordinates": {
+      "lat": 15.2286861,
+      "lon": 104.85642170000006
+    },
+    "adjacent": [
+      {
+        "id": 26,
+        "name_en": "AMNAT CHAROEN",
+        "name_th": "อำนาจเจริญ",
+        "distance_km": 75.02
+      },
+      {
+        "id": 24,
+        "name_en": "YASOTHON",
+        "name_th": "ยโสธร",
+        "distance_km": 98.68
+      },
+      {
+        "id": 22,
+        "name_en": "SI SA KET",
+        "name_th": "ศรีสะเกษ",
+        "distance_km": 58.64
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "name_en": "YASOTHON",
+    "name_th": "ยโสธร",
+    "coordinates": {
+      "lat": 15.792641,
+      "lon": 104.14528270000005
+    },
+    "adjacent": [
+      {
+        "id": 37,
+        "name_en": "MUKDAHAN",
+        "name_th": "มุกดาหาร",
+        "distance_km": 103.59
+      },
+      {
+        "id": 26,
+        "name_en": "AMNAT CHAROEN",
+        "name_th": "อำนาจเจริญ",
+        "distance_km": 52.04
+      },
+      {
+        "id": 23,
+        "name_en": "UBON RATCHATHANI",
+        "name_th": "อุบลราชธานี",
+        "distance_km": 98.68
+      },
+      {
+        "id": 22,
+        "name_en": "SI SA KET",
+        "name_th": "ศรีสะเกษ",
+        "distance_km": 77.31
+      },
+      {
+        "id": 33,
+        "name_en": "ROI ET",
+        "name_th": "ร้อยเอ็ด",
+        "distance_km": 60.21
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "name_en": "CHAIYAPHUM",
+    "name_th": "ชัยภูมิ",
+    "coordinates": {
+      "lat": 15.8068173,
+      "lon": 102.03150270000003
+    },
+    "adjacent": [
+      {
+        "id": 28,
+        "name_en": "KHON KAEN",
+        "name_th": "ขอนแก่น",
+        "distance_km": 111.23
+      },
+      {
+        "id": 19,
+        "name_en": "NAKHON RATCHASIMA",
+        "name_th": "นครราชสีมา",
+        "distance_km": 92.22
+      },
+      {
+        "id": 7,
+        "name_en": "LOPBURI",
+        "name_th": "ลพบุรี",
+        "distance_km": 185.45
+      },
+      {
+        "id": 54,
+        "name_en": "PHETCHABUN",
+        "name_th": "เพชรบูรณ์",
+        "distance_km": 115.75
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "name_en": "AMNAT CHAROEN",
+    "name_th": "อำนาจเจริญ",
+    "coordinates": {
+      "lat": 15.8656783,
+      "lon": 104.62577740000006
+    },
+    "adjacent": [
+      {
+        "id": 37,
+        "name_en": "MUKDAHAN",
+        "name_th": "มุกดาหาร",
+        "distance_km": 75.94
+      },
+      {
+        "id": 23,
+        "name_en": "UBON RATCHATHANI",
+        "name_th": "อุบลราชธานี",
+        "distance_km": 75.02
+      },
+      {
+        "id": 24,
+        "name_en": "YASOTHON",
+        "name_th": "ยโสธร",
+        "distance_km": 52.04
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "name_en": "NONG BUA LAM PHU",
+    "name_th": "หนองบัวลำภู",
+    "coordinates": {
+      "lat": 17.2218247,
+      "lon": 102.42603680000002
+    },
+    "adjacent": [
+      {
+        "id": 29,
+        "name_en": "UDON THANI",
+        "name_th": "อุดรธานี",
+        "distance_km": 43.89
+      },
+      {
+        "id": 30,
+        "name_en": "LOEI",
+        "name_th": "เลย",
+        "distance_km": 80.26
+      },
+      {
+        "id": 28,
+        "name_en": "KHON KAEN",
+        "name_th": "ขอนแก่น",
+        "distance_km": 97.08
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "name_en": "KHON KAEN",
+    "name_th": "ขอนแก่น",
+    "coordinates": {
+      "lat": 16.4419355,
+      "lon": 102.8359921
+    },
+    "adjacent": [
+      {
+        "id": 29,
+        "name_en": "UDON THANI",
+        "name_th": "อุดรธานี",
+        "distance_km": 108.2
+      },
+      {
+        "id": 34,
+        "name_en": "KALASIN",
+        "name_th": "กาฬสินธุ์",
+        "distance_km": 71.45
+      },
+      {
+        "id": 32,
+        "name_en": "MAHA SARAKHAM",
+        "name_th": "มหาสารคาม",
+        "distance_km": 57.41
+      },
+      {
+        "id": 20,
+        "name_en": "BURI RAM",
+        "name_th": "บุรีรัมย์",
+        "distance_km": 163.63
+      },
+      {
+        "id": 19,
+        "name_en": "NAKHON RATCHASIMA",
+        "name_th": "นครราชสีมา",
+        "distance_km": 180.76
+      },
+      {
+        "id": 25,
+        "name_en": "CHAIYAPHUM",
+        "name_th": "ชัยภูมิ",
+        "distance_km": 111.23
+      },
+      {
+        "id": 54,
+        "name_en": "PHETCHABUN",
+        "name_th": "เพชรบูรณ์",
+        "distance_km": 179.29
+      },
+      {
+        "id": 30,
+        "name_en": "LOEI",
+        "name_th": "เลย",
+        "distance_km": 165.86
+      },
+      {
+        "id": 27,
+        "name_en": "NONG BUA LAM PHU",
+        "name_th": "หนองบัวลำภู",
+        "distance_km": 97.08
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "name_en": "UDON THANI",
+    "name_th": "อุดรธานี",
+    "coordinates": {
+      "lat": 17.4138413,
+      "lon": 102.78723250000007
+    },
+    "adjacent": [
+      {
+        "id": 31,
+        "name_en": "NONG KHAI",
+        "name_th": "หนองคาย",
+        "distance_km": 51.87
+      },
+      {
+        "id": 35,
+        "name_en": "SAKON NAKHON",
+        "name_th": "สกลนคร",
+        "distance_km": 145.95
+      },
+      {
+        "id": 34,
+        "name_en": "KALASIN",
+        "name_th": "กาฬสินธุ์",
+        "distance_km": 133.33
+      },
+      {
+        "id": 28,
+        "name_en": "KHON KAEN",
+        "name_th": "ขอนแก่น",
+        "distance_km": 108.2
+      },
+      {
+        "id": 27,
+        "name_en": "NONG BUA LAM PHU",
+        "name_th": "หนองบัวลำภู",
+        "distance_km": 43.89
+      },
+      {
+        "id": 30,
+        "name_en": "LOEI",
+        "name_th": "เลย",
+        "distance_km": 113.25
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "name_en": "LOEI",
+    "name_th": "เลย",
+    "coordinates": {
+      "lat": 17.4860232,
+      "lon": 101.72230020000006
+    },
+    "adjacent": [
+      {
+        "id": 31,
+        "name_en": "NONG KHAI",
+        "name_th": "หนองคาย",
+        "distance_km": 116.43
+      },
+      {
+        "id": 29,
+        "name_en": "UDON THANI",
+        "name_th": "อุดรธานี",
+        "distance_km": 113.25
+      },
+      {
+        "id": 27,
+        "name_en": "NONG BUA LAM PHU",
+        "name_th": "หนองบัวลำภู",
+        "distance_km": 80.26
+      },
+      {
+        "id": 28,
+        "name_en": "KHON KAEN",
+        "name_th": "ขอนแก่น",
+        "distance_km": 165.86
+      },
+      {
+        "id": 54,
+        "name_en": "PHETCHABUN",
+        "name_th": "เพชรบูรณ์",
+        "distance_km": 133.11
+      },
+      {
+        "id": 52,
+        "name_en": "PHITSANULOK",
+        "name_th": "พิษณุโลก",
+        "distance_km": 171.5
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "name_en": "NONG KHAI",
+    "name_th": "หนองคาย",
+    "coordinates": {
+      "lat": 17.8782803,
+      "lon": 102.74126380000007
+    },
+    "adjacent": [
+      {
+        "id": 77,
+        "name_en": "BUENG KAN",
+        "name_th": "บึงกาฬ",
+        "distance_km": 109.69
+      },
+      {
+        "id": 29,
+        "name_en": "UDON THANI",
+        "name_th": "อุดรธานี",
+        "distance_km": 51.87
+      },
+      {
+        "id": 35,
+        "name_en": "SAKON NAKHON",
+        "name_th": "สกลนคร",
+        "distance_km": 168.26
+      },
+      {
+        "id": 30,
+        "name_en": "LOEI",
+        "name_th": "เลย",
+        "distance_km": 116.43
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "name_en": "MAHA SARAKHAM",
+    "name_th": "มหาสารคาม",
+    "coordinates": {
+      "lat": 16.1850896,
+      "lon": 103.30264609999995
+    },
+    "adjacent": [
+      {
+        "id": 34,
+        "name_en": "KALASIN",
+        "name_th": "กาฬสินธุ์",
+        "distance_km": 34.94
+      },
+      {
+        "id": 33,
+        "name_en": "ROI ET",
+        "name_th": "ร้อยเอ็ด",
+        "distance_km": 40.07
+      },
+      {
+        "id": 21,
+        "name_en": "SURIN",
+        "name_th": "สุรินทร์",
+        "distance_km": 146.24
+      },
+      {
+        "id": 20,
+        "name_en": "BURI RAM",
+        "name_th": "บุรีรัมย์",
+        "distance_km": 134.27
+      },
+      {
+        "id": 28,
+        "name_en": "KHON KAEN",
+        "name_th": "ขอนแก่น",
+        "distance_km": 57.41
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "name_en": "ROI ET",
+    "name_th": "ร้อยเอ็ด",
+    "coordinates": {
+      "lat": 16.0538196,
+      "lon": 103.65200359999994
+    },
+    "adjacent": [
+      {
+        "id": 34,
+        "name_en": "KALASIN",
+        "name_th": "กาฬสินธุ์",
+        "distance_km": 44.79
+      },
+      {
+        "id": 37,
+        "name_en": "MUKDAHAN",
+        "name_th": "มุกดาหาร",
+        "distance_km": 126.36
+      },
+      {
+        "id": 24,
+        "name_en": "YASOTHON",
+        "name_th": "ยโสธร",
+        "distance_km": 60.21
+      },
+      {
+        "id": 22,
+        "name_en": "SI SA KET",
+        "name_th": "ศรีสะเกษ",
+        "distance_km": 126.35
+      },
+      {
+        "id": 21,
+        "name_en": "SURIN",
+        "name_th": "สุรินทร์",
+        "distance_km": 131.3
+      },
+      {
+        "id": 32,
+        "name_en": "MAHA SARAKHAM",
+        "name_th": "มหาสารคาม",
+        "distance_km": 40.07
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "name_en": "KALASIN",
+    "name_th": "กาฬสินธุ์",
+    "coordinates": {
+      "lat": 16.4314078,
+      "lon": 103.5058755
+    },
+    "adjacent": [
+      {
+        "id": 35,
+        "name_en": "SAKON NAKHON",
+        "name_th": "สกลนคร",
+        "distance_km": 104.64
+      },
+      {
+        "id": 37,
+        "name_en": "MUKDAHAN",
+        "name_th": "มุกดาหาร",
+        "distance_km": 130.14
+      },
+      {
+        "id": 33,
+        "name_en": "ROI ET",
+        "name_th": "ร้อยเอ็ด",
+        "distance_km": 44.79
+      },
+      {
+        "id": 32,
+        "name_en": "MAHA SARAKHAM",
+        "name_th": "มหาสารคาม",
+        "distance_km": 34.94
+      },
+      {
+        "id": 28,
+        "name_en": "KHON KAEN",
+        "name_th": "ขอนแก่น",
+        "distance_km": 71.45
+      },
+      {
+        "id": 29,
+        "name_en": "UDON THANI",
+        "name_th": "อุดรธานี",
+        "distance_km": 133.33
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "name_en": "SAKON NAKHON",
+    "name_th": "สกลนคร",
+    "coordinates": {
+      "lat": 17.1545995,
+      "lon": 104.1348365
+    },
+    "adjacent": [
+      {
+        "id": 36,
+        "name_en": "NAKHON PHANOM",
+        "name_th": "นครพนม",
+        "distance_km": 72.38
+      },
+      {
+        "id": 77,
+        "name_en": "BUENG KAN",
+        "name_th": "บึงกาฬ",
+        "distance_km": 143.76
+      },
+      {
+        "id": 31,
+        "name_en": "NONG KHAI",
+        "name_th": "หนองคาย",
+        "distance_km": 168.26
+      },
+      {
+        "id": 29,
+        "name_en": "UDON THANI",
+        "name_th": "อุดรธานี",
+        "distance_km": 145.95
+      },
+      {
+        "id": 34,
+        "name_en": "KALASIN",
+        "name_th": "กาฬสินธุ์",
+        "distance_km": 104.64
+      },
+      {
+        "id": 37,
+        "name_en": "MUKDAHAN",
+        "name_th": "มุกดาหาร",
+        "distance_km": 92.32
+      }
+    ]
+  },
+  {
+    "id": 36,
+    "name_en": "NAKHON PHANOM",
+    "name_th": "นครพนม",
+    "coordinates": {
+      "lat": 17.392039,
+      "lon": 104.76955079999993
+    },
+    "adjacent": [
+      {
+        "id": 35,
+        "name_en": "SAKON NAKHON",
+        "name_th": "สกลนคร",
+        "distance_km": 72.38
+      },
+      {
+        "id": 37,
+        "name_en": "MUKDAHAN",
+        "name_th": "มุกดาหาร",
+        "distance_km": 94.61
+      },
+      {
+        "id": 77,
+        "name_en": "BUENG KAN",
+        "name_th": "บึงกาฬ",
+        "distance_km": 160.41
+      }
+    ]
+  },
+  {
+    "id": 37,
+    "name_en": "MUKDAHAN",
+    "name_th": "มุกดาหาร",
+    "coordinates": {
+      "lat": 16.542443,
+      "lon": 104.72091509999996
+    },
+    "adjacent": [
+      {
+        "id": 36,
+        "name_en": "NAKHON PHANOM",
+        "name_th": "นครพนม",
+        "distance_km": 94.61
+      },
+      {
+        "id": 35,
+        "name_en": "SAKON NAKHON",
+        "name_th": "สกลนคร",
+        "distance_km": 92.32
+      },
+      {
+        "id": 34,
+        "name_en": "KALASIN",
+        "name_th": "กาฬสินธุ์",
+        "distance_km": 130.14
+      },
+      {
+        "id": 33,
+        "name_en": "ROI ET",
+        "name_th": "ร้อยเอ็ด",
+        "distance_km": 126.36
+      },
+      {
+        "id": 24,
+        "name_en": "YASOTHON",
+        "name_th": "ยโสธร",
+        "distance_km": 103.59
+      },
+      {
+        "id": 26,
+        "name_en": "AMNAT CHAROEN",
+        "name_th": "อำนาจเจริญ",
+        "distance_km": 75.94
+      }
+    ]
+  },
+  {
+    "id": 38,
+    "name_en": "CHIANG MAI",
+    "name_th": "เชียงใหม่",
+    "coordinates": {
+      "lat": 18.7877477,
+      "lon": 98.99313110000003
+    },
+    "adjacent": [
+      {
+        "id": 45,
+        "name_en": "CHIANG RAI",
+        "name_th": "เชียงราย",
+        "distance_km": 152.38
+      },
+      {
+        "id": 40,
+        "name_en": "LAMPANG",
+        "name_th": "ลำปาง",
+        "distance_km": 76.36
+      },
+      {
+        "id": 39,
+        "name_en": "LAMPHUN",
+        "name_th": "ลำพูน",
+        "distance_km": 23.77
+      },
+      {
+        "id": 50,
+        "name_en": "TAK",
+        "name_th": "ตาก",
+        "distance_km": 212.15
+      },
+      {
+        "id": 46,
+        "name_en": "MAE HONG SON",
+        "name_th": "แม่ฮ่องสอน",
+        "distance_km": 122.05
+      }
+    ]
+  },
+  {
+    "id": 39,
+    "name_en": "LAMPHUN",
+    "name_th": "ลำพูน",
+    "coordinates": {
+      "lat": 18.5744606,
+      "lon": 99.0087221
+    },
+    "adjacent": [
+      {
+        "id": 40,
+        "name_en": "LAMPANG",
+        "name_th": "ลำปาง",
+        "distance_km": 59.96
+      },
+      {
+        "id": 38,
+        "name_en": "CHIANG MAI",
+        "name_th": "เชียงใหม่",
+        "distance_km": 23.77
+      },
+      {
+        "id": 50,
+        "name_en": "TAK",
+        "name_th": "ตาก",
+        "distance_km": 188.38
+      }
+    ]
+  },
+  {
+    "id": 40,
+    "name_en": "LAMPANG",
+    "name_th": "ลำปาง",
+    "coordinates": {
+      "lat": 18.2888404,
+      "lon": 99.49087399999996
+    },
+    "adjacent": [
+      {
+        "id": 45,
+        "name_en": "CHIANG RAI",
+        "name_th": "เชียงราย",
+        "distance_km": 183.46
+      },
+      {
+        "id": 44,
+        "name_en": "PHAYAO",
+        "name_th": "พะเยา",
+        "distance_km": 106.76
+      },
+      {
+        "id": 42,
+        "name_en": "PHRAE",
+        "name_th": "แพร่",
+        "distance_km": 70.44
+      },
+      {
+        "id": 51,
+        "name_en": "SUKHOTHAI",
+        "name_th": "สุโขทัย",
+        "distance_km": 147.06
+      },
+      {
+        "id": 50,
+        "name_en": "TAK",
+        "name_th": "ตาก",
+        "distance_km": 160.93
+      },
+      {
+        "id": 39,
+        "name_en": "LAMPHUN",
+        "name_th": "ลำพูน",
+        "distance_km": 59.96
+      },
+      {
+        "id": 38,
+        "name_en": "CHIANG MAI",
+        "name_th": "เชียงใหม่",
+        "distance_km": 76.36
+      }
+    ]
+  },
+  {
+    "id": 41,
+    "name_en": "UTTARADIT",
+    "name_th": "อุตรดิตถ์",
+    "coordinates": {
+      "lat": 17.6200886,
+      "lon": 100.09929420000003
+    },
+    "adjacent": [
+      {
+        "id": 52,
+        "name_en": "PHITSANULOK",
+        "name_th": "พิษณุโลก",
+        "distance_km": 89.55
+      },
+      {
+        "id": 51,
+        "name_en": "SUKHOTHAI",
+        "name_th": "สุโขทัย",
+        "distance_km": 74.22
+      },
+      {
+        "id": 42,
+        "name_en": "PHRAE",
+        "name_th": "แพร่",
+        "distance_km": 58.48
+      },
+      {
+        "id": 43,
+        "name_en": "NAN",
+        "name_th": "น่าน",
+        "distance_km": 146.88
+      }
+    ]
+  },
+  {
+    "id": 42,
+    "name_en": "PHRAE",
+    "name_th": "แพร่",
+    "coordinates": {
+      "lat": 18.1445774,
+      "lon": 100.14028310000003
+    },
+    "adjacent": [
+      {
+        "id": 43,
+        "name_en": "NAN",
+        "name_th": "น่าน",
+        "distance_km": 96.84
+      },
+      {
+        "id": 41,
+        "name_en": "UTTARADIT",
+        "name_th": "อุตรดิตถ์",
+        "distance_km": 58.48
+      },
+      {
+        "id": 51,
+        "name_en": "SUKHOTHAI",
+        "name_th": "สุโขทัย",
+        "distance_km": 130.95
+      },
+      {
+        "id": 40,
+        "name_en": "LAMPANG",
+        "name_th": "ลำปาง",
+        "distance_km": 70.44
+      },
+      {
+        "id": 44,
+        "name_en": "PHAYAO",
+        "name_th": "พะเยา",
+        "distance_km": 116.37
+      }
+    ]
+  },
+  {
+    "id": 43,
+    "name_en": "NAN",
+    "name_th": "น่าน",
+    "coordinates": {
+      "lat": 18.7756318,
+      "lon": 100.77304170000002
+    },
+    "adjacent": [
+      {
+        "id": 44,
+        "name_en": "PHAYAO",
+        "name_th": "พะเยา",
+        "distance_km": 101.39
+      },
+      {
+        "id": 42,
+        "name_en": "PHRAE",
+        "name_th": "แพร่",
+        "distance_km": 96.84
+      },
+      {
+        "id": 41,
+        "name_en": "UTTARADIT",
+        "name_th": "อุตรดิตถ์",
+        "distance_km": 146.88
+      }
+    ]
+  },
+  {
+    "id": 44,
+    "name_en": "PHAYAO",
+    "name_th": "พะเยา",
+    "coordinates": {
+      "lat": 19.1664789,
+      "lon": 99.9019419
+    },
+    "adjacent": [
+      {
+        "id": 43,
+        "name_en": "NAN",
+        "name_th": "น่าน",
+        "distance_km": 101.39
+      },
+      {
+        "id": 42,
+        "name_en": "PHRAE",
+        "name_th": "แพร่",
+        "distance_km": 116.37
+      },
+      {
+        "id": 40,
+        "name_en": "LAMPANG",
+        "name_th": "ลำปาง",
+        "distance_km": 106.76
+      },
+      {
+        "id": 45,
+        "name_en": "CHIANG RAI",
+        "name_th": "เชียงราย",
+        "distance_km": 82.7
+      }
+    ]
+  },
+  {
+    "id": 45,
+    "name_en": "CHIANG RAI",
+    "name_th": "เชียงราย",
+    "coordinates": {
+      "lat": 19.9071656,
+      "lon": 99.83095500000002
+    },
+    "adjacent": [
+      {
+        "id": 38,
+        "name_en": "CHIANG MAI",
+        "name_th": "เชียงใหม่",
+        "distance_km": 152.38
+      },
+      {
+        "id": 40,
+        "name_en": "LAMPANG",
+        "name_th": "ลำปาง",
+        "distance_km": 183.46
+      },
+      {
+        "id": 44,
+        "name_en": "PHAYAO",
+        "name_th": "พะเยา",
+        "distance_km": 82.7
+      }
+    ]
+  },
+  {
+    "id": 46,
+    "name_en": "MAE HONG SON",
+    "name_th": "แม่ฮ่องสอน",
+    "coordinates": {
+      "lat": 19.2990643,
+      "lon": 97.96562259999996
+    },
+    "adjacent": [
+      {
+        "id": 38,
+        "name_en": "CHIANG MAI",
+        "name_th": "เชียงใหม่",
+        "distance_km": 122.05
+      },
+      {
+        "id": 50,
+        "name_en": "TAK",
+        "name_th": "ตาก",
+        "distance_km": 295.21
+      }
+    ]
+  },
+  {
+    "id": 47,
+    "name_en": "NAKHON SAWAN",
+    "name_th": "นครสวรรค์",
+    "coordinates": {
+      "lat": 15.6930072,
+      "lon": 100.12255949999997
+    },
+    "adjacent": [
+      {
+        "id": 49,
+        "name_en": "KAMPHAENG PHET",
+        "name_th": "กำแพงเพชร",
+        "distance_km": 108.72
+      },
+      {
+        "id": 53,
+        "name_en": "PHICHIT",
+        "name_th": "พิจิตร",
+        "distance_km": 86.81
+      },
+      {
+        "id": 54,
+        "name_en": "PHETCHABUN",
+        "name_th": "เพชรบูรณ์",
+        "distance_km": 136.71
+      },
+      {
+        "id": 7,
+        "name_en": "LOPBURI",
+        "name_th": "ลพบุรี",
+        "distance_km": 114.52
+      },
+      {
+        "id": 8,
+        "name_en": "SING BURI",
+        "name_th": "สิงห์บุรี",
+        "distance_km": 93.63
+      },
+      {
+        "id": 9,
+        "name_en": "CHAI NAT",
+        "name_th": "ชัยนาท",
+        "distance_km": 56.47
+      },
+      {
+        "id": 48,
+        "name_en": "UTHAI THANI",
+        "name_th": "อุทัยธานี",
+        "distance_km": 35.98
+      },
+      {
+        "id": 50,
+        "name_en": "TAK",
+        "name_th": "ตาก",
+        "distance_km": 169.87
+      }
+    ]
+  },
+  {
+    "id": 48,
+    "name_en": "UTHAI THANI",
+    "name_th": "อุทัยธานี",
+    "coordinates": {
+      "lat": 15.3835001,
+      "lon": 100.02455269999996
+    },
+    "adjacent": [
+      {
+        "id": 57,
+        "name_en": "SUPHAN BURI",
+        "name_th": "สุพรรณบุรี",
+        "distance_km": 101.57
+      },
+      {
+        "id": 9,
+        "name_en": "CHAI NAT",
+        "name_th": "ชัยนาท",
+        "distance_km": 24.55
+      },
+      {
+        "id": 47,
+        "name_en": "NAKHON SAWAN",
+        "name_th": "นครสวรรค์",
+        "distance_km": 35.98
+      },
+      {
+        "id": 50,
+        "name_en": "TAK",
+        "name_th": "ตาก",
+        "distance_km": 192.49
+      },
+      {
+        "id": 56,
+        "name_en": "KANCHANABURI",
+        "name_th": "กาญจนบุรี",
+        "distance_km": 160.28
+      }
+    ]
+  },
+  {
+    "id": 49,
+    "name_en": "KAMPHAENG PHET",
+    "name_th": "กำแพงเพชร",
+    "coordinates": {
+      "lat": 16.4827798,
+      "lon": 99.52266179999992
+    },
+    "adjacent": [
+      {
+        "id": 50,
+        "name_en": "TAK",
+        "name_th": "ตาก",
+        "distance_km": 61.45
+      },
+      {
+        "id": 51,
+        "name_en": "SUKHOTHAI",
+        "name_th": "สุโขทัย",
+        "distance_km": 66.52
+      },
+      {
+        "id": 52,
+        "name_en": "PHITSANULOK",
+        "name_th": "พิษณุโลก",
+        "distance_km": 87.66
+      },
+      {
+        "id": 53,
+        "name_en": "PHICHIT",
+        "name_th": "พิจิตร",
+        "distance_km": 88.15
+      },
+      {
+        "id": 47,
+        "name_en": "NAKHON SAWAN",
+        "name_th": "นครสวรรค์",
+        "distance_km": 108.72
+      }
+    ]
+  },
+  {
+    "id": 50,
+    "name_en": "TAK",
+    "name_th": "ตาก",
+    "coordinates": {
+      "lat": 16.8839901,
+      "lon": 99.12584979999997
+    },
+    "adjacent": [
+      {
+        "id": 56,
+        "name_en": "KANCHANABURI",
+        "name_th": "กาญจนบุรี",
+        "distance_km": 321.13
+      },
+      {
+        "id": 48,
+        "name_en": "UTHAI THANI",
+        "name_th": "อุทัยธานี",
+        "distance_km": 192.49
+      },
+      {
+        "id": 47,
+        "name_en": "NAKHON SAWAN",
+        "name_th": "นครสวรรค์",
+        "distance_km": 169.87
+      },
+      {
+        "id": 49,
+        "name_en": "KAMPHAENG PHET",
+        "name_th": "กำแพงเพชร",
+        "distance_km": 61.45
+      },
+      {
+        "id": 51,
+        "name_en": "SUKHOTHAI",
+        "name_th": "สุโขทัย",
+        "distance_km": 75.73
+      },
+      {
+        "id": 40,
+        "name_en": "LAMPANG",
+        "name_th": "ลำปาง",
+        "distance_km": 160.93
+      },
+      {
+        "id": 39,
+        "name_en": "LAMPHUN",
+        "name_th": "ลำพูน",
+        "distance_km": 188.38
+      },
+      {
+        "id": 38,
+        "name_en": "CHIANG MAI",
+        "name_th": "เชียงใหม่",
+        "distance_km": 212.15
+      },
+      {
+        "id": 46,
+        "name_en": "MAE HONG SON",
+        "name_th": "แม่ฮ่องสอน",
+        "distance_km": 295.21
+      }
+    ]
+  },
+  {
+    "id": 51,
+    "name_en": "SUKHOTHAI",
+    "name_th": "สุโขทัย",
+    "coordinates": {
+      "lat": 17.0055573,
+      "lon": 99.82637120000004
+    },
+    "adjacent": [
+      {
+        "id": 42,
+        "name_en": "PHRAE",
+        "name_th": "แพร่",
+        "distance_km": 130.95
+      },
+      {
+        "id": 41,
+        "name_en": "UTTARADIT",
+        "name_th": "อุตรดิตถ์",
+        "distance_km": 74.22
+      },
+      {
+        "id": 40,
+        "name_en": "LAMPANG",
+        "name_th": "ลำปาง",
+        "distance_km": 147.06
+      },
+      {
+        "id": 50,
+        "name_en": "TAK",
+        "name_th": "ตาก",
+        "distance_km": 75.73
+      },
+      {
+        "id": 49,
+        "name_en": "KAMPHAENG PHET",
+        "name_th": "กำแพงเพชร",
+        "distance_km": 66.52
+      },
+      {
+        "id": 52,
+        "name_en": "PHITSANULOK",
+        "name_th": "พิษณุโลก",
+        "distance_km": 50.25
+      }
+    ]
+  },
+  {
+    "id": 52,
+    "name_en": "PHITSANULOK",
+    "name_th": "พิษณุโลก",
+    "coordinates": {
+      "lat": 16.8298048,
+      "lon": 100.26149150000003
+    },
+    "adjacent": [
+      {
+        "id": 30,
+        "name_en": "LOEI",
+        "name_th": "เลย",
+        "distance_km": 171.5
+      },
+      {
+        "id": 54,
+        "name_en": "PHETCHABUN",
+        "name_th": "เพชรบูรณ์",
+        "distance_km": 105.6
+      },
+      {
+        "id": 53,
+        "name_en": "PHICHIT",
+        "name_th": "พิจิตร",
+        "distance_km": 44.0
+      },
+      {
+        "id": 49,
+        "name_en": "KAMPHAENG PHET",
+        "name_th": "กำแพงเพชร",
+        "distance_km": 87.66
+      },
+      {
+        "id": 51,
+        "name_en": "SUKHOTHAI",
+        "name_th": "สุโขทัย",
+        "distance_km": 50.25
+      },
+      {
+        "id": 41,
+        "name_en": "UTTARADIT",
+        "name_th": "อุตรดิตถ์",
+        "distance_km": 89.55
+      }
+    ]
+  },
+  {
+    "id": 53,
+    "name_en": "PHICHIT",
+    "name_th": "พิจิตร",
+    "coordinates": {
+      "lat": 16.4429516,
+      "lon": 100.34823289999997
+    },
+    "adjacent": [
+      {
+        "id": 52,
+        "name_en": "PHITSANULOK",
+        "name_th": "พิษณุโลก",
+        "distance_km": 44.0
+      },
+      {
+        "id": 54,
+        "name_en": "PHETCHABUN",
+        "name_th": "เพชรบูรณ์",
+        "distance_km": 86.1
+      },
+      {
+        "id": 49,
+        "name_en": "KAMPHAENG PHET",
+        "name_th": "กำแพงเพชร",
+        "distance_km": 88.15
+      },
+      {
+        "id": 47,
+        "name_en": "NAKHON SAWAN",
+        "name_th": "นครสวรรค์",
+        "distance_km": 86.81
+      }
+    ]
+  },
+  {
+    "id": 54,
+    "name_en": "PHETCHABUN",
+    "name_th": "เพชรบูรณ์",
+    "coordinates": {
+      "lat": 16.4189807,
+      "lon": 101.15509259999999
+    },
+    "adjacent": [
+      {
+        "id": 30,
+        "name_en": "LOEI",
+        "name_th": "เลย",
+        "distance_km": 133.11
+      },
+      {
+        "id": 28,
+        "name_en": "KHON KAEN",
+        "name_th": "ขอนแก่น",
+        "distance_km": 179.29
+      },
+      {
+        "id": 25,
+        "name_en": "CHAIYAPHUM",
+        "name_th": "ชัยภูมิ",
+        "distance_km": 115.75
+      },
+      {
+        "id": 7,
+        "name_en": "LOPBURI",
+        "name_th": "ลพบุรี",
+        "distance_km": 187.92
+      },
+      {
+        "id": 47,
+        "name_en": "NAKHON SAWAN",
+        "name_th": "นครสวรรค์",
+        "distance_km": 136.71
+      },
+      {
+        "id": 53,
+        "name_en": "PHICHIT",
+        "name_th": "พิจิตร",
+        "distance_km": 86.1
+      },
+      {
+        "id": 52,
+        "name_en": "PHITSANULOK",
+        "name_th": "พิษณุโลก",
+        "distance_km": 105.6
+      }
+    ]
+  },
+  {
+    "id": 55,
+    "name_en": "RATCHABURI",
+    "name_th": "ราชบุรี",
+    "coordinates": {
+      "lat": 13.5282893,
+      "lon": 99.81342110000003
+    },
+    "adjacent": [
+      {
+        "id": 61,
+        "name_en": "PHETCHABURI",
+        "name_th": "เพชรบุรี",
+        "distance_km": 48.34
+      },
+      {
+        "id": 60,
+        "name_en": "SAMUT SONGKHRAM",
+        "name_th": "สมุทรสงคราม",
+        "distance_km": 24.3
+      },
+      {
+        "id": 59,
+        "name_en": "SAMUT SAKHON",
+        "name_th": "สมุทรสาคร",
+        "distance_km": 49.88
+      },
+      {
+        "id": 58,
+        "name_en": "NAKHON PATHOM",
+        "name_th": "นครปฐม",
+        "distance_km": 42.12
+      },
+      {
+        "id": 56,
+        "name_en": "KANCHANABURI",
+        "name_th": "กาญจนบุรี",
+        "distance_km": 62.78
+      }
+    ]
+  },
+  {
+    "id": 56,
+    "name_en": "KANCHANABURI",
+    "name_th": "กาญจนบุรี",
+    "coordinates": {
+      "lat": 14.0227797,
+      "lon": 99.53281149999998
+    },
+    "adjacent": [
+      {
+        "id": 55,
+        "name_en": "RATCHABURI",
+        "name_th": "ราชบุรี",
+        "distance_km": 62.78
+      },
+      {
+        "id": 58,
+        "name_en": "NAKHON PATHOM",
+        "name_th": "นครปฐม",
+        "distance_km": 61.42
+      },
+      {
+        "id": 57,
+        "name_en": "SUPHAN BURI",
+        "name_th": "สุพรรณบุรี",
+        "distance_km": 80.6
+      },
+      {
+        "id": 48,
+        "name_en": "UTHAI THANI",
+        "name_th": "อุทัยธานี",
+        "distance_km": 160.28
+      },
+      {
+        "id": 50,
+        "name_en": "TAK",
+        "name_th": "ตาก",
+        "distance_km": 321.13
+      }
+    ]
+  },
+  {
+    "id": 57,
+    "name_en": "SUPHAN BURI",
+    "name_th": "สุพรรณบุรี",
+    "coordinates": {
+      "lat": 14.4744892,
+      "lon": 100.11771279999994
+    },
+    "adjacent": [
+      {
+        "id": 56,
+        "name_en": "KANCHANABURI",
+        "name_th": "กาญจนบุรี",
+        "distance_km": 80.6
+      },
+      {
+        "id": 58,
+        "name_en": "NAKHON PATHOM",
+        "name_th": "นครปฐม",
+        "distance_km": 73.03
+      },
+      {
+        "id": 5,
+        "name_en": "PHRA NAKHON SI AYUTTHAYA",
+        "name_th": "พระนครศรีอยุธยา",
+        "distance_km": 50.43
+      },
+      {
+        "id": 6,
+        "name_en": "ANG THONG",
+        "name_th": "อ่างทอง",
+        "distance_km": 38.5
+      },
+      {
+        "id": 8,
+        "name_en": "SING BURI",
+        "name_th": "สิงห์บุรี",
+        "distance_km": 55.43
+      },
+      {
+        "id": 9,
+        "name_en": "CHAI NAT",
+        "name_th": "ชัยนาท",
+        "distance_km": 79.03
+      },
+      {
+        "id": 48,
+        "name_en": "UTHAI THANI",
+        "name_th": "อุทัยธานี",
+        "distance_km": 101.57
+      }
+    ]
+  },
+  {
+    "id": 58,
+    "name_en": "NAKHON PATHOM",
+    "name_th": "นครปฐม",
+    "coordinates": {
+      "lat": 13.8199206,
+      "lon": 100.06216760000007
+    },
+    "adjacent": [
+      {
+        "id": 59,
+        "name_en": "SAMUT SAKHON",
+        "name_th": "สมุทรสาคร",
+        "distance_km": 37.99
+      },
+      {
+        "id": 1,
+        "name_en": "BANGKOK",
+        "name_th": "กรุงเทพมหานคร",
+        "distance_km": 50.93
+      },
+      {
+        "id": 3,
+        "name_en": "NONTHABURI",
+        "name_th": "นนทบุรี",
+        "distance_km": 49.05
+      },
+      {
+        "id": 5,
+        "name_en": "PHRA NAKHON SI AYUTTHAYA",
+        "name_th": "พระนครศรีอยุธยา",
+        "distance_km": 80.65
+      },
+      {
+        "id": 57,
+        "name_en": "SUPHAN BURI",
+        "name_th": "สุพรรณบุรี",
+        "distance_km": 73.03
+      },
+      {
+        "id": 56,
+        "name_en": "KANCHANABURI",
+        "name_th": "กาญจนบุรี",
+        "distance_km": 61.42
+      },
+      {
+        "id": 55,
+        "name_en": "RATCHABURI",
+        "name_th": "ราชบุรี",
+        "distance_km": 42.12
+      }
+    ]
+  },
+  {
+    "id": 59,
+    "name_en": "SAMUT SAKHON",
+    "name_th": "สมุทรสาคร",
+    "coordinates": {
+      "lat": 13.5475216,
+      "lon": 100.27439559999993
+    },
+    "adjacent": [
+      {
+        "id": 60,
+        "name_en": "SAMUT SONGKHRAM",
+        "name_th": "สมุทรสงคราม",
+        "distance_km": 33.17
+      },
+      {
+        "id": 55,
+        "name_en": "RATCHABURI",
+        "name_th": "ราชบุรี",
+        "distance_km": 49.88
+      },
+      {
+        "id": 1,
+        "name_en": "BANGKOK",
+        "name_th": "กรุงเทพมหานคร",
+        "distance_km": 33.62
+      },
+      {
+        "id": 58,
+        "name_en": "NAKHON PATHOM",
+        "name_th": "นครปฐม",
+        "distance_km": 37.99
+      }
+    ]
+  },
+  {
+    "id": 60,
+    "name_en": "SAMUT SONGKHRAM",
+    "name_th": "สมุทรสงคราม",
+    "coordinates": {
+      "lat": 13.4098217,
+      "lon": 100.00226450000002
+    },
+    "adjacent": [
+      {
+        "id": 55,
+        "name_en": "RATCHABURI",
+        "name_th": "ราชบุรี",
+        "distance_km": 24.3
+      },
+      {
+        "id": 61,
+        "name_en": "PHETCHABURI",
+        "name_th": "เพชรบุรี",
+        "distance_km": 33.91
+      },
+      {
+        "id": 59,
+        "name_en": "SAMUT SAKHON",
+        "name_th": "สมุทรสาคร",
+        "distance_km": 33.17
+      }
+    ]
+  },
+  {
+    "id": 61,
+    "name_en": "PHETCHABURI",
+    "name_th": "เพชรบุรี",
+    "coordinates": {
+      "lat": 13.1111601,
+      "lon": 99.93913069999996
+    },
+    "adjacent": [
+      {
+        "id": 62,
+        "name_en": "PRACHUAP KHIRI KHAN",
+        "name_th": "ประจวบคีรีขันธ์",
+        "distance_km": 145.24
+      },
+      {
+        "id": 55,
+        "name_en": "RATCHABURI",
+        "name_th": "ราชบุรี",
+        "distance_km": 48.34
+      },
+      {
+        "id": 60,
+        "name_en": "SAMUT SONGKHRAM",
+        "name_th": "สมุทรสงคราม",
+        "distance_km": 33.91
+      }
+    ]
+  },
+  {
+    "id": 62,
+    "name_en": "PRACHUAP KHIRI KHAN",
+    "name_th": "ประจวบคีรีขันธ์",
+    "coordinates": {
+      "lat": 11.812367,
+      "lon": 99.79732709999996
+    },
+    "adjacent": [
+      {
+        "id": 69,
+        "name_en": "CHUMPHON",
+        "name_th": "ชุมพร",
+        "distance_km": 161.42
+      },
+      {
+        "id": 61,
+        "name_en": "PHETCHABURI",
+        "name_th": "เพชรบุรี",
+        "distance_km": 145.24
+      }
+    ]
+  },
+  {
+    "id": 63,
+    "name_en": "NAKHON SI THAMMARAT",
+    "name_th": "นครศรีธรรมราช",
+    "coordinates": {
+      "lat": 8.4303975,
+      "lon": 99.96312190000003
+    },
+    "adjacent": [
+      {
+        "id": 73,
+        "name_en": "PHATTHALUNG",
+        "name_th": "พัทลุง",
+        "distance_km": 91.3
+      },
+      {
+        "id": 64,
+        "name_en": "KRABI",
+        "name_th": "กระบี่",
+        "distance_km": 122.43
+      },
+      {
+        "id": 70,
+        "name_en": "SONGKHLA",
+        "name_th": "สงขลา",
+        "distance_km": 156.89
+      },
+      {
+        "id": 67,
+        "name_en": "SURAT THANI",
+        "name_th": "สุราษฎร์ธานี",
+        "distance_km": 105.65
+      },
+      {
+        "id": 72,
+        "name_en": "TRANG",
+        "name_th": "ตรัง",
+        "distance_km": 104.32
+      }
+    ]
+  },
+  {
+    "id": 64,
+    "name_en": "KRABI",
+    "name_th": "กระบี่",
+    "coordinates": {
+      "lat": 8.0862997,
+      "lon": 98.90628349999997
+    },
+    "adjacent": [
+      {
+        "id": 63,
+        "name_en": "NAKHON SI THAMMARAT",
+        "name_th": "นครศรีธรรมราช",
+        "distance_km": 122.43
+      },
+      {
+        "id": 72,
+        "name_en": "TRANG",
+        "name_th": "ตรัง",
+        "distance_km": 97.26
+      },
+      {
+        "id": 67,
+        "name_en": "SURAT THANI",
+        "name_th": "สุราษฎร์ธานี",
+        "distance_km": 125.57
+      },
+      {
+        "id": 65,
+        "name_en": "PHANGNGA",
+        "name_th": "พังงา",
+        "distance_km": 58.02
+      }
+    ]
+  },
+  {
+    "id": 65,
+    "name_en": "PHANGNGA",
+    "name_th": "พังงา",
+    "coordinates": {
+      "lat": 8.4407456,
+      "lon": 98.51930319999997
+    },
+    "adjacent": [
+      {
+        "id": 66,
+        "name_en": "PHUKET",
+        "name_th": "ภูเก็ต",
+        "distance_km": 53.9
+      },
+      {
+        "id": 64,
+        "name_en": "KRABI",
+        "name_th": "กระบี่",
+        "distance_km": 58.02
+      },
+      {
+        "id": 67,
+        "name_en": "SURAT THANI",
+        "name_th": "สุราษฎร์ธานี",
+        "distance_km": 117.43
+      },
+      {
+        "id": 68,
+        "name_en": "RANONG",
+        "name_th": "ระนอง",
+        "distance_km": 168.43
+      }
+    ]
+  },
+  {
+    "id": 66,
+    "name_en": "PHUKET",
+    "name_th": "ภูเก็ต",
+    "coordinates": {
+      "lat": 7.9810496,
+      "lon": 98.36388239999997
+    },
+    "adjacent": [
+      {
+        "id": 65,
+        "name_en": "PHANGNGA",
+        "name_th": "พังงา",
+        "distance_km": 53.9
+      }
+    ]
+  },
+  {
+    "id": 67,
+    "name_en": "SURAT THANI",
+    "name_th": "สุราษฎร์ธานี",
+    "coordinates": {
+      "lat": 9.1382389,
+      "lon": 99.32174829999997
+    },
+    "adjacent": [
+      {
+        "id": 65,
+        "name_en": "PHANGNGA",
+        "name_th": "พังงา",
+        "distance_km": 117.43
+      },
+      {
+        "id": 64,
+        "name_en": "KRABI",
+        "name_th": "กระบี่",
+        "distance_km": 125.57
+      },
+      {
+        "id": 63,
+        "name_en": "NAKHON SI THAMMARAT",
+        "name_th": "นครศรีธรรมราช",
+        "distance_km": 105.65
+      },
+      {
+        "id": 69,
+        "name_en": "CHUMPHON",
+        "name_th": "ชุมพร",
+        "distance_km": 151.45
+      },
+      {
+        "id": 68,
+        "name_en": "RANONG",
+        "name_th": "ระนอง",
+        "distance_km": 119.68
+      }
+    ]
+  },
+  {
+    "id": 68,
+    "name_en": "RANONG",
+    "name_th": "ระนอง",
+    "coordinates": {
+      "lat": 9.9528702,
+      "lon": 98.60846409999999
+    },
+    "adjacent": [
+      {
+        "id": 65,
+        "name_en": "PHANGNGA",
+        "name_th": "พังงา",
+        "distance_km": 168.43
+      },
+      {
+        "id": 67,
+        "name_en": "SURAT THANI",
+        "name_th": "สุราษฎร์ธานี",
+        "distance_km": 119.68
+      },
+      {
+        "id": 69,
+        "name_en": "CHUMPHON",
+        "name_th": "ชุมพร",
+        "distance_km": 86.72
+      }
+    ]
+  },
+  {
+    "id": 69,
+    "name_en": "CHUMPHON",
+    "name_th": "ชุมพร",
+    "coordinates": {
+      "lat": 10.4930496,
+      "lon": 99.18001989999993
+    },
+    "adjacent": [
+      {
+        "id": 68,
+        "name_en": "RANONG",
+        "name_th": "ระนอง",
+        "distance_km": 86.72
+      },
+      {
+        "id": 67,
+        "name_en": "SURAT THANI",
+        "name_th": "สุราษฎร์ธานี",
+        "distance_km": 151.45
+      },
+      {
+        "id": 62,
+        "name_en": "PRACHUAP KHIRI KHAN",
+        "name_th": "ประจวบคีรีขันธ์",
+        "distance_km": 161.42
+      }
+    ]
+  },
+  {
+    "id": 70,
+    "name_en": "SONGKHLA",
+    "name_th": "สงขลา",
+    "coordinates": {
+      "lat": 7.1756004,
+      "lon": 100.61434699999995
+    },
+    "adjacent": [
+      {
+        "id": 74,
+        "name_en": "PATTANI",
+        "name_th": "ปัตตานี",
+        "distance_km": 78.02
+      },
+      {
+        "id": 75,
+        "name_en": "YALA",
+        "name_th": "ยะลา",
+        "distance_km": 101.9
+      },
+      {
+        "id": 71,
+        "name_en": "SATUN",
+        "name_th": "สตูล",
+        "distance_km": 86.08
+      },
+      {
+        "id": 73,
+        "name_en": "PHATTHALUNG",
+        "name_th": "พัทลุง",
+        "distance_km": 77.17
+      },
+      {
+        "id": 63,
+        "name_en": "NAKHON SI THAMMARAT",
+        "name_th": "นครศรีธรรมราช",
+        "distance_km": 156.89
+      }
+    ]
+  },
+  {
+    "id": 71,
+    "name_en": "SATUN",
+    "name_th": "สตูล",
+    "coordinates": {
+      "lat": 6.6238158,
+      "lon": 100.06737440000006
+    },
+    "adjacent": [
+      {
+        "id": 70,
+        "name_en": "SONGKHLA",
+        "name_th": "สงขลา",
+        "distance_km": 86.08
+      },
+      {
+        "id": 72,
+        "name_en": "TRANG",
+        "name_th": "ตรัง",
+        "distance_km": 115.58
+      },
+      {
+        "id": 73,
+        "name_en": "PHATTHALUNG",
+        "name_th": "พัทลุง",
+        "distance_km": 110.4
+      }
+    ]
+  },
+  {
+    "id": 72,
+    "name_en": "TRANG",
+    "name_th": "ตรัง",
+    "coordinates": {
+      "lat": 7.5593851,
+      "lon": 99.61100650000003
+    },
+    "adjacent": [
+      {
+        "id": 71,
+        "name_en": "SATUN",
+        "name_th": "สตูล",
+        "distance_km": 115.58
+      },
+      {
+        "id": 73,
+        "name_en": "PHATTHALUNG",
+        "name_th": "พัทลุง",
+        "distance_km": 51.43
+      },
+      {
+        "id": 63,
+        "name_en": "NAKHON SI THAMMARAT",
+        "name_th": "นครศรีธรรมราช",
+        "distance_km": 104.32
+      },
+      {
+        "id": 64,
+        "name_en": "KRABI",
+        "name_th": "กระบี่",
+        "distance_km": 97.26
+      }
+    ]
+  },
+  {
+    "id": 73,
+    "name_en": "PHATTHALUNG",
+    "name_th": "พัทลุง",
+    "coordinates": {
+      "lat": 7.6166823,
+      "lon": 100.07402309999998
+    },
+    "adjacent": [
+      {
+        "id": 70,
+        "name_en": "SONGKHLA",
+        "name_th": "สงขลา",
+        "distance_km": 77.17
+      },
+      {
+        "id": 71,
+        "name_en": "SATUN",
+        "name_th": "สตูล",
+        "distance_km": 110.4
+      },
+      {
+        "id": 72,
+        "name_en": "TRANG",
+        "name_th": "ตรัง",
+        "distance_km": 51.43
+      },
+      {
+        "id": 63,
+        "name_en": "NAKHON SI THAMMARAT",
+        "name_th": "นครศรีธรรมราช",
+        "distance_km": 91.3
+      }
+    ]
+  },
+  {
+    "id": 74,
+    "name_en": "PATTANI",
+    "name_th": "ปัตตานี",
+    "coordinates": {
+      "lat": 6.869484399999999,
+      "lon": 101.25048259999994
+    },
+    "adjacent": [
+      {
+        "id": 76,
+        "name_en": "NARATHIWAT",
+        "name_th": "นราธิวาส",
+        "distance_km": 80.43
+      },
+      {
+        "id": 75,
+        "name_en": "YALA",
+        "name_th": "ยะลา",
+        "distance_km": 36.66
+      },
+      {
+        "id": 70,
+        "name_en": "SONGKHLA",
+        "name_th": "สงขลา",
+        "distance_km": 78.02
+      }
+    ]
+  },
+  {
+    "id": 75,
+    "name_en": "YALA",
+    "name_th": "ยะลา",
+    "coordinates": {
+      "lat": 6.541147,
+      "lon": 101.28039469999999
+    },
+    "adjacent": [
+      {
+        "id": 76,
+        "name_en": "NARATHIWAT",
+        "name_th": "นราธิวาส",
+        "distance_km": 61.56
+      },
+      {
+        "id": 74,
+        "name_en": "PATTANI",
+        "name_th": "ปัตตานี",
+        "distance_km": 36.66
+      },
+      {
+        "id": 70,
+        "name_en": "SONGKHLA",
+        "name_th": "สงขลา",
+        "distance_km": 101.9
+      }
+    ]
+  },
+  {
+    "id": 76,
+    "name_en": "NARATHIWAT",
+    "name_th": "นราธิวาส",
+    "coordinates": {
+      "lat": 6.4254607,
+      "lon": 101.82531429999995
+    },
+    "adjacent": [
+      {
+        "id": 75,
+        "name_en": "YALA",
+        "name_th": "ยะลา",
+        "distance_km": 61.56
+      },
+      {
+        "id": 74,
+        "name_en": "PATTANI",
+        "name_th": "ปัตตานี",
+        "distance_km": 80.43
+      }
+    ]
+  },
+  {
+    "id": 77,
+    "name_en": "BUENG KAN",
+    "name_th": "บึงกาฬ",
+    "coordinates": {
+      "lat": 18.3609104,
+      "lon": 103.64644629999998
+    },
+    "adjacent": [
+      {
+        "id": 36,
+        "name_en": "NAKHON PHANOM",
+        "name_th": "นครพนม",
+        "distance_km": 160.41
+      },
+      {
+        "id": 35,
+        "name_en": "SAKON NAKHON",
+        "name_th": "สกลนคร",
+        "distance_km": 143.76
+      },
+      {
+        "id": 31,
+        "name_en": "NONG KHAI",
+        "name_th": "หนองคาย",
+        "distance_km": 109.69
+      }
+    ]
+  }
+]

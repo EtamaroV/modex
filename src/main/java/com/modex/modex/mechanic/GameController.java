@@ -1,5 +1,7 @@
 package com.modex.modex.mechanic;
 
+import com.modex.modex.datastruct.Graph;
+import com.modex.modex.loader.GraphLoader;
 import com.modex.modex.view.UIControl;
 import javafx.animation.AnimationTimer;
 
@@ -11,6 +13,16 @@ public class GameController extends AnimationTimer {
     public GameController(UIControl ui) {
         this.ui = ui;
         this.timeManager = new TimeManager();
+
+        Graph graph = GraphLoader.loadFromJson("thailand_graph.json");
+
+        graph.printAdjacencyList();
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+        graph.printAdjacencyMatrix();
     }
 
     @Override
