@@ -3,8 +3,6 @@ package com.modex.modex.mechanic;
 public class TimeManager {
     private long lastUpdateTime = 0;
 
-    // ตั้งค่าความเร็วของเวลาในเกม: 1,000,000,000 ns = 1 วินาทีจริง
-    // ถ้าอยากให้เกมเร็วขึ้น (เช่น x2) ให้หารค่านี้ลง
     private long TICK_INTERVAL = 250_000_000L;
     private int tickSpeedLevel = 1;
 
