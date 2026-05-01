@@ -1,0 +1,61 @@
+.Conveyor {
+    -fx-pref-width: 100%;
+    -fx-pref-height: 121px;
+}
+
+.Conveyor_label {
+    -fx-pref-width: 100%;
+    -fx-pref-height: 32px;
+    -fx-background-color: #292d32;
+    -fx-padding: 0 0 0 10px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.Conveyor_tile {
+    -fx-pref-width: 100%;
+    -fx-pref-height: 89px;
+    -fx-background-image: url("./textures/conveyor_tile.png");
+    -fx-smooth: false;
+    -fx-background-repeat: repeat;
+    -fx-background-size: 40px 103px;
+}
+
+.Conveyor_Inbound_label {
+    -fx-text-fill: white;
+}
+
+.clock-pane {
+    -fx-background-color: #292d32;
+    -fx-background-radius: 100%;
+
+    -fx-border-color: white;     /* #d3d1c3 */
+    -fx-border-radius: 100%;
+    -fx-border-width: 4px;
+}
+
+.menu-btn {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-pref-width: 40px;
+    -fx-cursor: hand;
+
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+
+    -fx-end-margin: 5;
+
+    -fx-opacity: 100%;
+}
+
+.timespeed-I {
+    -fx-background-image: url("./textures/speed_I.png");
+}
+.timespeed-II {
+    -fx-background-image: url("./textures/speed_II.png");
+}
+
+.menu-btn:hover {
+    -fx-opacity: 60%;
+}
