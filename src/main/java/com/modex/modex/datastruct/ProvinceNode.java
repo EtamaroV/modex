@@ -8,6 +8,15 @@ public class ProvinceNode {
     public double lat;
     public double lon;
 
+    public boolean isStartNode = false;
+    public boolean isUnlocked = false;
+    public boolean isDrawn = false;
+
+    public boolean isConstructing = false;
+    public int constructionFinishHour = 0;
+
+    public int unlockCost = 1000;
+
     public List<Edge> edges = new ArrayList<>();
 
     public ProvinceNode(int id, String name, double lat, double lon) {

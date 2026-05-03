@@ -26,12 +26,13 @@
 }
 
 .clock-pane {
-    -fx-background-color: #292d32;
     -fx-background-radius: 100%;
 
     -fx-border-color: white;     /* #d3d1c3 */
     -fx-border-radius: 100%;
     -fx-border-width: 4px;
+
+    transition: -fx-background-color 1s;
 }
 
 .menu-btn {
@@ -58,4 +59,23 @@
 
 .menu-btn:hover {
     -fx-opacity: 60%;
+}
+
+
+.primary-btn {
+    -fx-border-color: white; -fx-border-width: 2px; -fx-background-color: white; -fx-text-fill: #292d32; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 8px 18px;
+}
+
+.primary-btn:hover {
+    -fx-border-color: #c6c6c6;
+    -fx-background-color: #c6c6c6;
+}
+
+.secondary-btn {
+    -fx-border-color: white; -fx-border-width: 2px; -fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 8px 18px;
+}
+
+.secondary-btn:hover {
+    -fx-border-color: #c6c6c6;
+    -fx-text-fill: #c6c6c6;
 }

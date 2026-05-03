@@ -17,7 +17,6 @@ public class Graph {
         return nodes.values();
     }
 
-    // undirected graph
     public void addEdge(int id1, int id2, double distance) {
         ProvinceNode a = nodes.get(id1);
         ProvinceNode b = nodes.get(id2);
@@ -25,7 +24,16 @@ public class Graph {
         if (a == null || b == null) return;
 
         a.edges.add(new Edge(b, distance));
-        b.edges.add(new Edge(a, distance));
+    }
+
+    public List<ProvinceNode> getNeighbors(ProvinceNode node) {
+        List<ProvinceNode> neighbors = new ArrayList<>();
+        if (node != null && node.edges != null) {
+            for (Edge e : node.edges) {
+                neighbors.add(e.target);
+            }
+        }
+        return neighbors;
     }
 
     public void printAdjacencyList() {

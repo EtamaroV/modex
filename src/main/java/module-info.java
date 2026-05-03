@@ -9,5 +9,9 @@ module com.modex.modex {
     opens com.modex.modex to javafx.fxml;
     exports com.modex.modex;
     exports com.modex.modex.view;
+    exports com.modex.modex.mechanic;
+    exports com.modex.modex.datastruct;
+    exports com.modex.modex.loader;
+    exports com.modex.modex.model;
     opens com.modex.modex.view to javafx.fxml;
 }

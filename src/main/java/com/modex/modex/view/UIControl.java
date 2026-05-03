@@ -1,5 +1,6 @@
 package com.modex.modex.view;
 
+import com.modex.modex.datastruct.ProvinceNode;
 import com.modex.modex.mechanic.GameController;
 import javafx.animation.*;
 import javafx.application.Application;
@@ -13,16 +14,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
@@ -30,6 +28,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UIControl extends Application {
 
@@ -37,19 +37,55 @@ public class UIControl extends Application {
 
     private final Translate mapTranslate = new Translate(0, 0);
     private final Scale mapScale = new Scale(1, 1, 0, 0);
+    private final double midX = (97.34 + 105.65) / 2;
+    private final double midY = (5.61 + 20.46) / 2;
+    private final double MAP_SCALE = 50.0;
+
 
     private boolean isZoomed = false;
-    private final double GRID_SIZE = 40.0;
+    private final double GRID_SIZE = 20.0;
 
     private Rotate hourRotate;
     private Rotate minuteRotate;
 
-    private VBox timeMenu; // ประกาศไว้ระดับคลาสเพื่อให้เข้าถึงได้
+    private VBox timeMenu;
     private boolean isMenuOpen = false;
+    private Group mapGroup;
+
+    private boolean isDrawProvinces = false;
+
+    private Map<ProvinceNode, ImageView> nodeSprites = new HashMap<>();
+    private Map<String, Line> edgeLines = new HashMap<>();
+
+    private Image lockedImage;
+    private Image unlockedImage;
+    private Image startNodeImage;
+    private Image constructionImage;
+    private final double SPRITE_SIZE = 8.0;
+
+    private Label moneyLabel;
+
+    private AnchorPane clockPane;
+    private Line hourHand;
+    private Line minuteHand;
+
+    private StackPane root;
+    private StackPane mainGameContent;
+    private StackPane modalOverlay;
 
     @Override
     public void start(Stage stage) throws IOException {
-        StackPane root = new StackPane();
+        try {
+            lockedImage = new Image(getClass().getResourceAsStream("/images/node_locked.png"));
+            unlockedImage = new Image(getClass().getResourceAsStream("/images/node_unlocked.png"));
+            startNodeImage = new Image(getClass().getResourceAsStream("/images/node_start.png"));
+            constructionImage = new Image(getClass().getResourceAsStream("/images/node_construction.png"));
+        } catch (Exception e) {
+            System.out.println("⚠️ โหลดรูปไม่สำเร็จ! เช็กว่าวางไฟล์รูปถูกที่หรือยัง");
+        }
+
+        root = new StackPane();
+        mainGameContent = new StackPane();
 
         Pane gameMap = new Pane();
         gameMap.setStyle("-fx-background-color: #4a627b;");
@@ -67,7 +103,7 @@ public class UIControl extends Application {
                     double targetCenterX = (gridCol * GRID_SIZE) + (GRID_SIZE / 2.0);
                     double targetCenterY = (gridRow * GRID_SIZE) + (GRID_SIZE / 2.0);
 
-                    zoomToArea(root, targetCenterX, targetCenterY, 2.5);
+                    zoomToArea(root, targetCenterX, targetCenterY, 10.0);
 
                     isZoomed = true;
 
@@ -84,7 +120,7 @@ public class UIControl extends Application {
         AnchorPane uiLayer = new AnchorPane();
         uiLayer.setPickOnBounds(false);
 
-        Label moneyLabel = new Label("฿ 5,000");
+        moneyLabel = new Label("฿ 5,000");
         moneyLabel.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;");
 
         AnchorPane conveyor = new AnchorPane();
@@ -120,7 +156,9 @@ public class UIControl extends Application {
         renderClock(uiLayer);
 
 
-        root.getChildren().addAll(gameMap, uiLayer);
+        mainGameContent.getChildren().addAll(gameMap, uiLayer);
+        mainGameContent.setStyle("-fx-background-color: #4a627b;");
+        root.getChildren().add(mainGameContent);
         root.setStyle("-fx-background-color: #4a627b;");
 
 
@@ -182,9 +220,9 @@ public class UIControl extends Application {
         phuket.setStrokeWidth(1);
         phuket.setStrokeLineJoin(StrokeLineJoin.ROUND);
 
-        Group mapGroup = new Group(thailand, phuket);
+        this.mapGroup = new Group(thailand, phuket);
 
-        mapGroup.getStyleClass().add("map-polygon");
+        this.mapGroup.getStyleClass().add("map-polygon");
 
         DropShadow shadow = new DropShadow();
 
@@ -193,20 +231,27 @@ public class UIControl extends Application {
         shadow.setOffsetY(0);
         shadow.setColor(Color.color(0, 0, 0, 0.5));
 
-        mapGroup.setEffect(shadow);
+        this.mapGroup.setEffect(shadow);
 
-        mapGroup.layoutXProperty().bind(uiLayer.widthProperty().divide(2));
-        mapGroup.layoutYProperty().bind(uiLayer.heightProperty().subtract(121).divide(2));
+        this.mapGroup.layoutXProperty().bind(uiLayer.widthProperty().divide(2));
+        this.mapGroup.layoutYProperty().bind(uiLayer.heightProperty().subtract(121).divide(2));
 
         DoubleBinding dynamicScale = Bindings.createDoubleBinding(
                 () -> (uiLayer.getHeight() - 121) / 800.0,
                 uiLayer.heightProperty()
         );
 
-        mapGroup.scaleXProperty().bind(dynamicScale);
-        mapGroup.scaleYProperty().bind(dynamicScale);
+        this.mapGroup.scaleXProperty().bind(dynamicScale);
+        this.mapGroup.scaleYProperty().bind(dynamicScale);
 
-        uiLayer.getChildren().add(mapGroup);
+        uiLayer.getChildren().add(this.mapGroup);
+    }
+
+    public boolean isDrawProvinces() {
+        return isDrawProvinces;
+    }
+    public void setDrawProvinces(boolean drawProvinces) {
+        isDrawProvinces = drawProvinces;
     }
 
     private void zoomToArea(StackPane root, double targetX, double targetY, double targetScale) {
@@ -231,7 +276,7 @@ public class UIControl extends Application {
     }
 
     private void renderClock(AnchorPane root) {
-        AnchorPane clockPane = new AnchorPane();
+        clockPane = new AnchorPane();
 
         clockPane.setPrefSize(60, 60);
         clockPane.setMinSize(60, 60);
@@ -240,27 +285,28 @@ public class UIControl extends Application {
         AnchorPane.setRightAnchor(clockPane, 10.0);
         AnchorPane.setTopAnchor(clockPane, 10.0);
         clockPane.getStyleClass().add("clock-pane");
+        clockPane.setStyle("-fx-background-color: #292d32;");
 
         double centerX = 30.0;
         double centerY = 30.0;
 
-        Line hourHand = new Line(centerX, centerY, centerX, 18);
-        hourHand.setStrokeWidth(3.5);
-        hourHand.setStroke(Color.web("white"));
-        hourHand.setStrokeLineCap(StrokeLineCap.ROUND);
+        this.hourHand = new Line(centerX, centerY, centerX, 18);
+        this.hourHand.setStrokeWidth(3.5);
+        this.hourHand.setStroke(Color.web("white"));
+        this.hourHand.setStrokeLineCap(StrokeLineCap.ROUND);
 
-        Line minuteHand = new Line(centerX, centerY, centerX, 12);
-        minuteHand.setStrokeWidth(3.5);
-        minuteHand.setStroke(Color.web("white"));
-        minuteHand.setStrokeLineCap(StrokeLineCap.ROUND);
+        this.minuteHand = new Line(centerX, centerY, centerX, 12);
+        this.minuteHand.setStrokeWidth(3.5);
+        this.minuteHand.setStroke(Color.web("white"));
+        this.minuteHand.setStrokeLineCap(StrokeLineCap.ROUND);
 
         hourRotate = new Rotate(0, centerX, centerY);
         minuteRotate = new Rotate(0, centerX, centerY);
 
-        hourHand.getTransforms().add(hourRotate);
-        minuteHand.getTransforms().add(minuteRotate);
+        this.hourHand.getTransforms().add(hourRotate);
+        this.minuteHand.getTransforms().add(minuteRotate);
 
-        timeMenu = new VBox(10); // ระยะห่างระหว่างปุ่ม 10px
+        timeMenu = new VBox(10);
         timeMenu.getStyleClass().add("time-menu");
 
         Button btnResume = new Button();
@@ -292,7 +338,7 @@ public class UIControl extends Application {
         clockPane.setCursor(Cursor.HAND);
         clockPane.setOnMouseClicked(e -> toggletimeMenu());
 
-        clockPane.getChildren().addAll(hourHand, minuteHand);
+        clockPane.getChildren().addAll(this.hourHand, this.minuteHand);
         root.getChildren().addAll(timeMenu, clockPane);
     }
 
@@ -345,13 +391,27 @@ public class UIControl extends Application {
         isMenuOpen = !isMenuOpen;
     }
 
-    public void updateClock(double hour, double minute) {
+    public void updateClock(double hour, double minute, boolean isNightTime) {
         double minuteAngle = minute * 6.0;
 
         double hourAngle = (hour % 12) * 30.0;
 
         minuteRotate.setAngle(minuteAngle);
         hourRotate.setAngle(hourAngle);
+
+        if (isNightTime) {
+            clockPane.setStyle("-fx-background-color: #292d32;");
+            minuteHand.setStroke(Color.web("white"));
+            hourHand.setStroke(Color.web("white"));
+        } else {
+            clockPane.setStyle("-fx-background-color: white;");
+            minuteHand.setStroke(Color.web("black"));
+            hourHand.setStroke(Color.web("black"));
+        }
+    }
+
+    public void updateMoneyLabel(int money) {
+        moneyLabel.setText("฿ " + String.format("%,d", money));
     }
 
     private void resetZoom(StackPane root) {
@@ -364,5 +424,262 @@ public class UIControl extends Application {
                 )
         );
         timeline.play();
+    }
+
+    public void drawProvinceNode(ProvinceNode node) {
+        if (nodeSprites.containsKey(node)) return;
+
+        double x = (node.lon - midX) * MAP_SCALE;
+        double y = (midY - node.lat) * MAP_SCALE;
+
+        ImageView sprite = new ImageView(node.isUnlocked ? (node.isStartNode ? startNodeImage : unlockedImage) : lockedImage);
+
+        sprite.setFitWidth(SPRITE_SIZE);
+        sprite.setFitHeight(SPRITE_SIZE);
+
+        sprite.setX(x - (SPRITE_SIZE / 2));
+        sprite.setY(y - (SPRITE_SIZE / 2));
+
+        ScaleTransition scaleIn = new ScaleTransition(Duration.millis(25), sprite);
+        scaleIn.setToX(1.2);
+        scaleIn.setToY(1.2);
+        scaleIn.setInterpolator(Interpolator.EASE_OUT);
+
+        ScaleTransition scaleOut = new ScaleTransition(Duration.millis(25), sprite);
+        scaleOut.setToX(1.0);
+        scaleOut.setToY(1.0);
+        scaleOut.setInterpolator(Interpolator.EASE_OUT);
+
+        sprite.setOnMouseEntered(e -> {
+            if (!isZoomed || node.isUnlocked) return;
+            sprite.setCursor(Cursor.HAND);
+            scaleOut.stop();
+            scaleIn.playFromStart();
+        });
+
+        sprite.setOnMouseExited(e -> {
+            sprite.setCursor(Cursor.DEFAULT);
+            scaleIn.stop();
+            scaleOut.playFromStart();
+        });
+
+        sprite.setOnMouseClicked(e -> {
+            if (!isZoomed) return;
+            if (e.getButton() == MouseButton.PRIMARY) {
+                if (node.isConstructing) {
+                    showConstructionModal(node);
+                } else if (!node.isUnlocked) {
+                    showPurchaseModal(node);
+                } else {
+                    System.out.println("จังหวัดนี้เป็นของคุณแล้ว!");
+                }
+            }
+        });
+
+        nodeSprites.put(node, sprite);
+        mapGroup.getChildren().add(sprite);
+    }
+
+    public void updateNodeToConstructing(ProvinceNode node) {
+        ImageView sprite = nodeSprites.get(node);
+        if (sprite != null) {
+            sprite.setImage(constructionImage);
+
+            FadeTransition ft = new FadeTransition(Duration.millis(800), sprite);
+            ft.setFromValue(0.4);
+            ft.setToValue(1.0);
+            ft.setCycleCount(Animation.INDEFINITE);
+            ft.setAutoReverse(true);
+            ft.play();
+
+            sprite.setUserData(ft);
+        }
+    }
+
+    public void updateNodeColor(ProvinceNode node) {
+        ImageView sprite = nodeSprites.get(node);
+        if (sprite != null) {
+            if (sprite.getUserData() instanceof FadeTransition) {
+                ((FadeTransition) sprite.getUserData()).stop();
+                sprite.setUserData(null);
+            }
+
+            if (node.isStartNode) {
+                sprite.setImage(startNodeImage);
+            } else {
+                sprite.setImage(unlockedImage);
+            }
+
+            sprite.setOpacity(1.0);
+            sprite.setStyle("");
+        }
+    }
+
+    public void updateEdgeColor(ProvinceNode source, ProvinceNode target) {
+        String edgeKey = getEdgeKey(source, target);
+        Line line = edgeLines.get(edgeKey);
+        if (line != null) {
+            line.setStroke(Color.web("#4ade80"));
+            line.setStrokeWidth(0.8);
+        }
+    }
+
+    private String getEdgeKey(ProvinceNode a, ProvinceNode b) {
+        int min = Math.min(a.id, b.id);
+        int max = Math.max(a.id, b.id);
+        return min + "-" + max;
+    }
+
+    public void drawEdge(ProvinceNode source, ProvinceNode target, boolean isUnlocked) {
+        String edgeKey = getEdgeKey(source, target);
+        if (edgeLines.containsKey(edgeKey)) return;
+
+        double x1 = (source.lon - midX) * MAP_SCALE;
+        double y1 = (midY - source.lat) * MAP_SCALE;
+        double x2 = (target.lon - midX) * MAP_SCALE;
+        double y2 = (midY - target.lat) * MAP_SCALE;
+
+        Line line = new Line(x1, y1, x2, y2);
+
+        line.setStroke(isUnlocked ? Color.web("#4ade80") : Color.web("#5a6b7d"));
+        line.setStrokeWidth(isUnlocked ? 0.8 : 0.4);
+        line.setOpacity(0.6);
+
+        edgeLines.put(edgeKey, line);
+        mapGroup.getChildren().add(1, line);
+    }
+
+
+    private void showPurchaseModal(ProvinceNode node) {
+        modalOverlay = new StackPane();
+        modalOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+
+        VBox dialogBox = new VBox(20);
+        dialogBox.setAlignment(Pos.CENTER);
+        dialogBox.setMaxSize(800, 400);
+        dialogBox.setSpacing(10);
+
+        Label title = new Label("UNLOCK PROVINCE");
+        title.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
+
+        Label provincename = new Label(node.name);
+        provincename.setStyle("-fx-text-fill: white; -fx-font-size: 48px; -fx-font-weight: bold; -fx-text-alignment: center;");
+
+        Label desc = new Label("฿ " + String.format("%,d", gameController.getCurrentUnlockCost()));
+        desc.setStyle("-fx-text-fill: lightgray; -fx-font-size: 16px; -fx-font-weight: bold;");
+
+        Label constuctiontime = new Label("24 hours (In-game)");
+        constuctiontime.setStyle("-fx-text-fill: lightgray; -fx-font-size: 16px; -fx-font-weight: bold;");
+
+        HBox buttonBox = new HBox(20);
+        buttonBox.setTranslateY(20);
+        buttonBox.setAlignment(Pos.CENTER);
+
+        Button btnBuy = new Button("CONFIRM");
+        btnBuy.getStyleClass().add("primary-btn");
+
+        if (gameController.getMoney() < gameController.getCurrentUnlockCost()) {
+            desc.setStyle("-fx-text-fill: red; -fx-font-size: 16px; -fx-font-weight: bold;");
+            btnBuy.setDisable(true);
+        }
+
+        Button btnCancel = new Button("CANCEL");
+        btnCancel.getStyleClass().add("secondary-btn");
+
+        btnBuy.setOnAction(e -> {
+            closeModal();
+            gameController.tryUnlockProvince(node);
+        });
+
+        btnCancel.setOnAction(e -> closeModal());
+
+        buttonBox.getChildren().addAll(btnBuy, btnCancel);
+        dialogBox.getChildren().addAll(title, provincename, desc, constuctiontime, buttonBox);
+        modalOverlay.getChildren().add(dialogBox);
+
+        GaussianBlur blur = new GaussianBlur(15);
+        mainGameContent.setEffect(blur);
+
+        root.getChildren().add(modalOverlay);
+
+        ScaleTransition st = new ScaleTransition(Duration.millis(250), dialogBox);
+        st.setFromX(0.5); st.setFromY(0.5);
+        st.setToX(1.0); st.setToY(1.0);
+        st.setInterpolator(Interpolator.EASE_OUT);
+        st.play();
+    }
+
+    private void showConstructionModal(ProvinceNode node) {
+        modalOverlay = new StackPane();
+        modalOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+
+        VBox dialogBox = new VBox(20);
+        dialogBox.setAlignment(Pos.CENTER);
+        dialogBox.setMaxSize(800, 400);
+        dialogBox.setSpacing(10);
+
+        Label title = new Label("UNDER CONSTRUCTION");
+        title.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
+
+        Label provincename = new Label(node.name);
+        provincename.setStyle("-fx-text-fill: white; -fx-font-size: 48px; -fx-font-weight: bold; -fx-text-alignment: center;");
+
+        Label percentLabel = new Label("- 0.00 % -");
+        percentLabel.setStyle("-fx-text-fill: lightgray; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 10px;  -fx-text-alignment: center;");
+
+        HBox buttonBox = new HBox(20);
+        buttonBox.setTranslateY(20);
+        buttonBox.setAlignment(Pos.CENTER);
+
+        Button btnClose = new Button("CLOSE");
+        btnClose.getStyleClass().add("secondary-btn");
+
+        AnimationTimer liveUpdateTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                double currentExactHour = gameController.getTimeManager().getTotalHours() + (gameController.getTimeManager().getMinute() / 60.0);
+
+                double remainingHours = node.constructionFinishHour - currentExactHour;
+
+                remainingHours = Math.max(0, Math.min(24, remainingHours));
+
+                double percentCompleted = ((24.0 - remainingHours) / 24.0) * 100.0;
+
+                if (percentCompleted >= 100.0) {
+                    percentLabel.setText("COMPLETED!");
+                    percentLabel.setStyle("-fx-text-fill: #4ade80; -fx-font-size: 22px; -fx-font-weight: bold;");
+                    this.stop();
+                    closeModal();
+                } else {
+                    percentLabel.setText("- " + String.format("%.2f %%", percentCompleted) + " -");
+                }
+            }
+        };
+        liveUpdateTimer.start();
+
+        btnClose.setOnAction(e -> {
+            liveUpdateTimer.stop();
+            closeModal();
+        });
+
+        buttonBox.getChildren().add(btnClose);
+        dialogBox.getChildren().addAll(title, provincename, percentLabel, buttonBox);
+        modalOverlay.getChildren().add(dialogBox);
+
+        GaussianBlur blur = new GaussianBlur(15);
+        mainGameContent.setEffect(blur);
+
+        root.getChildren().add(modalOverlay);
+
+        ScaleTransition st = new ScaleTransition(Duration.millis(250), dialogBox);
+        st.setFromX(0.5); st.setFromY(0.5);
+        st.setToX(1.0); st.setToY(1.0);
+        st.setInterpolator(Interpolator.EASE_OUT);
+        st.play();
+    }
+
+    private void closeModal() {
+        mainGameContent.setEffect(null);
+        root.getChildren().remove(modalOverlay);
     }
 }

@@ -7,8 +7,8 @@ public class TimeManager {
     private int tickSpeedLevel = 1;
 
     private int minute = 0;
-    private int hour = 8;    // เริ่มเกมตอน 08:00 น.
-    private int day = 1;     // เริ่มเกมที่วันที่ 1
+    private int hour = 8;
+    private int day = 1;
 
     private boolean isNewDay = false;
     private boolean isPaused = false;
@@ -68,21 +68,18 @@ public class TimeManager {
         if (hour >= 24) {
             hour = 0;
             day++;
-            isNewDay = true; // แจ้งเตือนระบบว่าขึ้นวันใหม่แล้ว
+            isNewDay = true;
         }
     }
 
-    // --- ระบบควบคุมเวลา ---
     public void setPaused(boolean paused) {
         this.isPaused = paused;
         if (!paused) {
-            // สำคัญมาก: รีเซ็ต lastUpdateTime เพื่อไม่ให้เวลาข้ามตอนปลดพาวส์
             lastUpdateTime = 0;
         }
     }
     public boolean isPaused() { return isPaused; }
 
-    // --- Getters สำหรับดึงไปโชว์หรือคำนวณ ---
     public String getTimeString() {
         return String.format("Day %d | %02d:%02d", day, hour, minute);
     }
@@ -90,9 +87,20 @@ public class TimeManager {
     public int getHour() { return hour; }
     public int getMinute() { return minute; }
     public int getDay() { return day; }
+
+    public void setTime(int day, int hour, int minute) {
+        this.day = day;
+        this.hour = hour;
+        this.minute = minute;
+    }
+
+    public int getTotalHours() {
+        return (this.day * 24) + this.hour;
+    }
+
     public boolean isNewDay() { return isNewDay; }
 
     public boolean isNightTime() {
-        return hour >= 20 || hour <= 5; // ตัวอย่างเงื่อนไขเวลากลางคืน
+        return hour >= 18 || hour <= 6;
     }
 }
