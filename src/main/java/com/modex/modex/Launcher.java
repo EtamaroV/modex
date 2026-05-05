@@ -9,5 +9,6 @@ public class Launcher {
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "MODEx");
 
         Application.launch(UIControl.class, args);
+
     }
 }

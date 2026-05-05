@@ -1,8 +1,7 @@
 package com.modex.modex.mechanic;
 
-import com.modex.modex.datastruct.Edge;
 import com.modex.modex.datastruct.Graph;
-import com.modex.modex.datastruct.ProvinceNode;
+import com.modex.modex.datastruct.Province;
 import com.modex.modex.loader.GraphLoader;
 import com.modex.modex.model.Player;
 import com.modex.modex.view.UIControl;
@@ -27,6 +26,10 @@ public class GameController extends AnimationTimer {
     private int latestSave = 0;
 
     private int playerStartNode;
+
+    public Graph getProvinceGraph(){
+        return provinceGraph;
+    }
 
     public GameController(UIControl ui) { // Init
         this.ui = ui;
@@ -67,7 +70,7 @@ public class GameController extends AnimationTimer {
         if (ui != null && !timeManager.isPaused()) {
             int currentTotalHours = timeManager.getTotalHours();
 
-            for (ProvinceNode node : provinceGraph.getAllNodes()) {
+            for (Province node : provinceGraph.getAllNodes()) {
                 if (node.isConstructing && currentTotalHours >= node.constructionFinishHour) {
                     node.isConstructing = false;
                     node.isUnlocked = true;
@@ -78,7 +81,7 @@ public class GameController extends AnimationTimer {
                     if (ui != null) {
                         ui.updateNodeColor(node);
 
-                        for (ProvinceNode neighbor : provinceGraph.getNeighbors(node)) {
+                        for (Province neighbor : provinceGraph.getNeighbors(node)) {
                             if (neighbor.isUnlocked) {
                                 ui.updateEdgeColor(neighbor, node);
                             }
@@ -113,7 +116,7 @@ public class GameController extends AnimationTimer {
                 JSONObject nodeData = nodesArr.getJSONObject(i);
                 int id = nodeData.getInt("id");
 
-                ProvinceNode node = provinceGraph.getNode(id);
+                Province node = provinceGraph.getNode(id);
                 if (node != null) {
                     node.isUnlocked = nodeData.getBoolean("isUnlocked");
                     node.isConstructing = nodeData.getBoolean("isConstructing");
@@ -124,7 +127,7 @@ public class GameController extends AnimationTimer {
         }
 
         if (ui != null) {
-            for (ProvinceNode node : provinceGraph.getAllNodes()) {
+            for (Province node : provinceGraph.getAllNodes()) {
                 if (node.isUnlocked || node.isConstructing) {
 
                     ui.drawProvinceNode(node);
@@ -136,7 +139,7 @@ public class GameController extends AnimationTimer {
                     } else if (node.isUnlocked) {
                         ui.updateNodeColor(node);
 
-                        for (ProvinceNode neighbor : provinceGraph.getNeighbors(node)) {
+                        for (Province neighbor : provinceGraph.getNeighbors(node)) {
                             if (neighbor.isUnlocked) {
                                 ui.updateEdgeColor(neighbor, node);
                             }
@@ -153,11 +156,11 @@ public class GameController extends AnimationTimer {
     }
 
     private void spawnInitialProvince() {
-        List<ProvinceNode> allNodes = new ArrayList<>(provinceGraph.getAllNodes());
+        List<Province> allNodes = new ArrayList<>(provinceGraph.getAllNodes());
         if (allNodes.isEmpty()) return;
 
         Random rand = new Random();
-        ProvinceNode startNode = allNodes.get(rand.nextInt(allNodes.size()));
+        Province startNode = allNodes.get(rand.nextInt(allNodes.size()));
 
         startNode.isUnlocked = true;
         startNode.isStartNode = true;
@@ -174,8 +177,8 @@ public class GameController extends AnimationTimer {
         }
     }
 
-    private void expandVision(ProvinceNode centerNode) {
-        for (ProvinceNode neighbor : provinceGraph.getNeighbors(centerNode)) {
+    private void expandVision(Province centerNode) {
+        for (Province neighbor : provinceGraph.getNeighbors(centerNode)) {
             if (!neighbor.isDrawn) {
                 ui.drawProvinceNode(neighbor);
                 neighbor.isDrawn = true;
@@ -184,11 +187,11 @@ public class GameController extends AnimationTimer {
         }
     }
 
-    public void tryUnlockProvince(ProvinceNode targetNode) {
+    public void tryUnlockProvince(Province targetNode) {
         if (targetNode.isUnlocked || targetNode.isConstructing) return;
 
         boolean hasUnlockedNeighbor = false;
-        for (ProvinceNode neighbor : provinceGraph.getNeighbors(targetNode)) {
+        for (Province neighbor : provinceGraph.getNeighbors(targetNode)) {
             if (neighbor.isUnlocked) {
                 hasUnlockedNeighbor = true;
                 break;

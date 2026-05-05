@@ -3,31 +3,35 @@ package com.modex.modex.datastruct;
 import java.util.*;
 
 public class Graph {
-    private Map<Integer, ProvinceNode> nodes = new HashMap<>();
+    private Map<Integer, Province> nodes = new HashMap<>();
 
-    public void addNode(ProvinceNode node) {
+    public void addNode(Province node) {
         nodes.put(node.id, node);
     }
 
-    public ProvinceNode getNode(int id) {
+    public Province getNode(int id) {
         return nodes.get(id);
     }
 
-    public Collection<ProvinceNode> getAllNodes() {
+    public Collection<Province> getAllNodes() {
         return nodes.values();
     }
 
     public void addEdge(int id1, int id2, double distance) {
-        ProvinceNode a = nodes.get(id1);
-        ProvinceNode b = nodes.get(id2);
+        Province a = nodes.get(id1);
+        Province b = nodes.get(id2);
 
         if (a == null || b == null) return;
 
-        a.edges.add(new Edge(b, distance));
+        a.edges.add(new Edge(a ,b, distance));
     }
 
-    public List<ProvinceNode> getNeighbors(ProvinceNode node) {
-        List<ProvinceNode> neighbors = new ArrayList<>();
+    public Map<Integer, Province> getNodes(){
+        return nodes;
+    }
+
+    public List<Province> getNeighbors(Province node) {
+        List<Province> neighbors = new ArrayList<>();
         if (node != null && node.edges != null) {
             for (Edge e : node.edges) {
                 neighbors.add(e.target);
@@ -37,7 +41,7 @@ public class Graph {
     }
 
     public void printAdjacencyList() {
-        for (ProvinceNode node : nodes.values()) {
+        for (Province node : nodes.values()) {
             System.out.print(node.name + " -> ");
 
             for (Edge e : node.edges) {
@@ -49,13 +53,13 @@ public class Graph {
     }
 
     public void printAdjacencyMatrix() {
-        List<ProvinceNode> nodeList = new ArrayList<>(nodes.values());
+        List<Province> nodeList = new ArrayList<>(nodes.values());
 
         int n = nodeList.size();
         double[][] matrix = new double[n][n];
 
         // map node -> index
-        Map<ProvinceNode, Integer> indexMap = new HashMap<>();
+        Map<Province, Integer> indexMap = new HashMap<>();
         for (int i = 0; i < n; i++) {
             indexMap.put(nodeList.get(i), i);
         }
@@ -67,7 +71,7 @@ public class Graph {
         }
 
         // เติม edge ลง matrix
-        for (ProvinceNode node : nodeList) {
+        for (Province node : nodeList) {
             int i = indexMap.get(node);
 
             for (Edge e : node.edges) {
@@ -78,7 +82,7 @@ public class Graph {
 
         // 🖥️ แสดงผล
         System.out.print("      ");
-        for (ProvinceNode node : nodeList) {
+        for (Province node : nodeList) {
             System.out.printf("%-12s", node.name);
         }
         System.out.println();
