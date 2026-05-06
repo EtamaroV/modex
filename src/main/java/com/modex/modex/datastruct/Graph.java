@@ -40,6 +40,14 @@ public class Graph {
         return neighbors;
     }
 
+    public List<Province> getUnlocks(Province startProvince) {
+        List<Province> unlockProvinces = new ArrayList<>();
+        for (Province node : nodes.values()) {
+            if (node.isUnlocked && node.id != startProvince.id) unlockProvinces.add(node);
+        }
+        return unlockProvinces;
+    }
+
     public void printAdjacencyList() {
         for (Province node : nodes.values()) {
             System.out.print(node.name + " -> ");

@@ -1,5 +1,6 @@
 package com.modex.modex.view;
 
+import com.modex.modex.datastruct.Parcel;
 import com.modex.modex.datastruct.Province;
 import com.modex.modex.mechanic.GameController;
 import javafx.animation.*;
@@ -72,6 +73,15 @@ public class UIControl extends Application {
     private StackPane root;
     private StackPane mainGameContent;
     private StackPane modalOverlay;
+    private AnchorPane uiLayer;
+
+    private HBox conveyor_slot;
+    private AnchorPane conveyor_tile;
+
+    private final java.util.List<Node> conveyorQueue = new java.util.ArrayList<>();
+    private final StackPane[] truckSlots = new StackPane[5];
+    private AnchorPane truckMenu;
+    private Image deliveryBtnImage;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -80,6 +90,8 @@ public class UIControl extends Application {
             unlockedImage = new Image(getClass().getResourceAsStream("/images/node_unlocked.png"));
             startNodeImage = new Image(getClass().getResourceAsStream("/images/node_start.png"));
             constructionImage = new Image(getClass().getResourceAsStream("/images/node_construction.png"));
+
+            deliveryBtnImage = new Image(getClass().getResourceAsStream("/images/delivery_btn.png"));
         } catch (Exception e) {
             System.out.println("⚠️ โหลดรูปไม่สำเร็จ! เช็กว่าวางไฟล์รูปถูกที่หรือยัง");
         }
@@ -117,7 +129,7 @@ public class UIControl extends Application {
             }
         });
 
-        AnchorPane uiLayer = new AnchorPane();
+        uiLayer = new AnchorPane();
         uiLayer.setPickOnBounds(false);
 
         moneyLabel = new Label("฿ 5,000");
@@ -129,11 +141,20 @@ public class UIControl extends Application {
         AnchorPane.setRightAnchor(conveyor, 0.0);
         conveyor.getStyleClass().add("Conveyor");
 
-        AnchorPane conveyor_tile = new AnchorPane();
+        conveyor_tile = new AnchorPane();
         AnchorPane.setBottomAnchor(conveyor_tile, 0.0);
         AnchorPane.setLeftAnchor(conveyor_tile, 0.0);
         AnchorPane.setRightAnchor(conveyor_tile, 0.0);
         conveyor_tile.getStyleClass().add("Conveyor_tile");
+
+        conveyor_slot = new HBox();
+        conveyor_slot.getStyleClass().add("Conveyor_slot");
+        conveyor_slot.setSpacing(10.0);
+        conveyor_tile.getChildren().add(conveyor_slot);
+        AnchorPane.setTopAnchor(conveyor_slot, 0.0);
+        AnchorPane.setBottomAnchor(conveyor_slot, 0.0);
+        AnchorPane.setLeftAnchor(conveyor_slot, 0.0);
+        AnchorPane.setRightAnchor(conveyor_slot, 0.0);
 
         AnchorPane conveyor_label = new AnchorPane();
         AnchorPane.setTopAnchor(conveyor_label, 0.0);
@@ -181,6 +202,8 @@ public class UIControl extends Application {
         gameController = new GameController(this);
 
         gameController.start();
+
+        drawTruckMenu();
     }
 
     public void drawThailand(Pane uiLayer) {
@@ -681,5 +704,290 @@ public class UIControl extends Application {
     private void closeModal() {
         mainGameContent.setEffect(null);
         root.getChildren().remove(modalOverlay);
+    }
+
+    private Timeline spinConveyor(Parcel parcel) {
+        javafx.beans.property.IntegerProperty bgPositionX = new javafx.beans.property.SimpleIntegerProperty(0);
+
+        bgPositionX.addListener((obs, oldVal, newVal) -> {
+            conveyor_tile.setStyle("-fx-background-position: " + newVal + "px 0px;");
+        });
+
+        Timeline beltAnimation = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(bgPositionX, 0)),
+                new KeyFrame(Duration.seconds(0.5), new KeyValue(bgPositionX, 40, Interpolator.LINEAR))
+        );
+
+        beltAnimation.setCycleCount(Animation.INDEFINITE);
+        beltAnimation.play();
+        return beltAnimation;
+    }
+
+    public void drawParcelOnConveyor(Parcel parcel) {
+        StackPane parcelNode = new StackPane();
+        parcelNode.setUserData(parcel);
+
+        parcelNode.getStyleClass().add("parcel-box");
+        parcelNode.setPrefSize(110, 60);
+        parcelNode.setStyle("-fx-background-color: #dcb382; -fx-border-color: #8c5d2c; -fx-border-width: 2px; -fx-background-radius: 5px; -fx-border-radius: 5px;");
+        parcelNode.setLayoutY(15.5);
+
+        Label destinationLabel = new Label(parcel.getTo().name);
+        parcelNode.getChildren().add(destinationLabel);
+
+        parcelNode.setTranslateX(-120.0);
+
+        conveyor_tile.getChildren().add(parcelNode);
+        conveyorQueue.add(parcelNode);
+
+        Timeline spinAnim = spinConveyor(parcel);
+        parcelNode.getProperties().put("spinAnim", spinAnim);
+
+        setupDragAndDrop(parcelNode);
+
+        updateQueuePositions();
+    }
+
+    private void updateQueuePositions() {
+        double currentWidth = conveyor_tile.getWidth() > 0 ? conveyor_tile.getWidth() : 900.0;
+        double speed = 250.0;
+
+        for (int i = 0; i < conveyorQueue.size(); i++) {
+            Node node = conveyorQueue.get(i);
+
+            if (node.getUserData() instanceof Timeline) {
+                ((Timeline) node.getUserData()).stop();
+            }
+
+            double startX = node.getTranslateX();
+
+            double targetX = currentWidth - 130 - (i * 120);
+
+            double distance = Math.abs(targetX - startX);
+            double durationSeconds = Math.max(0.05, distance / speed);
+
+            Timeline timeline = new Timeline(
+                    new KeyFrame(Duration.ZERO, new KeyValue(node.translateXProperty(), startX)),
+                    new KeyFrame(Duration.seconds(durationSeconds), new KeyValue(node.translateXProperty(), targetX, Interpolator.LINEAR))
+            );
+
+
+            timeline.setOnFinished(e -> {
+                if (node.getProperties().containsKey("spinAnim")) {
+                    Timeline spinAnim = (Timeline) node.getProperties().get("spinAnim");
+                    if (spinAnim != null) spinAnim.stop();
+                }
+            });
+
+            node.setUserData(timeline);
+            timeline.play();
+
+
+            if (distance > 1 && node.getProperties().containsKey("spinAnim")) {
+                Timeline spinAnim = (Timeline) node.getProperties().get("spinAnim");
+                if(spinAnim != null) spinAnim.play();
+            }
+        }
+    }
+
+    private void setupDragAndDrop(StackPane parcelNode) {
+        final double[] dragDelta = new double[2];
+
+        parcelNode.setOnMousePressed(e -> {
+
+            if (parcelNode.getUserData() instanceof Timeline) {
+                ((Timeline) parcelNode.getUserData()).stop();
+            }
+            if (parcelNode.getProperties().containsKey("spinAnim")) {
+                Timeline spinAnim = (Timeline) parcelNode.getProperties().get("spinAnim");
+                if (spinAnim != null) spinAnim.stop();
+            }
+
+            parcelNode.setCursor(Cursor.CLOSED_HAND);
+
+
+            javafx.geometry.Point2D scenePos = parcelNode.localToScene(0, 0);
+            javafx.geometry.Point2D uiLayerPos = uiLayer.sceneToLocal(scenePos);
+
+
+            if (parcelNode.getParent() != uiLayer) {
+                ((Pane) parcelNode.getParent()).getChildren().remove(parcelNode);
+                uiLayer.getChildren().add(parcelNode);
+            }
+
+
+            parcelNode.toFront();
+
+
+            parcelNode.setLayoutX(0);
+            parcelNode.setLayoutY(0);
+            parcelNode.setTranslateX(uiLayerPos.getX());
+            parcelNode.setTranslateY(uiLayerPos.getY());
+
+
+            dragDelta[0] = parcelNode.getTranslateX() - e.getSceneX();
+            dragDelta[1] = parcelNode.getTranslateY() - e.getSceneY();
+
+
+            if (conveyorQueue.remove(parcelNode)) {
+                updateQueuePositions();
+            }
+        });
+
+        parcelNode.setOnMouseDragged(e -> {
+            parcelNode.setTranslateX(e.getSceneX() + dragDelta[0]);
+            parcelNode.setTranslateY(e.getSceneY() + dragDelta[1]);
+        });
+
+        parcelNode.setOnMouseReleased(e -> {
+            parcelNode.setCursor(Cursor.HAND);
+            javafx.geometry.Bounds parcelBounds = parcelNode.localToScene(parcelNode.getBoundsInLocal());
+
+            boolean droppedInTruck = false;
+
+            for (int i = 0; i < truckSlots.length; i++) {
+                StackPane targetSlot = truckSlots[i];
+                javafx.geometry.Bounds slotBounds = targetSlot.localToScene(targetSlot.getBoundsInLocal());
+
+                if (slotBounds.intersects(parcelBounds) && targetSlot.getChildren().isEmpty()) {
+                    droppedInTruck = true;
+
+                    int logicalOrder = 4 - i;
+                    System.out.println("🚚 พัสดุลงรถ Order ที่: " + logicalOrder);
+
+                    uiLayer.getChildren().remove(parcelNode);
+                    targetSlot.getChildren().add(parcelNode);
+
+
+                    parcelNode.setTranslateX(0);
+                    parcelNode.setTranslateY(0);
+                    break;
+                }
+            }
+
+            if (droppedInTruck) return;
+
+
+            uiLayer.getChildren().remove(parcelNode);
+            conveyor_tile.getChildren().add(parcelNode);
+
+            parcelNode.setLayoutY(15.5);
+
+            javafx.geometry.Point2D localPos = conveyor_tile.sceneToLocal(parcelBounds.getMinX(), parcelBounds.getMinY());
+            parcelNode.setTranslateX(localPos.getX());
+            parcelNode.setTranslateY(0);
+
+            int insertIndex = conveyorQueue.size();
+            for (int i = 0; i < conveyorQueue.size(); i++) {
+                if (parcelNode.getTranslateX() > conveyorQueue.get(i).getTranslateX()) {
+                    insertIndex = i;
+                    break;
+                }
+            }
+
+            conveyorQueue.add(insertIndex, parcelNode);
+            updateQueuePositions();
+        });
+
+        parcelNode.setOnMouseEntered(e -> parcelNode.setCursor(Cursor.HAND));
+    }
+
+    public void drawTruckMenu() {
+        truckMenu = new AnchorPane();
+        truckMenu.getStyleClass().add("truck-box");
+        truckMenu.setPrefSize(130*5 + 10, 120);
+        uiLayer.getChildren().add(truckMenu);
+        AnchorPane.setRightAnchor(truckMenu, 5.0);
+        AnchorPane.setBottomAnchor(truckMenu, 126.0);
+
+        AnchorPane LabelArea = new AnchorPane();
+        LabelArea.getStyleClass().add("truck-label");
+        LabelArea.setPrefSize(130*5 + 10, 40);
+        AnchorPane.setLeftAnchor(LabelArea, 0.0);
+        AnchorPane.setRightAnchor(LabelArea, 0.0);
+        AnchorPane.setTopAnchor(LabelArea, 0.0);
+
+        Label trucktext = new Label("Truck");
+        trucktext.getStyleClass().add("truck-text");
+        LabelArea.getChildren().add(trucktext);
+        AnchorPane.setLeftAnchor(trucktext, 0.0);
+
+        Label firstLabel = new Label("First");
+        firstLabel.getStyleClass().add("truck-stext");
+        LabelArea.getChildren().add(firstLabel);
+
+
+        Label lastLabel = new Label("Last");
+        lastLabel.getStyleClass().add("truck-stext");
+        LabelArea.getChildren().add(lastLabel);
+
+        AnchorPane.setLeftAnchor(lastLabel, 10.0);
+        AnchorPane.setBottomAnchor(lastLabel, 0.0);
+        AnchorPane.setRightAnchor(firstLabel, 10.0);
+        AnchorPane.setBottomAnchor(firstLabel, 0.0);
+
+
+        AnchorPane truckSlotArea = new AnchorPane();
+        AnchorPane.setLeftAnchor(truckSlotArea, 0.0);
+        AnchorPane.setRightAnchor(truckSlotArea, 0.0);
+        AnchorPane.setBottomAnchor(truckSlotArea, 10.0);
+        truckMenu.getChildren().addAll(LabelArea, truckSlotArea);
+
+        HBox slots = new HBox();
+        slots.setAlignment(Pos.CENTER);
+        slots.setSpacing(10);
+        slots.getStyleClass().add("truck-slotsarea");
+
+        AnchorPane.setTopAnchor(slots, 0.0);
+        AnchorPane.setBottomAnchor(slots, 0.0);
+        AnchorPane.setLeftAnchor(slots, 0.0);
+        AnchorPane.setRightAnchor(slots, 0.0);
+        truckSlotArea.getChildren().add(slots);
+
+        for (int i = 0; i < 5; i++) {
+            StackPane slot = new StackPane();
+            slot.setPrefSize(120, 70);
+            slot.getStyleClass().add("truck-slot");
+            slots.getChildren().add(slot);
+
+            truckSlots[i] = slot;
+        }
+
+        ImageView deliveryButton = new ImageView(deliveryBtnImage);
+        deliveryButton.getStyleClass().add("truck-button");
+        deliveryButton.setFitWidth(80);
+        deliveryButton.setFitHeight(80);
+        deliveryButton.setCursor(Cursor.HAND);
+        AnchorPane.setRightAnchor(deliveryButton, 5.0);
+        AnchorPane.setTopAnchor(deliveryButton, -90.0);
+        truckMenu.getChildren().add(deliveryButton);
+
+        deliveryButton.setOnMouseClicked(e -> {
+            gameController.deliveryParcels(getParcelsInTruck());
+        });
+    }
+
+    public java.util.List<Parcel> getParcelsInTruck() {
+        java.util.List<Parcel> parcels = new java.util.ArrayList<>();
+
+        for (int i = 4; i >= 0; i--) {
+            StackPane slot = truckSlots[i];
+
+            if (!slot.getChildren().isEmpty()) {
+
+                javafx.scene.Node parcelNode = slot.getChildren().get(0);
+
+                if (parcelNode.getUserData() instanceof Parcel) {
+                    Parcel p = (Parcel) parcelNode.getUserData();
+                    parcels.add(p);
+                }
+            }
+        }
+
+        return parcels;
+    }
+
+    public void removeTruckMenu() {
+        uiLayer.getChildren().remove(truckMenu);
     }
 }

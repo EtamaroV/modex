@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.modex.modex.datastruct.Edge;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,6 +16,8 @@ import com.modex.modex.model.Player;
 import com.modex.modex.view.UIControl;
 
 import javafx.animation.AnimationTimer;
+
+import static com.modex.modex.datastruct.Utility.dijkstra;
 
 public class GameController extends AnimationTimer {
 
@@ -71,7 +74,7 @@ public class GameController extends AnimationTimer {
             System.out.println("SAVING TOTAL HOURS: " + totalHours);
         }
 
-        if ((totalHours > latestParcelSpawn) && (totalHours % 8 == 0)) {
+        if ((totalHours > latestParcelSpawn) && (totalHours % 1 == 0)) { // ต้อง 8 นะ อันนี้เทส
             latestParcelSpawn = totalHours;
             System.out.println("parcel Gen: " + totalHours);
             parcelGeneration();
@@ -242,7 +245,7 @@ public class GameController extends AnimationTimer {
 
     public Parcel parcelGeneration(){
         Random rand = new Random();
-        List<Province> allNodes = new ArrayList<>(provinceGraph.getAllNodes());
+        List<Province> allNodes = provinceGraph.getUnlocks(startProvince);
         
         Province destinationProvince = allNodes.get(rand.nextInt(allNodes.size()));
 
@@ -254,6 +257,8 @@ public class GameController extends AnimationTimer {
         System.out.println(newParcel.getTo().name);
         System.out.println(newParcel.getReward());
         System.out.println("");
+
+        ui.drawParcelOnConveyor(newParcel);
 
         return newParcel;
     }
@@ -268,6 +273,11 @@ public class GameController extends AnimationTimer {
 
     public int getMoney() {
         return player.getMoney();
+    }
+
+    public void deliveryParcels(java.util.List<Parcel>  parcels) {
+        //ตรงนี้้เลยครับเพื่อนๆ
+        ui.removeTruckMenu();
     }
 
 }

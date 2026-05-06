@@ -21,6 +21,11 @@
     -fx-background-size: 40px 103px;
 }
 
+.Conveyor_slot {
+    -fx-pref-height: 100%;
+    -fx-pref-width: 100%;
+}
+
 .Conveyor_Inbound_label {
     -fx-text-fill: white;
 }
@@ -78,4 +83,37 @@
 .secondary-btn:hover {
     -fx-border-color: #c6c6c6;
     -fx-text-fill: #c6c6c6;
+}
+
+.truck-box {
+    -fx-background-color: #292d32;
+    -fx-background-radius: 5px;
+}
+
+.truck-slotsarea {
+    -fx-pref-height: 70px;
+}
+
+.truck-slot {
+    -fx-background-color: #2E3238;
+    -fx-background-radius: 5px; -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+.truck-label {
+
+}
+
+.truck-text {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 5px 0 0 10px;
+    -fx-text-alignment: center;
+    -fx-font-weight: bold;
+}
+
+.truck-stext {
+    -fx-text-fill: #acacac;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
 }
