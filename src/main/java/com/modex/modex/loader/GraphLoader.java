@@ -5,7 +5,6 @@ import com.modex.modex.datastruct.*;
 import org.json.*;
 
 import java.io.InputStream;
-import java.nio.file.*;
 
 public class GraphLoader {
 
@@ -35,7 +34,7 @@ public class GraphLoader {
                 double lat = coord.getDouble("lat");
                 double lon = coord.getDouble("lon");
 
-                ProvinceNode node = new ProvinceNode(id, name, lat, lon);
+                Province node = new Province(id, name, lat, lon);
                 graph.addNode(node);
             }
 

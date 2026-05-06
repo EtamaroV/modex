@@ -1,7 +1,7 @@
 package com.modex.modex.mechanic;
 
 import com.modex.modex.datastruct.Graph;
-import com.modex.modex.datastruct.ProvinceNode;
+import com.modex.modex.datastruct.Province;
 
 import com.modex.modex.model.Player;
 
@@ -58,7 +58,7 @@ public class SaveManager {
             saveObj.put("time", timeObj);
 
             JSONArray nodesArr = new JSONArray();
-            for (ProvinceNode node : graph.getAllNodes()) {
+            for (Province node : graph.getAllNodes()) {
                 if (node.isUnlocked || node.isConstructing) {
                     JSONObject nodeData = new JSONObject();
                     nodeData.put("id", node.id);

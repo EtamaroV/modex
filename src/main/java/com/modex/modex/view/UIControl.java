@@ -1,6 +1,6 @@
 package com.modex.modex.view;
 
-import com.modex.modex.datastruct.ProvinceNode;
+import com.modex.modex.datastruct.Province;
 import com.modex.modex.mechanic.GameController;
 import javafx.animation.*;
 import javafx.application.Application;
@@ -54,7 +54,7 @@ public class UIControl extends Application {
 
     private boolean isDrawProvinces = false;
 
-    private Map<ProvinceNode, ImageView> nodeSprites = new HashMap<>();
+    private Map<Province, ImageView> nodeSprites = new HashMap<>();
     private Map<String, Line> edgeLines = new HashMap<>();
 
     private Image lockedImage;
@@ -426,7 +426,7 @@ public class UIControl extends Application {
         timeline.play();
     }
 
-    public void drawProvinceNode(ProvinceNode node) {
+    public void drawProvinceNode(Province node) {
         if (nodeSprites.containsKey(node)) return;
 
         double x = (node.lon - midX) * MAP_SCALE;
@@ -480,7 +480,7 @@ public class UIControl extends Application {
         mapGroup.getChildren().add(sprite);
     }
 
-    public void updateNodeToConstructing(ProvinceNode node) {
+    public void updateNodeToConstructing(Province node) {
         ImageView sprite = nodeSprites.get(node);
         if (sprite != null) {
             sprite.setImage(constructionImage);
@@ -496,7 +496,7 @@ public class UIControl extends Application {
         }
     }
 
-    public void updateNodeColor(ProvinceNode node) {
+    public void updateNodeColor(Province node) {
         ImageView sprite = nodeSprites.get(node);
         if (sprite != null) {
             if (sprite.getUserData() instanceof FadeTransition) {
@@ -515,7 +515,7 @@ public class UIControl extends Application {
         }
     }
 
-    public void updateEdgeColor(ProvinceNode source, ProvinceNode target) {
+    public void updateEdgeColor(Province source, Province target) {
         String edgeKey = getEdgeKey(source, target);
         Line line = edgeLines.get(edgeKey);
         if (line != null) {
@@ -524,13 +524,13 @@ public class UIControl extends Application {
         }
     }
 
-    private String getEdgeKey(ProvinceNode a, ProvinceNode b) {
+    private String getEdgeKey(Province a, Province b) {
         int min = Math.min(a.id, b.id);
         int max = Math.max(a.id, b.id);
         return min + "-" + max;
     }
 
-    public void drawEdge(ProvinceNode source, ProvinceNode target, boolean isUnlocked) {
+    public void drawEdge(Province source, Province target, boolean isUnlocked) {
         String edgeKey = getEdgeKey(source, target);
         if (edgeLines.containsKey(edgeKey)) return;
 
@@ -550,7 +550,7 @@ public class UIControl extends Application {
     }
 
 
-    private void showPurchaseModal(ProvinceNode node) {
+    private void showPurchaseModal(Province node) {
         modalOverlay = new StackPane();
         modalOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
 
@@ -609,7 +609,7 @@ public class UIControl extends Application {
         st.play();
     }
 
-    private void showConstructionModal(ProvinceNode node) {
+    private void showConstructionModal(Province node) {
         modalOverlay = new StackPane();
         modalOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
 
