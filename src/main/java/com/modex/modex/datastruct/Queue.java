@@ -37,6 +37,11 @@ public class Queue<T> {
         return data;
     }
 
+    public T peek() {
+        if (isEmpty()) return null;
+        return first.data;
+    }
+
     public boolean isEmpty() {
         return first == null;
     }
