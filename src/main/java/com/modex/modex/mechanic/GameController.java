@@ -1,17 +1,20 @@
 package com.modex.modex.mechanic;
 
-import com.modex.modex.datastruct.Graph;
-import com.modex.modex.datastruct.Province;
-import com.modex.modex.loader.GraphLoader;
-import com.modex.modex.model.Player;
-import com.modex.modex.view.UIControl;
-import javafx.animation.AnimationTimer;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.json.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.modex.modex.datastruct.Graph;
+import com.modex.modex.datastruct.Parcel;
+import com.modex.modex.datastruct.Province;
+import com.modex.modex.loader.GraphLoader;
+import com.modex.modex.model.Player;
+import com.modex.modex.view.UIControl;
+
+import javafx.animation.AnimationTimer;
 
 public class GameController extends AnimationTimer {
 
@@ -25,7 +28,11 @@ public class GameController extends AnimationTimer {
 
     private int latestSave = 0;
 
+    private int latestParcelSpawn = 0;
+
     private int playerStartNode;
+
+    private Province startProvince;
 
     public Graph getProvinceGraph(){
         return provinceGraph;
@@ -40,7 +47,8 @@ public class GameController extends AnimationTimer {
         this.provinceGraph = GraphLoader.loadFromJson("thailand_graph.json");
 
         if (!loadGame()) {
-            spawnInitialProvince();
+            IO.println("haeel");
+            startProvince = spawnInitialProvince();
         }
 
     }
@@ -61,6 +69,12 @@ public class GameController extends AnimationTimer {
             latestSave = totalHours;
             saveGame();
             System.out.println("SAVING TOTAL HOURS: " + totalHours);
+        }
+
+        if ((totalHours > latestParcelSpawn) && (totalHours % 8 == 0)) {
+            latestParcelSpawn = totalHours;
+            System.out.println("parcel Gen: " + totalHours);
+            parcelGeneration();
         }
 
         if (timeManager.isNewDay()) {
@@ -122,6 +136,9 @@ public class GameController extends AnimationTimer {
                     node.isConstructing = nodeData.getBoolean("isConstructing");
                     node.constructionFinishHour = nodeData.getInt("finishHour");
                     node.isStartNode = (id == playerStartNode);
+                    if (id == playerStartNode) {
+                        startProvince = node;
+                    }
                 }
             }
         }
@@ -155,9 +172,9 @@ public class GameController extends AnimationTimer {
         return true;
     }
 
-    private void spawnInitialProvince() {
+    private Province spawnInitialProvince() {
         List<Province> allNodes = new ArrayList<>(provinceGraph.getAllNodes());
-        if (allNodes.isEmpty()) return;
+        if (allNodes.isEmpty()) return null;
 
         Random rand = new Random();
         Province startNode = allNodes.get(rand.nextInt(allNodes.size()));
@@ -175,6 +192,8 @@ public class GameController extends AnimationTimer {
 
             ui.updateMoneyLabel(player.getMoney());
         }
+
+        return startNode;
     }
 
     private void expandVision(Province centerNode) {
@@ -219,6 +238,24 @@ public class GameController extends AnimationTimer {
         } else {
             System.out.println("💸 เงินไม่พอ!");
         }
+    }
+
+    public Parcel parcelGeneration(){
+        Random rand = new Random();
+        List<Province> allNodes = new ArrayList<>(provinceGraph.getAllNodes());
+        
+        Province destinationProvince = allNodes.get(rand.nextInt(allNodes.size()));
+
+        Parcel newParcel = new Parcel(startProvince, destinationProvince);
+
+        int rewardPerParcel = rand.nextInt(300,601);
+        newParcel.setReward(rewardPerParcel);
+
+        System.out.println(newParcel.getTo().name);
+        System.out.println(newParcel.getReward());
+        System.out.println("");
+
+        return newParcel;
     }
 
     public int getCurrentUnlockCost() {
