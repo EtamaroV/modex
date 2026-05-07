@@ -35,6 +35,8 @@ public class GameController extends AnimationTimer {
 
     private int playerStartNode;
 
+    private int unlockNodeCounts = 0;
+
     private Province startProvince;
 
     public Graph getProvinceGraph(){
@@ -50,7 +52,6 @@ public class GameController extends AnimationTimer {
         this.provinceGraph = GraphLoader.loadFromJson("thailand_graph.json");
 
         if (!loadGame()) {
-            IO.println("haeel");
             startProvince = spawnInitialProvince();
         }
 
@@ -150,6 +151,8 @@ public class GameController extends AnimationTimer {
             for (Province node : provinceGraph.getAllNodes()) {
                 if (node.isUnlocked || node.isConstructing) {
 
+                    unlockNodeCounts++;
+
                     ui.drawProvinceNode(node);
                     node.isDrawn = true;
 
@@ -186,6 +189,8 @@ public class GameController extends AnimationTimer {
         startNode.isStartNode = true;
 
         playerStartNode = startNode.id;
+
+        unlockNodeCounts++;
 
         if (ui != null) {
             ui.drawProvinceNode(startNode);
@@ -226,8 +231,16 @@ public class GameController extends AnimationTimer {
         }
 
         if (player.deductMoney(currentUnlockCost)) {
+
             targetNode.isConstructing = true;
-            targetNode.constructionFinishHour = timeManager.getTotalHours() + 24;
+            if (unlockNodeCounts > 5) {
+                targetNode.constructionFinishHour = timeManager.getTotalHours() + 24;
+            } else {
+                targetNode.constructionFinishHour = timeManager.getTotalHours() + 1;
+            }
+
+
+            unlockNodeCounts++;
 
             currentUnlockCost = (int) (currentUnlockCost * 1.0562626);
             System.out.println("🚧 เริ่มก่อสร้าง " + targetNode.name + " (จะเสร็จในอีก 24 ชม.)");
@@ -273,6 +286,10 @@ public class GameController extends AnimationTimer {
 
     public int getMoney() {
         return player.getMoney();
+    }
+
+    public int getUnlockNodeCounts() {
+        return unlockNodeCounts;
     }
 
     public void deliveryParcels(java.util.List<Parcel> parcels) {
