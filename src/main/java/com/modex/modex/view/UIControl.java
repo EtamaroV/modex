@@ -62,6 +62,8 @@ public class UIControl extends Application {
     private Image unlockedImage;
     private Image startNodeImage;
     private Image constructionImage;
+    private Image startbtnImage;
+    private Image logo;
     private final double SPRITE_SIZE = 8.0;
 
     private Label moneyLabel;
@@ -83,6 +85,8 @@ public class UIControl extends Application {
     private AnchorPane truckMenu;
     private Image deliveryBtnImage;
 
+    private StackPane startOverlay;
+
     @Override
     public void start(Stage stage) throws IOException {
         try {
@@ -90,6 +94,9 @@ public class UIControl extends Application {
             unlockedImage = new Image(getClass().getResourceAsStream("/images/node_unlocked.png"));
             startNodeImage = new Image(getClass().getResourceAsStream("/images/node_start.png"));
             constructionImage = new Image(getClass().getResourceAsStream("/images/node_construction.png"));
+
+            startbtnImage = new Image(getClass().getResourceAsStream("/images/contineue.png"));
+            logo = new Image(getClass().getResourceAsStream("/images/ModEx_rmbg.png"));
 
             deliveryBtnImage = new Image(getClass().getResourceAsStream("/images/delivery_btn.png"));
         } catch (Exception e) {
@@ -202,7 +209,9 @@ public class UIControl extends Application {
 
         gameController = new GameController(this);
 
-        gameController.start();
+        //gameController.start();
+
+        showStartScreen();
 
         drawTruckMenu();
     }
@@ -997,5 +1006,64 @@ public class UIControl extends Application {
 
     public void removeTruckMenu() {
         uiLayer.getChildren().remove(truckMenu);
+    }
+
+    private void showStartScreen() {
+        startOverlay = new StackPane();
+        startOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.75);");
+
+        // ส่วนจัดวางแนวตั้ง
+        VBox container = new VBox(30); // 40 คือระยะห่างระหว่าง Logo กับ ปุ่ม
+        container.setAlignment(Pos.CENTER);
+
+        // --- ส่วนของ Logo ---
+        ImageView logoView = new ImageView(logo);
+        logoView.setPreserveRatio(true);
+        logoView.setFitWidth(500); // ปรับขนาดความกว้างของ Logo ตามต้องการ
+        
+        // เพิ่ม Animation เล็กน้อยให้ Logo ดูมีชีวิตชีวา (Fade In)
+        FadeTransition logoFade = new FadeTransition(Duration.millis(1000), logoView);
+        logoFade.setFromValue(0);
+        logoFade.setToValue(1);
+        logoFade.play();
+
+        // --- ส่วนของปุ่ม Start ---
+        ImageView startBtnView = new ImageView(startbtnImage);
+        startBtnView.setPreserveRatio(true);
+        startBtnView.setFitWidth(250); // ปรับขนาดปุ่ม Start
+        startBtnView.setCursor(Cursor.HAND);
+
+        // เอฟเฟกต์ตอนเอาเมาส์ไปชี้ปุ่ม
+        startBtnView.setOnMouseEntered(e -> {
+            startBtnView.setScaleX(1.1);
+            startBtnView.setScaleY(1.1);
+        });
+        startBtnView.setOnMouseExited(e -> {
+            startBtnView.setScaleX(1.0);
+            startBtnView.setScaleY(1.0);
+        });
+
+        // เมื่อคลิกปุ่ม Start
+        startBtnView.setOnMouseClicked(e -> {
+            if (e.getButton() == MouseButton.PRIMARY) {
+                FadeTransition ft = new FadeTransition(Duration.millis(500), startOverlay);
+                ft.setFromValue(1.0);
+                ft.setToValue(0.0);
+                ft.setOnFinished(event -> {
+                    root.getChildren().remove(startOverlay);
+                    gameController.start(); // เริ่มระบบเกม
+                });
+                ft.play();
+            }
+        });
+
+        // นำ Logo และปุ่มใส่ลงใน VBox
+        container.getChildren().addAll(logoView, startBtnView);
+        
+        // นำ VBox ใส่ลงใน Overlay
+        startOverlay.getChildren().add(container);
+        
+        // นำ Overlay ใส่ลงใน root ของเกม
+        root.getChildren().add(startOverlay);
     }
 }
