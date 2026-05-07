@@ -50,7 +50,7 @@ public class GameController extends AnimationTimer {
         this.provinceGraph = GraphLoader.loadFromJson("thailand_graph.json");
 
         if (!loadGame()) {
-            IO.println("haeel");
+            //IO.println("haeel");
             startProvince = spawnInitialProvince();
         }
 
