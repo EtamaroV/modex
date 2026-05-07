@@ -98,7 +98,9 @@ public class TimeManager {
         return (this.day * 24) + this.hour;
     }
 
-    public boolean isNewDay() { return isNewDay; }
+    public boolean isNewDay() {
+        return isNewDay ? isPaused ? false : true : false;
+    }
 
     public boolean isNightTime() {
         return hour >= 18 || hour <= 6;

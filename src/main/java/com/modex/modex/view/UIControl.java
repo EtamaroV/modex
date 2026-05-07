@@ -79,6 +79,7 @@ public class UIControl extends Application {
 
     private HBox conveyor_slot;
     private AnchorPane conveyor_tile;
+    private Label inbound_label;
 
     private final java.util.List<Node> conveyorQueue = new java.util.ArrayList<>();
     private StackPane[] truckSlots = new StackPane[5];
@@ -86,6 +87,8 @@ public class UIControl extends Application {
     private Image deliveryBtnImage;
 
     private StackPane startOverlay;
+
+    private StackPane summaryOverlay;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -169,7 +172,7 @@ public class UIControl extends Application {
         AnchorPane.setRightAnchor(conveyor_label, 0.0);
         conveyor_label.getStyleClass().add("Conveyor_label");
 
-        Label inbound_label = new Label("INBOUND QUEUE");
+        inbound_label = new Label("INBOUND QUEUE");
         inbound_label.getStyleClass().add("Conveyor_Inbound_label");
         AnchorPane.setTopAnchor(inbound_label, 0.0);
         AnchorPane.setBottomAnchor(inbound_label, 0.0);
@@ -548,13 +551,17 @@ public class UIControl extends Application {
         }
     }
 
-    public void updateEdgeColor(Province source, Province target) {
+    public void updateEdgeColor(Province source, Province target, String hexColor) {
         String edgeKey = getEdgeKey(source, target);
         Line line = edgeLines.get(edgeKey);
         if (line != null) {
-            line.setStroke(Color.web("#4ade80"));
+            line.setStroke(Color.web(hexColor));
             line.setStrokeWidth(0.8);
         }
+    }
+
+    public void updateEdgeColor(Province source, Province target) {
+        updateEdgeColor(source, target, "#4ade80");
     }
 
     private String getEdgeKey(Province a, Province b) {
@@ -739,6 +746,7 @@ public class UIControl extends Application {
     }
 
     public void drawParcelOnConveyor(Parcel parcel) {
+        if (conveyorQueue.size() >= 20) return;
         StackPane parcelNode = new StackPane();
         parcelNode.setUserData(parcel);
 
@@ -761,6 +769,8 @@ public class UIControl extends Application {
         setupDragAndDrop(parcelNode);
 
         updateQueuePositions();
+
+        inbound_label.setText("INBOUND QUEUE ("+conveyorQueue.size() + "/20)");
     }
 
     private void updateQueuePositions() {
@@ -1065,5 +1075,93 @@ public class UIControl extends Application {
         
         // นำ Overlay ใส่ลงใน root ของเกม
         root.getChildren().add(startOverlay);
+    }
+
+    public void showDailySummary(int parcelDelivered, int income, double distance, int expenses) {
+        summaryOverlay = new StackPane();
+        summaryOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.75);");
+
+        gameController.getTimeManager().setPaused(true);
+
+        VBox dialogBox = new VBox(20);
+        dialogBox.setAlignment(Pos.CENTER);
+        dialogBox.setMaxSize(500, 400);
+
+        Label title = new Label("DAY " + gameController.getTimeManager().getDay());
+        title.setStyle("-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;");
+
+        GridPane statsGrid = new GridPane();
+        statsGrid.setAlignment(Pos.CENTER);
+        statsGrid.setHgap(30);
+        statsGrid.setVgap(15);
+
+        String labelStyle = "-fx-text-fill: lightgray; -fx-font-size: 18px;";
+
+        Label lblDelivered = new Label("Parcels Delivered:");
+        lblDelivered.setStyle(labelStyle);
+        Label valDelivered = new Label(parcelDelivered + " Boxes");
+        valDelivered.setStyle("-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;");
+
+        Label lblDistance = new Label("Total Distance:");
+        lblDistance.setStyle(labelStyle);
+        Label valDistance = new Label(String.format("%.2f km", distance));
+        valDistance.setStyle("-fx-text-fill: #facc15; -fx-font-size: 18px; -fx-font-weight: bold;"); // สีเหลือง
+
+        Label lblIncome = new Label("Gross Income:");
+        lblIncome.setStyle(labelStyle);
+        Label valIncome = new Label("+ ฿ " + String.format("%,d", income));
+        valIncome.setStyle("-fx-text-fill: #4ade80; -fx-font-size: 18px; -fx-font-weight: bold;"); // สีเขียว
+
+        Label lblExpenses = new Label("Daily Expenses:");
+        lblExpenses.setStyle(labelStyle);
+        Label valExpenses = new Label("- ฿ " + String.format("%,d", expenses));
+        valExpenses.setStyle("-fx-text-fill: #ef4444; -fx-font-size: 18px; -fx-font-weight: bold;"); // สีแดง
+
+        statsGrid.add(lblDelivered, 0, 0); statsGrid.add(valDelivered, 1, 0);
+        statsGrid.add(lblDistance, 0, 1);  statsGrid.add(valDistance, 1, 1);
+        statsGrid.add(lblIncome, 0, 2);    statsGrid.add(valIncome, 1, 2);
+        statsGrid.add(lblExpenses, 0, 3);  statsGrid.add(valExpenses, 1, 3);
+
+        int netProfit = income - expenses;
+        HBox netBox = new HBox(20);
+        netBox.setAlignment(Pos.CENTER);
+        Label lblNet = new Label("NET PROFIT:");
+        lblNet.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
+
+        Label valNet = new Label((netProfit >= 0 ? "+ ฿ " : "- ฿ ") + String.format("%,d", Math.abs(netProfit)));
+        valNet.setStyle("-fx-text-fill: " + (netProfit >= 0 ? "#4ade80" : "#ef4444") + "; -fx-font-size: 26px; -fx-font-weight: bold;");
+        netBox.getChildren().addAll(lblNet, valNet);
+
+        Line separator = new Line(0, 0, 350, 0);
+        separator.setStroke(javafx.scene.paint.Color.web("#5a6b7d"));
+        separator.setStrokeWidth(2);
+
+        Button btnContinue = new Button("CONTINUE");
+        btnContinue.getStyleClass().add("primary-btn");
+        btnContinue.setOnAction(e -> {
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(200), summaryOverlay);
+            fadeOut.setToValue(0);
+            fadeOut.setOnFinished(ev -> root.getChildren().remove(summaryOverlay));
+            fadeOut.play();
+
+            gameController.getTimeManager().setPaused(false);
+            gameController.saveGame();
+        });
+
+        dialogBox.getChildren().addAll(title, statsGrid, separator, netBox, btnContinue);
+        summaryOverlay.getChildren().add(dialogBox);
+
+        root.getChildren().add(summaryOverlay);
+
+        summaryOverlay.setOpacity(0);
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(250), summaryOverlay);
+        fadeIn.setToValue(1);
+        fadeIn.play();
+
+        ScaleTransition scaleIn = new ScaleTransition(Duration.millis(250), dialogBox);
+        scaleIn.setFromX(0.7); scaleIn.setFromY(0.7);
+        scaleIn.setToX(1.0); scaleIn.setToY(1.0);
+        scaleIn.setInterpolator(Interpolator.EASE_OUT);
+        scaleIn.play();
     }
 }

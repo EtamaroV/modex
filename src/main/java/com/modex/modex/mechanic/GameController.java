@@ -83,6 +83,7 @@ public class GameController extends AnimationTimer {
         }
 
         if (timeManager.isNewDay()) {
+            ui.showDailySummary(1, 2, 3.5, 4);
             System.out.println("--- เริ่มต้นวันที่ " + timeManager.getDay() + " ---");
         }
 
@@ -295,7 +296,7 @@ public class GameController extends AnimationTimer {
 
     public void deliveryParcels(java.util.List<Parcel> parcels) {
         for (Parcel parcel : parcels) {
-            System.out.println(parcel.getFrom().name);
+            System.out.println(parcel.getTo().name);
         }
 
         ui.removeTruckMenu();
