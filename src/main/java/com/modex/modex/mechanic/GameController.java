@@ -300,7 +300,7 @@ public class GameController extends AnimationTimer {
         }
 
         if (player.deductMoney(currentUnlockCost)) {
-
+            this.ui.moneyPopup(-currentUnlockCost);
             targetNode.isConstructing = true;
             if (unlockNodeCounts > 5) {
                 targetNode.constructionFinishHour = timeManager.getTotalHours() + 24;
@@ -463,7 +463,9 @@ public class GameController extends AnimationTimer {
         ui.drawTruckMenu();
 
         //
-        dailyExpenses += 100 + (int)(cumulativeDistance*0.25);
+        int expense = 100 + (int)(cumulativeDistance*0.25);
+        dailyExpenses += expense;
+        this.ui.moneyPopup(-expense);
         dailyCumulativeDistance += cumulativeDistance;
 
     }
@@ -480,6 +482,7 @@ public class GameController extends AnimationTimer {
 
         // 3. อัปเดตเงินบนหน้าจอ UI
         this.ui.updateMoneyLabel(this.player.getMoney());
+        this.ui.moneyPopup(moneyToEarn);
 
         System.out.println("💰 ภารกิจสำเร็จ! ส่งพัสดุถึง " + parcel.getTo().name + " ได้รับเงิน " + moneyToEarn + " บาท");
     }

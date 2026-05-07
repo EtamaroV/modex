@@ -27,6 +27,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
+import javafx.stage.Popup;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -461,6 +462,35 @@ public class UIControl extends Application {
 
     public void updateMoneyLabel(int money) {
         moneyLabel.setText("฿ " + String.format("%,d", money));
+    }
+
+    public void moneyPopup(int change){
+        // 1. สร้างตัวเลขเงิน
+        Label moneyLabel = new Label((change >= 0)? "+$"  + (change): "-$" + (-change));
+        moneyLabel.setStyle("-fx-text-fill: " + ((change >= 0 )? "#00FF00": "red") + "; -fx-font-size: 20px; -fx-font-weight: bold;");
+
+        // 2. แอดเข้าไปใน Root (StackPane)
+        root.getChildren().add(moneyLabel);
+
+        // 3. สั่งให้ไปอยู่ที่มุมขวาบน และตั้งค่า Margin (เว้นระยะจากขอบนิดหน่อย)
+        StackPane.setAlignment(moneyLabel, javafx.geometry.Pos.TOP_LEFT);
+        StackPane.setMargin(moneyLabel, new javafx.geometry.Insets(25, 0, 0, 20)); // เว้นจากขอบบน 20, ขวา 20
+
+        // 4. Animation เด้งสวยๆ (ขยายแล้วค่อยๆ จางหายลงข้างล่าง)
+        TranslateTransition moveDown = new TranslateTransition(Duration.seconds(1.5), moneyLabel);
+        moveDown.setFromY(0);
+        moveDown.setToY(30); // ให้ค่อยๆ ไหลลงมานิดหน่อย
+
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(1.5), moneyLabel);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+
+        ParallelTransition animation = new ParallelTransition(moveDown, fadeOut);
+
+        // สำคัญ: เมื่อจบ Animation ต้องลบ Label ออกจาก Root ไม่เช่นนั้นจะหนักเครื่อง (Memory Leak)
+        animation.setOnFinished(e -> root.getChildren().remove(moneyLabel));
+
+        animation.play();
     }
 
     private void resetZoom(StackPane root) {
