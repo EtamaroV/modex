@@ -275,9 +275,13 @@ public class GameController extends AnimationTimer {
         return player.getMoney();
     }
 
-    public void deliveryParcels(java.util.List<Parcel>  parcels) {
-        //ตรงนี้้เลยครับเพื่อนๆ
+    public void deliveryParcels(java.util.List<Parcel> parcels) {
+        for (Parcel parcel : parcels) {
+            System.out.println(parcel.getFrom().name);
+        }
+
         ui.removeTruckMenu();
+        ui.drawTruckMenu();
     }
 
 }

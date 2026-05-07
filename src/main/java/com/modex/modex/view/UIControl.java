@@ -79,7 +79,7 @@ public class UIControl extends Application {
     private AnchorPane conveyor_tile;
 
     private final java.util.List<Node> conveyorQueue = new java.util.ArrayList<>();
-    private final StackPane[] truckSlots = new StackPane[5];
+    private StackPane[] truckSlots = new StackPane[5];
     private AnchorPane truckMenu;
     private Image deliveryBtnImage;
 
@@ -194,6 +194,7 @@ public class UIControl extends Application {
 
         Scene scene = new Scene(root, 900, 600);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/ModEx.png")));
         stage.setFullScreen(true);
         stage.setTitle("MODEx");
         stage.setScene(scene);
@@ -779,7 +780,7 @@ public class UIControl extends Application {
                 }
             });
 
-            node.setUserData(timeline);
+            node.getProperties().put("moveAnim", timeline);
             timeline.play();
 
 
@@ -795,8 +796,9 @@ public class UIControl extends Application {
 
         parcelNode.setOnMousePressed(e -> {
 
-            if (parcelNode.getUserData() instanceof Timeline) {
-                ((Timeline) parcelNode.getUserData()).stop();
+            if (parcelNode.getProperties().containsKey("moveAnim")) {
+                Timeline moveAnim = (Timeline) parcelNode.getProperties().get("moveAnim");
+                if (moveAnim != null) moveAnim.stop();
             }
             if (parcelNode.getProperties().containsKey("spinAnim")) {
                 Timeline spinAnim = (Timeline) parcelNode.getProperties().get("spinAnim");
@@ -893,6 +895,7 @@ public class UIControl extends Application {
     }
 
     public void drawTruckMenu() {
+        truckSlots = new StackPane[5];
         truckMenu = new AnchorPane();
         truckMenu.getStyleClass().add("truck-box");
         truckMenu.setPrefSize(130*5 + 10, 120);
@@ -975,7 +978,7 @@ public class UIControl extends Application {
 
             if (!slot.getChildren().isEmpty()) {
 
-                javafx.scene.Node parcelNode = slot.getChildren().get(0);
+                javafx.scene.Node parcelNode = slot.getChildren().getFirst();
 
                 if (parcelNode.getUserData() instanceof Parcel) {
                     Parcel p = (Parcel) parcelNode.getUserData();
