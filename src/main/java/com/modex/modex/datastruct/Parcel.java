@@ -1,11 +1,15 @@
 package com.modex.modex.datastruct;
 
+import java.util.List;
+
 public class Parcel {
     private Province from;
     private Province to;
     private Province currentProvince;
-    private Edge path;
+    private List<Edge> path;
     private int reward;
+
+    private double distance_delivery;
 
     public Parcel(Province From,Province To){
         from = From;
@@ -27,7 +31,7 @@ public class Parcel {
         return currentProvince;
     }
 
-    public Edge getPath() {
+    public  List<Edge> getPath() {
         return path;
     }
 
@@ -39,7 +43,7 @@ public class Parcel {
         this.currentProvince = currentProvince;
     }
 
-    public void setPath(Edge path) {
+    public void setPath( List<Edge> path) {
         this.path = path;
     }
 
@@ -47,5 +51,18 @@ public class Parcel {
         this.reward = reward;
     }
 
+    // เพิ่มเข้าไปใน Class Parcel
+    public void setFrom(Province from) {
+        this.from = from;
+    }
+
+    // เพิ่มใน Parcel.java
+    public void setDistanceDelivery(double distance) {
+        this.distance_delivery = distance;
+    }
+
+    public double getDistanceDelivery() {
+        return distance_delivery;
+    }
 
 }

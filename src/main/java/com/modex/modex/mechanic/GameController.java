@@ -313,12 +313,65 @@ public class GameController extends AnimationTimer {
     }
 
     public void deliveryParcels(java.util.List<Parcel> parcels) {
-        for (Parcel parcel : parcels) {
-            System.out.println(parcel.getTo().name);
+        if (parcels == null || parcels.isEmpty()) return;
+
+        // 1. เตรียมตัวแปรสำหรับเก็บข้อมูลสรุป
+        double cumulativeDistance = 0;
+        // สมมติความเร็วรถเฉลี่ยที่ 60 km/h (หรือปรับตาม Logic เกมของคุณ)
+        double averageSpeed = 60.0; 
+
+        System.out.println("\n========== DELIVERY ROUTE SUMMARY ==========");
+        
+        // เริ่มต้นจุดแรกด้วยตำแหน่งปัจจุบัน (from ของพัสดุกล่องแรก)
+        Province lastStop = parcels.get(0).getFrom();
+
+        for (int i = 0; i < parcels.size(); i++) {
+            Parcel currentParcel = parcels.get(i);
+
+            // 2. Chaining Logic: อัปเดตจุดเริ่มให้ต่อจากจุดหมายก่อนหน้า
+            currentParcel.setFrom(lastStop);
+            currentParcel.setCurrentProvince(lastStop);
+
+            // 3. คำนวณเส้นทางด้วย Dijkstra
+            List<Edge> optimizedPath = this.provinceGraph.findShortestPath(lastStop, currentParcel.getTo());
+            currentParcel.setPath(optimizedPath);
+
+            // 4. คำนวณระยะทางช่วงปัจจุบัน
+            double segmentDistance = 0;
+            if (optimizedPath != null && !optimizedPath.isEmpty()) {
+                for (Edge edge : optimizedPath) {
+                    segmentDistance += edge.distance; // อ้างอิงตัวแปร distance จาก Edge.java
+                }
+            } else {
+                // หากหาเส้นทางไม่ได้ ให้ใช้ค่าที่ Dijkstra บันทึกไว้ในโหนดปลายทาง
+                segmentDistance = currentParcel.getTo().distanceFormSource;
+            }
+
+            // 5. อัปเดตข้อมูลลงใน Parcel
+            currentParcel.setDistanceDelivery(segmentDistance);
+            cumulativeDistance += segmentDistance;
+
+            // คำนวณเวลาที่คาดว่าจะถึง (ETA) ของกล่องนี้
+            double etaInMinutes = (cumulativeDistance / averageSpeed);
+
+            // 6. แสดงข้อมูลของแต่ละกล่อง
+            System.out.printf("Box #%d: [%s -> %s]\n", (i + 1), currentParcel.getFrom().name, currentParcel.getTo().name);
+            System.out.printf("   - Distance this leg: %.2f km\n", segmentDistance);
+            System.out.printf("   - Total distance so far: %.2f km\n", cumulativeDistance);
+            System.out.printf("   - Est. Arrival Time: +%.0f hr\n", etaInMinutes);
+            System.out.println("--------------------------------------------");
+
+            // อัปเดตจุดจอดเพื่อใช้คำนวณกล่องถัดไป
+            lastStop = currentParcel.getTo();
         }
 
+        System.out.println("Total Route Distance: " + String.format("%.2f", cumulativeDistance) + " km");
+        System.out.println("============================================\n");
+
+        // อัปเดต UI
         ui.removeTruckMenu();
         ui.drawTruckMenu();
     }
+
 
 }
