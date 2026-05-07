@@ -948,7 +948,11 @@ public class UIControl extends Application {
 
         for (Province node : gameController.getProvinceGraph().getAllNodes()) {
             for (Province neighbor : gameController.getProvinceGraph().getNeighbors(node)) {
-                updateEdgeColor(node, neighbor, "#4ade80", 0.8, false);
+                if (node.isUnlocked && neighbor.isUnlocked) {
+                    updateEdgeColor(node, neighbor, "#4ade80", 0.8, false);
+                } else {
+                    updateEdgeColor(node, neighbor, "#5a6b7d", 0.4, false);
+                }
             }
         }
     }
