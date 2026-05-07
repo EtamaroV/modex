@@ -275,6 +275,11 @@ public class GameController extends AnimationTimer {
 
         ui.drawParcelOnConveyor(newParcel);
 
+        List<Edge> paths = dijkstra(startProvince, destinationProvince);
+        for (Edge path : paths) {
+            System.out.println("From " + path.source.name + " To " + path.target.name);
+        }
+
         return newParcel;
     }
 
