@@ -258,30 +258,49 @@ public class GameController extends AnimationTimer {
         }
     }
 
-    public Parcel parcelGeneration(){
+    public Parcel parcelGeneration() {
         Random rand = new Random();
-        List<Province> allNodes = provinceGraph.getUnlocks(startProvince);
-        
-        Province destinationProvince = allNodes.get(rand.nextInt(allNodes.size()));
 
-        Parcel newParcel = new Parcel(startProvince, destinationProvince);
-
-        int rewardPerParcel = rand.nextInt(300,601);
-        newParcel.setReward(rewardPerParcel);
-
-        System.out.println(newParcel.getTo().name);
-        System.out.println(newParcel.getReward());
-        System.out.println("");
-
-        ui.drawParcelOnConveyor(newParcel);
-
-        List<Edge> paths = dijkstra(startProvince, destinationProvince);
-        for (Edge path : paths) {
-            System.out.println("From " + path.source.name + " To " + path.target.name);
+        // 1. ตรวจสอบจุดเริ่มต้น (ป้องกัน Null)
+        if (this.startProvince == null) {
+            // ดึงจังหวัดแรกใน Graph มาเป็นค่าเริ่มต้น
+            this.startProvince = provinceGraph.getNodes().values().iterator().next();
         }
 
+        // 2. ดึงรายการจังหวัดที่ปลดล็อกแล้ว (ไม่รวมจุดเริ่ม)
+        List<Province> allNodes = provinceGraph.getUnlocks(this.startProvince);
+        if (allNodes.isEmpty()) return null;
+
+        // 3. สุ่มจังหวัดปลายทาง
+        Province destination = allNodes.get(rand.nextInt(allNodes.size()));
+
+        // 4. 🔥 วิธีเรียกใช้ Dijkstra ที่คุณเขียนไว้ใน Graph
+        // เรียกผ่าน Object ของคลาส Graph ได้เลย
+        List<Edge> path = this.provinceGraph.findShortestPath(this.startProvince, destination);
+
+        // 5. นำระยะทางที่ได้มาคำนวณเงิน (กิโลละ 2 บาท + ค่าธรรมเนียม 25)
+        double distance = destination.distanceFormSource;
+        int reward;
+
+        if (distance >= 1000000.0) {
+            reward = 25; // กรณีหาทางไม่เจอจริงๆ ให้แค่ค่าธรรมเนียม
+        } else {
+            reward = (int) (distance * 2) + 25;
+        }
+
+        // 6. สร้างและตั้งค่า Parcel
+        Parcel newParcel = new Parcel(this.startProvince, destination);
+        newParcel.setReward(reward);
+
+        // แสดงผลตรวจสอบ
+        System.out.println("From: " + this.startProvince.name + " -> To: " + destination.name);
+        System.out.println("Distance: " + distance + " km | Reward: " + reward + " Baht");
+
+        ui.drawParcelOnConveyor(newParcel);
         return newParcel;
     }
+
+
 
     public int getCurrentUnlockCost() {
         return currentUnlockCost;

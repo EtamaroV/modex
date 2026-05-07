@@ -108,4 +108,83 @@ public class Graph {
             System.out.println();
         }
     }
+    public List<Edge> findShortestPath(Province startNode, Province endNode) {
+        if (startNode == null || endNode == null) return null;
+
+        // 1. Reset ข้อมูลพื้นฐานของทุก Node ใน Graph ก่อนเริ่มคำนวณ
+        for (Province node : nodes.values()) {
+            node.distanceFormSource = 1000000.0; // เทียบเท่า Infinity
+            node.from = null;
+            node.isVisited = false;
+        }
+
+        // 2. กำหนดระยะทางเริ่มต้นที่จุด Start
+        startNode.distanceFormSource = 0.0;
+
+        while (true) {
+            // ค้นหาจังหวัดที่ระยะทางน้อยที่สุด (Min Distance) และยังไม่ได้ถูก Visit
+            Province u = null;
+            double minDistance = 1000000.0;
+
+            for (Province temp : nodes.values()) {
+                // เงื่อนไข: ต้อง Unlocked แล้ว และยังไม่เคยถูก Visit ในรอบนี้
+                if (temp.isUnlocked && !temp.isVisited && temp.distanceFormSource < minDistance) {
+                    minDistance = temp.distanceFormSource;
+                    u = temp;
+                }
+            }
+
+            // ถ้าหาโหนดถัดไปไม่ได้ หรือถึงจุดหมายแล้วให้หยุด
+            if (u == null || u == endNode) {
+                break;
+            }
+
+            u.isVisited = true;
+
+            // 3. ตรวจสอบเส้นทางที่เชื่อมจาก u ไปยังจังหวัดข้างเคียง (Relaxation)
+            if (u.edges != null) {
+                for (Edge e : u.edges) {
+                    Province v = e.target;
+
+                    // เดินผ่านได้เฉพาะจังหวัดที่ Unlocked แล้วเท่านั้น
+                    if (v.isUnlocked && !v.isVisited) {
+                        double alt = u.distanceFormSource + e.distance;
+                        
+                        // ถ้าเจอเส้นทางที่สั้นกว่าเดิม ให้ทำการ Update
+                        if (alt < v.distanceFormSource) {
+                            v.distanceFormSource = alt;
+                            v.from = u; // เก็บข้อมูลว่ามาจากจังหวัดไหน
+                        }
+                    }
+                }
+            }
+        }
+
+        // 4. สร้างรายการเส้นทาง (Build Path) ย้อนกลับจากปลายทางไปต้นทาง
+        List<Edge> path = new ArrayList<>();
+        Province curr = endNode;
+        
+        while (curr != null && curr.from != null) {
+            Province parent = curr.from;
+            // หา Edge ที่เชื่อมระหว่าง Parent มายัง Current
+            for (Edge e : parent.edges) {
+                if (e.target == curr) {
+                    path.add(e);
+                    break;
+                }
+            }
+            curr = parent;
+        }
+
+        Collections.reverse(path);
+        
+        
+        if (endNode.distanceFormSource >= 1000000.0) {
+            System.out.println("❌ No path found to: " + endNode.name);
+        } else {
+            System.out.printf("✅ Path found! Total Distance to %s: %.2f km\n", endNode.name, endNode.distanceFormSource);
+        }
+
+        return path;
+    }
 }
