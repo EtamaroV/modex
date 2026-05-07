@@ -4,13 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.modex.modex.datastruct.Edge;
+import com.modex.modex.datastruct.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.modex.modex.datastruct.Graph;
-import com.modex.modex.datastruct.Parcel;
-import com.modex.modex.datastruct.Province;
 import com.modex.modex.loader.GraphLoader;
 import com.modex.modex.model.Player;
 import com.modex.modex.view.UIControl;
@@ -110,6 +107,66 @@ public class GameController extends AnimationTimer {
                     }
                 }
             }
+
+            //TRUCK
+            java.util.Iterator<Rider> iterator = activeRiders.iterator();
+            while (iterator.hasNext()) {
+                Rider rider = iterator.next();
+
+                // ถ้ารถยังทีเส้นทางถนนให้วิ่ง
+                if (rider.path != null && !rider.path.isEmpty()) {
+                    Edge currentEdge = rider.path.getFirst(); // ดึงถนนเส้นปัจจุบันที่กำลังวิ่งอยู่
+
+                    // ถ้าเปอร์เซ็นต์เพิ่งเป็น 0 แปลว่าเพิ่งเลี้ยวเข้าถนนเส้นนี้ ให้คำนวณความเร็วและหันหน้ารถ
+                    if (rider.edgeProgress == 0.0) {
+                        rider.truckSprite.setRoute(currentEdge.source, currentEdge.target);
+
+                        // 🌟 1. ตั้งความเร็วรถให้ตรงกับสูตร ETA (เช่น 60 km/h)
+                        double averageSpeed = 60.0;
+                        double distance = Math.max(1.0, currentEdge.distance); // ป้องกันการหาร 0
+
+                        // 🌟 2. คำนวณเปอร์เซ็นต์ที่รถจะวิ่งได้ใน 1 ชั่วโมงในเกม (Speed / Distance)
+                        // เช่น ถนนยาว 120 km รถวิ่ง 60 km/h -> edgeSpeed = 0.5 (คือ 1 ชั่วโมงวิ่งได้ 50%)
+                        rider.edgeSpeed = averageSpeed / distance;
+                    }
+
+                    // 🌟 3. ขยับรถ (แปลงเวลาในเกมให้สัมพันธ์กับเฟรมเรต)
+                    // ตัวเลข 0.005 คือตัวคูณให้รถวิ่งสอดคล้องกับ TimeManager (สามารถปรับเพิ่ม/ลดให้พอดีกับเกมคุณได้)
+                    // โบนัส: ถ้าคุณดึงค่าเร่งเวลา x1, x2 จาก timeManager มาได้ ให้เอามาคูณตรงนี้ รถจะซิ่งตามปุ่มเร่งเวลาเลย!
+                    rider.edgeProgress += rider.edgeSpeed * 0.005;
+
+                    if (rider.edgeProgress >= 1.0) {
+                        // === วิ่งสุดถนนเส้นนี้แล้ว ===
+                        rider.truckSprite.updateProgress(1.0);
+                        rider.currentProvince = currentEdge.target; // อัปเดตตำแหน่งรถ
+                        rider.edgeProgress = 0.0; // รีเซ็ตเตรียมวิ่งถนนเส้นต่อไป
+                        rider.removeOldPath(); // โยนถนนเส้นนี้ทิ้ง
+
+                        // 📦 เช็คว่า "สุดถนนเส้นนี้" คือ "ปลายทางของพัสดุชิ้นบนสุด" หรือไม่?
+                        if (!rider.parcelList.isEmpty() && rider.currentProvince == rider.parcelList.getFirst().getTo()) {
+
+                            Parcel deliveredParcel = rider.parcelList.getFirst();
+                            player.setMoney(player.getMoney() + deliveredParcel.getReward());
+                            ui.updateMoneyLabel(player.getMoney());
+
+                            System.out.println("📦 โยนของลงที่ " + deliveredParcel.getTo().name + " | รับเงิน ฿ " + deliveredParcel.getReward());
+
+                            completeDelivery(deliveredParcel);
+
+                            rider.removePackage(); // ลบพัสดุออกจากกระเป๋า Rider
+                        }
+                    } else {
+                        // ถ้ายังวิ่งอยู่กลางถนน ก็อัปเดตภาพ
+                        rider.truckSprite.updateProgress(rider.edgeProgress);
+                    }
+                } else {
+                    // ถนนหมดแล้ว = ภารกิจเสร็จสิ้น (ส่งของครบหมดแล้ว)
+                    rider.truckSprite.remove();
+                    iterator.remove();
+                    System.out.println("🚚 Rider วิ่งส่งของเสร็จสมบูรณ์ ถอนตัวกลับฐาน!");
+                }
+            }
+
         }
     }
 
@@ -312,54 +369,59 @@ public class GameController extends AnimationTimer {
         return unlockNodeCounts;
     }
 
+    private List<Rider> activeRiders = new ArrayList<>();
+
     public void deliveryParcels(java.util.List<Parcel> parcels) {
         if (parcels == null || parcels.isEmpty()) return;
 
-        // 1. เตรียมตัวแปรสำหรับเก็บข้อมูลสรุป
         double cumulativeDistance = 0;
-        // สมมติความเร็วรถเฉลี่ยที่ 60 km/h (หรือปรับตาม Logic เกมของคุณ)
-        double averageSpeed = 60.0; 
+        double averageSpeed = 2000.0; // km/h
 
         System.out.println("\n========== DELIVERY ROUTE SUMMARY ==========");
-        
+
         // เริ่มต้นจุดแรกด้วยตำแหน่งปัจจุบัน (from ของพัสดุกล่องแรก)
-        Province lastStop = parcels.get(0).getFrom();
+        Province lastStop = parcels.getFirst().getFrom();
 
         for (int i = 0; i < parcels.size(); i++) {
             Parcel currentParcel = parcels.get(i);
 
-            // 2. Chaining Logic: อัปเดตจุดเริ่มให้ต่อจากจุดหมายก่อนหน้า
+            // Chaining Logic: อัปเดตจุดเริ่มให้ต่อจากจุดหมายก่อนหน้า
             currentParcel.setFrom(lastStop);
             currentParcel.setCurrentProvince(lastStop);
 
-            // 3. คำนวณเส้นทางด้วย Dijkstra
+            // 🌟 สำคัญมาก: ล้างค่า Graph ก่อนรัน Dijkstra ใหม่เสมอ ป้องกันทางตัน
+            for (Province p : provinceGraph.getAllNodes()) {
+                p.isVisited = false;
+                p.distanceFormSource = Double.MAX_VALUE;
+                p.from = null;
+            }
+
+            // คำนวณเส้นทางด้วย Dijkstra
             List<Edge> optimizedPath = this.provinceGraph.findShortestPath(lastStop, currentParcel.getTo());
             currentParcel.setPath(optimizedPath);
 
-            // 4. คำนวณระยะทางช่วงปัจจุบัน
             double segmentDistance = 0;
             if (optimizedPath != null && !optimizedPath.isEmpty()) {
                 for (Edge edge : optimizedPath) {
-                    segmentDistance += edge.distance; // อ้างอิงตัวแปร distance จาก Edge.java
+                    segmentDistance += edge.distance;
                 }
             } else {
-                // หากหาเส้นทางไม่ได้ ให้ใช้ค่าที่ Dijkstra บันทึกไว้ในโหนดปลายทาง
                 segmentDistance = currentParcel.getTo().distanceFormSource;
             }
 
-            // 5. อัปเดตข้อมูลลงใน Parcel
+            // อัปเดตข้อมูลลงใน Parcel
             currentParcel.setDistanceDelivery(segmentDistance);
             cumulativeDistance += segmentDistance;
 
-            // คำนวณเวลาที่คาดว่าจะถึง (ETA) ของกล่องนี้
-            double etaInMinutes = (cumulativeDistance / averageSpeed);
-            currentParcel.setEstimatedArrivalTime(etaInMinutes);
+            // 🌟 แก้ตัวแปรเป็น ชั่วโมง (hr) เพราะระยะทางเป็น km และความเร็วเป็น km/h
+            double etaInHours = (cumulativeDistance / averageSpeed);
+            currentParcel.setEstimatedArrivalTime(etaInHours);
 
-            // 6. แสดงข้อมูลของแต่ละกล่อง
+            // แสดงข้อมูลของแต่ละกล่อง
             System.out.printf("Box #%d: [%s -> %s]\n", (i + 1), currentParcel.getFrom().name, currentParcel.getTo().name);
             System.out.printf("   - Distance this leg: %.2f km\n", segmentDistance);
             System.out.printf("   - Total distance so far: %.2f km\n", cumulativeDistance);
-            System.out.printf("   - Est. Arrival Time: +%.0f hr\n", etaInMinutes);
+            System.out.printf("   - Est. Arrival Time: +%.2f hr\n", etaInHours); // โชว์ทศนิยม 2 ตำแหน่ง
             System.out.println("--------------------------------------------");
 
             // อัปเดตจุดจอดเพื่อใช้คำนวณกล่องถัดไป
@@ -368,6 +430,23 @@ public class GameController extends AnimationTimer {
 
         System.out.println("Total Route Distance: " + String.format("%.2f", cumulativeDistance) + " km");
         System.out.println("============================================\n");
+
+        // 🌟 --- นำข้อมูลส่งให้ระบบ RIDER ออกไปขับรถจริงๆ ---
+        Province startLocation = parcels.getFirst().getFrom();
+        Rider newRider = new Rider(parcels, startLocation);
+
+        // ดึงถนนทั้งหมดจากพัสดุทุกกล่อง มารวมกันให้รถวิ่งรวดเดียว
+        for (Parcel p : parcels) {
+            if (p.getPath() != null) {
+                newRider.path.addAll(p.getPath());
+            }
+        }
+
+        // สร้างภาพรถ UI
+        newRider.truckSprite = ui.new TruckSprite(startLocation, startLocation);
+
+        // โยนใส่ Game Loop ให้มันขยับรถ
+        activeRiders.add(newRider);
 
         // อัปเดต UI
         ui.removeTruckMenu();

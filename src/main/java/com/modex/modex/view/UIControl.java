@@ -90,6 +90,8 @@ public class UIControl extends Application {
 
     private StackPane summaryOverlay;
 
+    private Image[] TruckImages = new Image[7];
+
     @Override
     public void start(Stage stage) throws IOException {
         try {
@@ -102,6 +104,15 @@ public class UIControl extends Application {
             logo = new Image(getClass().getResourceAsStream("/images/ModEx_rmbg.png"));
 
             deliveryBtnImage = new Image(getClass().getResourceAsStream("/images/delivery_btn.png"));
+
+            TruckImages[0] = new Image(getClass().getResourceAsStream("/images/truck_blue.png"));
+            TruckImages[1] = new Image(getClass().getResourceAsStream("/images/truck_green.png"));
+            TruckImages[2] = new Image(getClass().getResourceAsStream("/images/truck_lightblue.png"));
+            TruckImages[3] = new Image(getClass().getResourceAsStream("/images/truck_orange.png"));
+            TruckImages[4] = new Image(getClass().getResourceAsStream("/images/truck_purple.png"));
+            TruckImages[5] = new Image(getClass().getResourceAsStream("/images/truck_red.png"));
+            TruckImages[6] = new Image(getClass().getResourceAsStream("/images/truck_yellow.png"));
+
         } catch (Exception e) {
             System.out.println("⚠️ โหลดรูปไม่สำเร็จ! เช็กว่าวางไฟล์รูปถูกที่หรือยัง");
         }
@@ -1163,5 +1174,88 @@ public class UIControl extends Application {
         scaleIn.setToX(1.0); scaleIn.setToY(1.0);
         scaleIn.setInterpolator(Interpolator.EASE_OUT);
         scaleIn.play();
+    }
+
+
+    public class TruckSprite {
+        private StackPane truckWrapper; // 🌟 ใช้ StackPane เพื่อล็อคจุดกึ่งกลางไม่ให้เหวี่ยงตอนหมุน
+        private Label percentLabel;
+        private ImageView truckImage;
+        private double startX, startY, endX, endY;
+
+        public TruckSprite(Province source, Province target) {
+            int randomIndex = new java.util.Random().nextInt(TruckImages.length);
+
+            // 🌟 2. นำรูปที่สุ่มได้มาใส่ ImageView
+            Image selectedImage = TruckImages[randomIndex];
+
+            if (selectedImage != null) {
+                truckImage = new ImageView(selectedImage);
+            } else {
+                truckImage = new ImageView(); // กันเหนียวกรณีโหลดรูปไม่ติด
+            }
+
+            truckImage.setFitWidth(10);
+            truckImage.setFitHeight(10);
+            truckImage.setPreserveRatio(true);
+
+            percentLabel = new Label("0%");
+            percentLabel.setStyle("-fx-text-fill: white; -fx-font-size: 10px; -fx-font-weight: bold; -fx-background-color: rgba(0,0,0,0.7); -fx-padding: 1 3; -fx-background-radius: 3;");
+
+            // 🌟 2. เลื่อนป้าย % ขึ้นไปด้านบนรถ เพื่อไม่ให้รบกวนจุดศูนย์กลางของการหมุน
+            percentLabel.setTranslateY(-20);
+
+            truckWrapper = new StackPane();
+            truckWrapper.getChildren().add(truckImage);
+
+            // จัดกึ่งกลางให้อยู่ทับบนเส้นถนนเป๊ะๆ
+            truckWrapper.translateXProperty().bind(truckWrapper.widthProperty().divide(-2));
+            truckWrapper.translateYProperty().bind(truckWrapper.heightProperty().divide(-2));
+
+            mapGroup.getChildren().add(truckWrapper);
+
+            setRoute(source, target);
+        }
+
+        // ฟังก์ชันสั่งให้รถเปลี่ยนจุดหมายไปที่ใหม่
+        public void setRoute(Province source, Province target) {
+            this.startX = (source.lon - midX) * MAP_SCALE;
+            this.startY = (midY - source.lat) * MAP_SCALE;
+            this.endX = (target.lon - midX) * MAP_SCALE;
+            this.endY = (midY - target.lat) * MAP_SCALE;
+            updateProgress(0.0);
+
+            // 🌟 3. ระบบหันหัวรถแบบมุมมองด้านข้าง (ป้องกันล้อชี้ฟ้า)
+            double deltaX = this.endX - this.startX;
+            double deltaY = this.endY - this.startY;
+
+            if (deltaX >= 0) {
+                // กรณีวิ่งไปทางขวา: พลิกรูปให้หันขวา
+                truckImage.setScaleX(-1);
+                // หามุมเอียง (องศาเทียบกับแกนขวา)
+                double tiltAngle = Math.toDegrees(Math.atan2(deltaY, deltaX));
+                truckImage.setRotate(tiltAngle);
+            } else {
+                // กรณีวิ่งไปทางซ้าย: รูปหันซ้ายอยู่แล้ว
+                truckImage.setScaleX(1);
+                // หามุมเอียง (องศาเทียบกับแกนซ้าย) โดยใช้ -deltaX เป็นบวก
+                double tiltAngle = Math.toDegrees(Math.atan2(deltaY, -deltaX));
+                truckImage.setRotate(-tiltAngle);
+            }
+        }
+
+        public void updateProgress(double progress) {
+            progress = Math.max(0.0, Math.min(1.0, progress));
+            double currentX = startX + (progress * (endX - startX));
+            double currentY = startY + (progress * (endY - startY));
+
+            truckWrapper.setLayoutX(currentX);
+            truckWrapper.setLayoutY(currentY);
+            percentLabel.setText((int)(progress * 100) + "%");
+        }
+
+        public void remove() {
+            mapGroup.getChildren().remove(truckWrapper);
+        }
     }
 }
