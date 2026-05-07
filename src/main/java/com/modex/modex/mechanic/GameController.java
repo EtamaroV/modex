@@ -37,7 +37,9 @@ public class GameController extends AnimationTimer {
     private Province startProvince;
 
     private int dailyParcelDelivered = 0;
+    private double dailyCumulativeDistance = 0;
     private int dailyIncome = 0;
+    private int dailyExpenses = 0;
 
 
     public Graph getProvinceGraph(){
@@ -84,9 +86,11 @@ public class GameController extends AnimationTimer {
         }
 
         if (timeManager.isNewDay()) {
-            ui.showDailySummary(dailyParcelDelivered, dailyIncome, 3.5, 0);
+            ui.showDailySummary(dailyParcelDelivered, dailyIncome, dailyCumulativeDistance, dailyExpenses);
             dailyParcelDelivered = 0;
+            dailyCumulativeDistance = 0;
             dailyIncome = 0;
+            dailyExpenses = 0;
             System.out.println("--- เริ่มต้นวันที่ " + timeManager.getDay() + " ---");
         }
 
@@ -457,6 +461,10 @@ public class GameController extends AnimationTimer {
         // อัปเดต UI
         ui.removeTruckMenu();
         ui.drawTruckMenu();
+
+        //
+        dailyExpenses += 100 + (int)(cumulativeDistance*0.25);
+        dailyCumulativeDistance += cumulativeDistance;
 
     }
 

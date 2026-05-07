@@ -1184,7 +1184,7 @@ public class UIControl extends Application {
         Label valDistance = new Label(String.format("%.2f km", distance));
         valDistance.setStyle("-fx-text-fill: #facc15; -fx-font-size: 18px; -fx-font-weight: bold;"); // สีเหลือง
 
-        Label lblIncome = new Label("Gross Income:");
+        Label lblIncome = new Label("Gross Revenue:");
         lblIncome.setStyle(labelStyle);
         Label valIncome = new Label("+ ฿ " + String.format("%,d", income));
         valIncome.setStyle("-fx-text-fill: #4ade80; -fx-font-size: 18px; -fx-font-weight: bold;"); // สีเขียว
@@ -1195,9 +1195,9 @@ public class UIControl extends Application {
         valExpenses.setStyle("-fx-text-fill: #ef4444; -fx-font-size: 18px; -fx-font-weight: bold;"); // สีแดง
 
         statsGrid.add(lblDelivered, 0, 0); statsGrid.add(valDelivered, 1, 0);
-        //statsGrid.add(lblDistance, 0, 1);  statsGrid.add(valDistance, 1, 1);
+        statsGrid.add(lblDistance, 0, 1);  statsGrid.add(valDistance, 1, 1);
         statsGrid.add(lblIncome, 0, 2);    statsGrid.add(valIncome, 1, 2);
-        //statsGrid.add(lblExpenses, 0, 3);  statsGrid.add(valExpenses, 1, 3);
+        statsGrid.add(lblExpenses, 0, 3);  statsGrid.add(valExpenses, 1, 3);
 
         int netProfit = income - expenses;
         HBox netBox = new HBox(20);
