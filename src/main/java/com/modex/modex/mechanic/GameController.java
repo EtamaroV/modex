@@ -372,6 +372,22 @@ public class GameController extends AnimationTimer {
         // อัปเดต UI
         ui.removeTruckMenu();
         ui.drawTruckMenu();
+
+    }
+
+    public void completeDelivery(Parcel parcel) {
+        if (parcel == null) return;
+
+        // 1. ดึงเงินรางวัลที่เก็บไว้ใน parcel ออกมา
+        int moneyToEarn = parcel.getReward();
+
+        // 2. เพิ่มเงินให้ตัวละคร (Player)
+        this.player.addMoney(moneyToEarn);
+
+        // 3. อัปเดตเงินบนหน้าจอ UI
+        this.ui.updateMoneyLabel(this.player.getMoney());
+
+        System.out.println("💰 ภารกิจสำเร็จ! ส่งพัสดุถึง " + parcel.getTo().name + " ได้รับเงิน " + moneyToEarn + " บาท");
     }
 
 
