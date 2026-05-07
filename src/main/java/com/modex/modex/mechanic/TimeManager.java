@@ -105,4 +105,6 @@ public class TimeManager {
     public boolean isNightTime() {
         return hour >= 18 || hour <= 6;
     }
+
+    public long getTickInterval(){return TICK_INTERVAL;}
 }

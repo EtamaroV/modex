@@ -128,7 +128,7 @@ public class GameController extends AnimationTimer {
                         rider.truckSprite.setRoute(currentEdge.source, currentEdge.target);
 
                         // 🌟 1. ตั้งความเร็วรถให้ตรงกับสูตร ETA (เช่น 60 km/h)
-                        double averageSpeed = 60.0;
+                        double averageSpeed = 60.0*((double)250_000_000L/(double) timeManager.getTickInterval());
                         double distance = Math.max(1.0, currentEdge.distance); // ป้องกันการหาร 0
 
                         // 🌟 2. คำนวณเปอร์เซ็นต์ที่รถจะวิ่งได้ใน 1 ชั่วโมงในเกม (Speed / Distance)
