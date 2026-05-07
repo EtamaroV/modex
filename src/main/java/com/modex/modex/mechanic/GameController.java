@@ -85,6 +85,8 @@ public class GameController extends AnimationTimer {
 
         if (timeManager.isNewDay()) {
             ui.showDailySummary(dailyParcelDelivered, dailyIncome, 3.5, 4);
+            dailyParcelDelivered = 0;
+            dailyIncome = 0;
             System.out.println("--- เริ่มต้นวันที่ " + timeManager.getDay() + " ---");
         }
 
