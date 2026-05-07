@@ -267,18 +267,14 @@ public class GameController extends AnimationTimer {
             this.startProvince = provinceGraph.getNodes().values().iterator().next();
         }
 
-        // 2. ดึงรายการจังหวัดที่ปลดล็อกแล้ว (ไม่รวมจุดเริ่ม)
         List<Province> allNodes = provinceGraph.getUnlocks(this.startProvince);
         if (allNodes.isEmpty()) return null;
 
-        // 3. สุ่มจังหวัดปลายทาง
         Province destination = allNodes.get(rand.nextInt(allNodes.size()));
 
-        // 4. 🔥 วิธีเรียกใช้ Dijkstra ที่คุณเขียนไว้ใน Graph
-        // เรียกผ่าน Object ของคลาส Graph ได้เลย
         List<Edge> path = this.provinceGraph.findShortestPath(this.startProvince, destination);
 
-        // 5. นำระยะทางที่ได้มาคำนวณเงิน (กิโลละ 2 บาท + ค่าธรรมเนียม 25)
+        
         double distance = destination.distanceFormSource;
         int reward;
 
@@ -288,11 +284,9 @@ public class GameController extends AnimationTimer {
             reward = (int) (distance * 2) + 25;
         }
 
-        // 6. สร้างและตั้งค่า Parcel
         Parcel newParcel = new Parcel(this.startProvince, destination);
         newParcel.setReward(reward);
 
-        // แสดงผลตรวจสอบ
         System.out.println("From: " + this.startProvince.name + " -> To: " + destination.name);
         System.out.println("Distance: " + distance + " km | Reward: " + reward + " Baht");
 
