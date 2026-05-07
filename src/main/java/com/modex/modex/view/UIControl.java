@@ -154,7 +154,7 @@ public class UIControl extends Application {
         uiLayer.setPickOnBounds(false);
 
         moneyLabel = new Label("฿ 5,000");
-        moneyLabel.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;");
+        moneyLabel.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 10px;");
 
         AnchorPane conveyor = new AnchorPane();
         AnchorPane.setBottomAnchor(conveyor, 0.0);
@@ -1092,7 +1092,8 @@ public class UIControl extends Application {
         summaryOverlay = new StackPane();
         summaryOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.75);");
 
-        gameController.getTimeManager().setPaused(true);
+        //gameController.getTimeManager().setPaused(true);
+        gameController.getTimeManager().changeTickSpeed(1);
 
         VBox dialogBox = new VBox(20);
         dialogBox.setAlignment(Pos.CENTER);
@@ -1129,9 +1130,9 @@ public class UIControl extends Application {
         valExpenses.setStyle("-fx-text-fill: #ef4444; -fx-font-size: 18px; -fx-font-weight: bold;"); // สีแดง
 
         statsGrid.add(lblDelivered, 0, 0); statsGrid.add(valDelivered, 1, 0);
-        statsGrid.add(lblDistance, 0, 1);  statsGrid.add(valDistance, 1, 1);
+        //statsGrid.add(lblDistance, 0, 1);  statsGrid.add(valDistance, 1, 1);
         statsGrid.add(lblIncome, 0, 2);    statsGrid.add(valIncome, 1, 2);
-        statsGrid.add(lblExpenses, 0, 3);  statsGrid.add(valExpenses, 1, 3);
+        //statsGrid.add(lblExpenses, 0, 3);  statsGrid.add(valExpenses, 1, 3);
 
         int netProfit = income - expenses;
         HBox netBox = new HBox(20);

@@ -99,7 +99,7 @@ public class TimeManager {
     }
 
     public boolean isNewDay() {
-        return isNewDay ? isPaused ? false : true : false;
+        return isNewDay;
     }
 
     public boolean isNightTime() {

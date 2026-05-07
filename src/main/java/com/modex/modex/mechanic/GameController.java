@@ -36,6 +36,10 @@ public class GameController extends AnimationTimer {
 
     private Province startProvince;
 
+    private int dailyParcelDelivered = 0;
+    private int dailyIncome = 0;
+
+
     public Graph getProvinceGraph(){
         return provinceGraph;
     }
@@ -80,7 +84,7 @@ public class GameController extends AnimationTimer {
         }
 
         if (timeManager.isNewDay()) {
-            ui.showDailySummary(1, 2, 3.5, 4);
+            ui.showDailySummary(dailyParcelDelivered, dailyIncome, 3.5, 4);
             System.out.println("--- เริ่มต้นวันที่ " + timeManager.getDay() + " ---");
         }
 
@@ -152,6 +156,7 @@ public class GameController extends AnimationTimer {
                             System.out.println("📦 โยนของลงที่ " + deliveredParcel.getTo().name + " | รับเงิน ฿ " + deliveredParcel.getReward());
 
                             completeDelivery(deliveredParcel);
+                            dailyParcelDelivered++;
 
                             rider.removePackage(); // ลบพัสดุออกจากกระเป๋า Rider
                         }
@@ -459,6 +464,7 @@ public class GameController extends AnimationTimer {
 
         // 1. ดึงเงินรางวัลที่เก็บไว้ใน parcel ออกมา
         int moneyToEarn = parcel.getReward();
+        dailyIncome += moneyToEarn;
 
         // 2. เพิ่มเงินให้ตัวละคร (Player)
         this.player.addMoney(moneyToEarn);
