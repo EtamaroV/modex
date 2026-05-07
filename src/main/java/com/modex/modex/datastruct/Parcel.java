@@ -9,6 +9,7 @@ public class Parcel {
     private List<Edge> path;
     private int reward;
 
+    private double estimatedArrivalTime;
     private double distance_delivery;
 
     public Parcel(Province From,Province To){
@@ -65,4 +66,11 @@ public class Parcel {
         return distance_delivery;
     }
 
+    public void setEstimatedArrivalTime(double time) {
+        this.estimatedArrivalTime = time;
+    }
+
+    public double getEstimatedArrivalTime() {
+        return estimatedArrivalTime;
+    }
 }

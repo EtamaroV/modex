@@ -353,6 +353,7 @@ public class GameController extends AnimationTimer {
 
             // คำนวณเวลาที่คาดว่าจะถึง (ETA) ของกล่องนี้
             double etaInMinutes = (cumulativeDistance / averageSpeed);
+            currentParcel.setEstimatedArrivalTime(etaInMinutes);
 
             // 6. แสดงข้อมูลของแต่ละกล่อง
             System.out.printf("Box #%d: [%s -> %s]\n", (i + 1), currentParcel.getFrom().name, currentParcel.getTo().name);
