@@ -1066,6 +1066,7 @@ public class UIControl extends Application {
 
         deliveryButton.setOnMouseClicked(e -> {
             gameController.deliveryParcels(getParcelsInTruck());
+            resetRouteHighlight();
         });
     }
 
