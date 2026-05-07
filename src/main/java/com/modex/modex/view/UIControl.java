@@ -593,6 +593,11 @@ public class UIControl extends Application {
         desc.setStyle("-fx-text-fill: lightgray; -fx-font-size: 16px; -fx-font-weight: bold;");
 
         Label constuctiontime = new Label("24 hours (In-game)");
+        if (gameController.getUnlockNodeCounts() <= 5) {
+            constuctiontime = new Label("1 hours (In-game)");
+        }
+
+
         constuctiontime.setStyle("-fx-text-fill: lightgray; -fx-font-size: 16px; -fx-font-weight: bold;");
 
         HBox buttonBox = new HBox(20);
