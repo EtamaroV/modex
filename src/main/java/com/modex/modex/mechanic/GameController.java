@@ -149,18 +149,17 @@ public class GameController extends AnimationTimer {
                         rider.removeOldPath(); // โยนถนนเส้นนี้ทิ้ง
 
                         // 📦 เช็คว่า "สุดถนนเส้นนี้" คือ "ปลายทางของพัสดุชิ้นบนสุด" หรือไม่?
-                        if (!rider.parcelList.isEmpty() && rider.currentProvince == rider.parcelList.getFirst().getTo()) {
+
+                        while (!rider.parcelList.isEmpty() && rider.currentProvince == rider.parcelList.getFirst().getTo()) {
 
                             Parcel deliveredParcel = rider.parcelList.getFirst();
-                            player.setMoney(player.getMoney() + deliveredParcel.getReward());
-                            ui.updateMoneyLabel(player.getMoney());
 
                             System.out.println("📦 โยนของลงที่ " + deliveredParcel.getTo().name + " | รับเงิน ฿ " + deliveredParcel.getReward());
 
                             completeDelivery(deliveredParcel);
                             dailyParcelDelivered++;
 
-                            rider.removePackage(); // ลบพัสดุออกจากกระเป๋า Rider
+                            rider.removePackage();
                         }
                     } else {
                         // ถ้ายังวิ่งอยู่กลางถนน ก็อัปเดตภาพ
