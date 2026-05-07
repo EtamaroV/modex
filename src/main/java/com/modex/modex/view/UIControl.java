@@ -1,5 +1,6 @@
 package com.modex.modex.view;
 
+import com.modex.modex.datastruct.Edge;
 import com.modex.modex.datastruct.Parcel;
 import com.modex.modex.datastruct.Province;
 import com.modex.modex.mechanic.GameController;
@@ -30,6 +31,7 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UIControl extends Application {
@@ -562,17 +564,24 @@ public class UIControl extends Application {
         }
     }
 
-    public void updateEdgeColor(Province source, Province target, String hexColor) {
+    public void updateEdgeColor(Province source, Province target, String hexColor, double width, boolean bringToFront) {
         String edgeKey = getEdgeKey(source, target);
         Line line = edgeLines.get(edgeKey);
         if (line != null) {
             line.setStroke(Color.web(hexColor));
-            line.setStrokeWidth(0.8);
+            line.setStrokeWidth(width);
+            if (bringToFront) {
+                line.toFront(); // ดันเส้นไฮไลต์ขึ้นมาไม่ให้โดนเส้นอื่นทับ
+            }
         }
     }
 
+    public void updateEdgeColor(Province source, Province target, String hexColor) {
+        updateEdgeColor(source, target, hexColor, 0.8, false);
+    }
+
     public void updateEdgeColor(Province source, Province target) {
-        updateEdgeColor(source, target, "#4ade80");
+        updateEdgeColor(source, target, "#4ade80", 0.8, false);
     }
 
     private String getEdgeKey(Province a, Province b) {
@@ -895,15 +904,16 @@ public class UIControl extends Application {
                     uiLayer.getChildren().remove(parcelNode);
                     targetSlot.getChildren().add(parcelNode);
 
-
                     parcelNode.setTranslateX(0);
                     parcelNode.setTranslateY(0);
+
+                    // 🌟 เพิ่มบรรทัดนี้: อัปเดตสีเส้น เมื่อวางของลงรถสำเร็จ
+                    highlightTruckRoute();
                     break;
                 }
             }
 
             if (droppedInTruck) return;
-
 
             uiLayer.getChildren().remove(parcelNode);
             conveyor_tile.getChildren().add(parcelNode);
@@ -924,9 +934,59 @@ public class UIControl extends Application {
 
             conveyorQueue.add(insertIndex, parcelNode);
             updateQueuePositions();
+
+            // 🌟 เพิ่มบรรทัดนี้: อัปเดตสีเส้นอีกครั้ง กรณีผู้เล่นดึงของออกจากรถมาไว้ที่สายพาน
+            highlightTruckRoute();
         });
 
         parcelNode.setOnMouseEntered(e -> parcelNode.setCursor(Cursor.HAND));
+    }
+
+    // 🌟 1. ฟังก์ชันสำหรับล้างสีไฮไลต์ ให้กลับเป็นสีเขียว/เทา ปกติ
+    public void resetRouteHighlight() {
+        if (gameController == null || gameController.getProvinceGraph() == null) return;
+
+        for (Province node : gameController.getProvinceGraph().getAllNodes()) {
+            for (Province neighbor : gameController.getProvinceGraph().getNeighbors(node)) {
+                updateEdgeColor(node, neighbor, "#4ade80", 0.8, false);
+            }
+        }
+    }
+
+    // 🌟 2. ฟังก์ชันตีเส้นไฮไลต์สีต่างๆ ตามลำดับกล่องในรถบรรทุก
+    public void highlightTruckRoute() {
+        resetRouteHighlight(); // ล้างเส้นเก่าก่อนเสมอ
+
+        java.util.List<Parcel> parcels = getParcelsInTruck();
+        if (parcels.isEmpty()) return; // ถ้ารถว่าง ไม่ต้องทำอะไร
+
+        Province currentLoc = parcels.get(0).getFrom(); // รถเริ่มจากจุดรับของกล่องแรก
+
+        // ชุดสีสำหรับเรียงลำดับ (เหลือง -> ฟ้า -> ม่วง -> ชมพู -> ส้ม)
+        String[] routeColors = {"#facc15", "#38bdf8", "#c084fc", "#f472b6", "#fb923c"};
+
+        for (int i = 0; i < parcels.size(); i++) {
+            Parcel p = parcels.get(i);
+
+            // สำคัญมาก: ล้างสถานะ Graph ก่อนคำนวณเส้นทางใหม่
+            for (Province node : gameController.getProvinceGraph().getAllNodes()) {
+                node.isVisited = false;
+                node.distanceFormSource = Double.MAX_VALUE;
+                node.from = null;
+            }
+
+            // หาเส้นทางย่อยของคิวนี้
+            List<Edge> path = gameController.getProvinceGraph().findShortestPath(currentLoc, p.getTo());
+
+            if (path != null) {
+                String color = routeColors[i % routeColors.length]; // ดึงสีตามลำดับคิว
+                for (Edge edge : path) {
+                    updateEdgeColor(edge.source, edge.target, color, 3.0, true);
+                }
+            }
+            // อัปเดตจุดเริ่มของรอบถัดไปเป็นปลายทางของกล่องนี้
+            currentLoc = p.getTo();
+        }
     }
 
     public void drawTruckMenu() {
