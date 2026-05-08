@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -90,5 +91,15 @@ public class SaveManager {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void deleteGameData() throws IOException {
+        Path path = getSaveFilePath();
+        if (Files.exists(path)) {
+            Files.delete(path);
+            System.out.println("Save data deleted successfully.");
+        } else {
+            System.out.println("No save data found to delete.");
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.modex.modex.mechanic;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -25,6 +26,7 @@ public class GameController extends AnimationTimer {
     private Graph provinceGraph;
 
     private int currentUnlockCost;
+    private int currentQuota;
 
     private int latestSave = 0;
 
@@ -45,12 +47,14 @@ public class GameController extends AnimationTimer {
     public Graph getProvinceGraph(){
         return provinceGraph;
     }
+    public int getCurrentQuota(){return currentQuota;}
 
     public GameController(UIControl ui) { // Init
         this.ui = ui;
         this.timeManager = new TimeManager();
         this.player = new Player(5000);
         this.currentUnlockCost = 1000;
+        this.currentQuota = 1000;
 
         this.provinceGraph = GraphLoader.loadFromJson("thailand_graph.json");
 
@@ -87,10 +91,13 @@ public class GameController extends AnimationTimer {
 
         if (timeManager.isNewDay()) {
             ui.showDailySummary(dailyParcelDelivered, dailyIncome, dailyCumulativeDistance, dailyExpenses);
+
             dailyParcelDelivered = 0;
             dailyCumulativeDistance = 0;
             dailyIncome = 0;
             dailyExpenses = 0;
+            currentQuota = (int)(currentQuota*1.1);
+            ui.updateQuotaLabel(0,currentQuota);
             System.out.println("--- เริ่มต้นวันที่ " + timeManager.getDay() + " ---");
         }
 
@@ -132,12 +139,18 @@ public class GameController extends AnimationTimer {
                         rider.truckSprite.setRoute(currentEdge.source, currentEdge.target);
 
                         // 🌟 1. ตั้งความเร็วรถให้ตรงกับสูตร ETA (เช่น 60 km/h)
-                        double averageSpeed = 60.0*((double)250_000_000L/(double) timeManager.getTickInterval());
-                        double distance = Math.max(1.0, currentEdge.distance); // ป้องกันการหาร 0
+                        if (timeManager.getTickInterval() != 0){
+                            double averageSpeed = 60.0*((double)250_000_000L/(double) timeManager.getTickInterval());
+                            double distance = Math.max(1.0, currentEdge.distance); // ป้องกันการหาร 0
 
-                        // 🌟 2. คำนวณเปอร์เซ็นต์ที่รถจะวิ่งได้ใน 1 ชั่วโมงในเกม (Speed / Distance)
-                        // เช่น ถนนยาว 120 km รถวิ่ง 60 km/h -> edgeSpeed = 0.5 (คือ 1 ชั่วโมงวิ่งได้ 50%)
-                        rider.edgeSpeed = averageSpeed / distance;
+                            // 🌟 2. คำนวณเปอร์เซ็นต์ที่รถจะวิ่งได้ใน 1 ชั่วโมงในเกม (Speed / Distance)
+                            // เช่น ถนนยาว 120 km รถวิ่ง 60 km/h -> edgeSpeed = 0.5 (คือ 1 ชั่วโมงวิ่งได้ 50%)
+                            rider.edgeSpeed = averageSpeed / distance;
+                        }
+                        else {
+                            rider.edgeSpeed = 0;
+                        }
+
                     }
 
                     // 🌟 3. ขยับรถ (แปลงเวลาในเกมให้สัมพันธ์กับเฟรมเรต)
@@ -182,6 +195,10 @@ public class GameController extends AnimationTimer {
 
     public void saveGame() {
         SaveManager.saveGame(player, currentUnlockCost, provinceGraph, timeManager, playerStartNode);
+    }
+
+    public void deleteGameData() throws IOException {
+        SaveManager.deleteGameData();
     }
 
     public boolean loadGame() {
@@ -482,6 +499,7 @@ public class GameController extends AnimationTimer {
 
         // 3. อัปเดตเงินบนหน้าจอ UI
         this.ui.updateMoneyLabel(this.player.getMoney());
+        this.ui.updateQuotaLabel(dailyIncome,currentQuota);
         this.ui.moneyPopup(moneyToEarn);
 
         System.out.println("💰 ภารกิจสำเร็จ! ส่งพัสดุถึง " + parcel.getTo().name + " ได้รับเงิน " + moneyToEarn + " บาท");

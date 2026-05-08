@@ -23,7 +23,7 @@ public class TimeManager {
                 tickSpeedLevel = 1;
                 break;
             case 2:
-                TICK_INTERVAL = 125_000_000L;
+                TICK_INTERVAL = 25_000_000L;
                 tickSpeedLevel = 2;
                 break;
             default:

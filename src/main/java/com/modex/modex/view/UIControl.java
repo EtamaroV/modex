@@ -70,6 +70,7 @@ public class UIControl extends Application {
     private final double SPRITE_SIZE = 8.0;
 
     private Label moneyLabel;
+    private Label quotaLabel;
 
     private AnchorPane clockPane;
     private Line hourHand;
@@ -159,6 +160,9 @@ public class UIControl extends Application {
         moneyLabel = new Label("฿ 5,000");
         moneyLabel.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 10px;");
 
+        quotaLabel = new Label("฿0/฿1,000");
+        quotaLabel.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 10px;");
+
         AnchorPane conveyor = new AnchorPane();
         AnchorPane.setBottomAnchor(conveyor, 0.0);
         AnchorPane.setLeftAnchor(conveyor, 0.0);
@@ -203,8 +207,10 @@ public class UIControl extends Application {
 
         mainGameContent.getChildren().addAll(gameMap, uiLayer);
         mainGameContent.setStyle("-fx-background-color: #4a627b;");
-        root.getChildren().add(mainGameContent);
+        root.getChildren().addAll(mainGameContent,quotaLabel);
         root.setStyle("-fx-background-color: #4a627b;");
+        StackPane.setAlignment(quotaLabel, Pos.TOP_LEFT);
+        StackPane.setMargin(quotaLabel, new javafx.geometry.Insets(60, 0, 0, 0));
 
 
 
@@ -464,31 +470,35 @@ public class UIControl extends Application {
         moneyLabel.setText("฿ " + String.format("%,d", money));
     }
 
+    public void updateQuotaLabel(int money,int quota) {
+        quotaLabel.setText("฿ " + String.format("%,d", money)+ "/" + String.format("%,d",quota));
+    }
+
     public void moneyPopup(int change){
         // 1. สร้างตัวเลขเงิน
-        Label moneyLabel = new Label((change >= 0)? "+$"  + (change): "-$" + (-change));
-        moneyLabel.setStyle("-fx-text-fill: " + ((change >= 0 )? "#00FF00": "red") + "; -fx-font-size: 20px; -fx-font-weight: bold;");
+        Label moneypopup = new Label((change >= 0)? "+$"  + (change): "-$" + (-change));
+        moneypopup.setStyle("-fx-text-fill: " + ((change >= 0 )? "#00FF00": "red") + "; -fx-font-size: 20px; -fx-font-weight: bold;");
 
         // 2. แอดเข้าไปใน Root (StackPane)
-        root.getChildren().add(moneyLabel);
+        root.getChildren().add(moneypopup);
 
         // 3. สั่งให้ไปอยู่ที่มุมขวาบน และตั้งค่า Margin (เว้นระยะจากขอบนิดหน่อย)
-        StackPane.setAlignment(moneyLabel, javafx.geometry.Pos.TOP_LEFT);
-        StackPane.setMargin(moneyLabel, new javafx.geometry.Insets(25, 0, 0, 20)); // เว้นจากขอบบน 20, ขวา 20
+        StackPane.setAlignment(moneypopup, javafx.geometry.Pos.TOP_LEFT);
+        StackPane.setMargin(moneypopup, new javafx.geometry.Insets(25, 0, 0, 20)); // เว้นจากขอบบน 20, ขวา 20
 
         // 4. Animation เด้งสวยๆ (ขยายแล้วค่อยๆ จางหายลงข้างล่าง)
-        TranslateTransition moveDown = new TranslateTransition(Duration.seconds(1.5), moneyLabel);
+        TranslateTransition moveDown = new TranslateTransition(Duration.seconds(1.5), moneypopup);
         moveDown.setFromY(0);
         moveDown.setToY(30); // ให้ค่อยๆ ไหลลงมานิดหน่อย
 
-        FadeTransition fadeOut = new FadeTransition(Duration.seconds(1.5), moneyLabel);
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(1.5), moneypopup);
         fadeOut.setFromValue(1.0);
         fadeOut.setToValue(0.0);
 
         ParallelTransition animation = new ParallelTransition(moveDown, fadeOut);
 
         // สำคัญ: เมื่อจบ Animation ต้องลบ Label ออกจาก Root ไม่เช่นนั้นจะหนักเครื่อง (Memory Leak)
-        animation.setOnFinished(e -> root.getChildren().remove(moneyLabel));
+        animation.setOnFinished(e -> root.getChildren().remove(moneypopup));
 
         animation.play();
     }
@@ -1193,6 +1203,8 @@ public class UIControl extends Application {
         //gameController.getTimeManager().setPaused(true);
         gameController.getTimeManager().changeTickSpeed(1);
 
+        boolean metTheQuota = (income >= gameController.getCurrentQuota())? true: false;
+
         VBox dialogBox = new VBox(20);
         dialogBox.setAlignment(Pos.CENTER);
         dialogBox.setMaxSize(500, 400);
@@ -1222,6 +1234,11 @@ public class UIControl extends Application {
         Label valIncome = new Label("+ ฿ " + String.format("%,d", income));
         valIncome.setStyle("-fx-text-fill: #4ade80; -fx-font-size: 18px; -fx-font-weight: bold;"); // สีเขียว
 
+        Label lblQuota = new Label("Quota:");
+        lblQuota.setStyle(labelStyle);
+        Label valQuota = new Label("+ ฿ " + String.format("%,d", income) + "/"+ String.format("%,d",gameController.getCurrentQuota()) + " ("+((metTheQuota)? "": " not ")+"met the quota)");
+        valQuota.setStyle("-fx-text-fill: #4ade80; -fx-font-size: 18px; -fx-font-weight: bold;"); // สีเขียว
+
         Label lblExpenses = new Label("Daily Expenses:");
         lblExpenses.setStyle(labelStyle);
         Label valExpenses = new Label("- ฿ " + String.format("%,d", expenses));
@@ -1230,7 +1247,8 @@ public class UIControl extends Application {
         statsGrid.add(lblDelivered, 0, 0); statsGrid.add(valDelivered, 1, 0);
         statsGrid.add(lblDistance, 0, 1);  statsGrid.add(valDistance, 1, 1);
         statsGrid.add(lblIncome, 0, 2);    statsGrid.add(valIncome, 1, 2);
-        statsGrid.add(lblExpenses, 0, 3);  statsGrid.add(valExpenses, 1, 3);
+        statsGrid.add(lblQuota, 0, 3);    statsGrid.add(valQuota, 1, 3);
+        statsGrid.add(lblExpenses, 0, 4);  statsGrid.add(valExpenses, 1, 4);
 
         int netProfit = income - expenses;
         HBox netBox = new HBox(20);
@@ -1246,17 +1264,43 @@ public class UIControl extends Application {
         separator.setStroke(javafx.scene.paint.Color.web("#5a6b7d"));
         separator.setStrokeWidth(2);
 
-        Button btnContinue = new Button("CONTINUE");
-        btnContinue.getStyleClass().add("primary-btn");
-        btnContinue.setOnAction(e -> {
-            FadeTransition fadeOut = new FadeTransition(Duration.millis(200), summaryOverlay);
-            fadeOut.setToValue(0);
-            fadeOut.setOnFinished(ev -> root.getChildren().remove(summaryOverlay));
-            fadeOut.play();
+        Button btnContinue;
+        if (metTheQuota){
+            btnContinue = new Button("CONTINUE");
+            btnContinue.getStyleClass().add("primary-btn");
+            btnContinue.setOnAction(e -> {
+                FadeTransition fadeOut = new FadeTransition(Duration.millis(200), summaryOverlay);
+                fadeOut.setToValue(0);
+                fadeOut.setOnFinished(ev -> root.getChildren().remove(summaryOverlay));
+                fadeOut.play();
 
-            gameController.getTimeManager().setPaused(false);
-            gameController.saveGame();
-        });
+                gameController.getTimeManager().setPaused(false);
+                gameController.saveGame();
+            });
+        }
+        else{
+            btnContinue = new Button("Exit game");
+            btnContinue.getStyleClass().add("primary-btn");
+            btnContinue.setOnAction(e -> {
+                FadeTransition fadeOut = new FadeTransition(Duration.millis(200), summaryOverlay);
+                fadeOut.setToValue(0);
+                fadeOut.setOnFinished(ev -> root.getChildren().remove(summaryOverlay));
+                fadeOut.play();
+
+                gameController.getTimeManager().setPaused(false);
+                try {
+                    gameController.deleteGameData();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                System.exit(0);
+
+            });
+
+
+        }
+
+
 
         dialogBox.getChildren().addAll(title, statsGrid, separator, netBox, btnContinue);
         summaryOverlay.getChildren().add(dialogBox);
