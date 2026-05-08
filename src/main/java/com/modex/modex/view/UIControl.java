@@ -1184,6 +1184,9 @@ public class UIControl extends Application {
     }
 
     public void showDailySummary(int parcelDelivered, int income, double distance, int expenses) {
+
+        root.getChildren().remove(summaryOverlay);
+
         summaryOverlay = new StackPane();
         summaryOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.75);");
 
