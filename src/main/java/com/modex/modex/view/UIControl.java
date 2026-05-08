@@ -815,8 +815,12 @@ public class UIControl extends Application {
         parcelNode.setStyle("-fx-background-color: #dcb382; -fx-border-color: #8c5d2c; -fx-border-width: 2px; -fx-background-radius: 5px; -fx-border-radius: 5px;");
         parcelNode.setLayoutY(15.5);
 
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
         Label destinationLabel = new Label(parcel.getTo().name);
-        parcelNode.getChildren().add(destinationLabel);
+        Label reward = new Label("฿ " + parcel.getReward());
+        vbox.getChildren().addAll(destinationLabel, reward);
+        parcelNode.getChildren().add(vbox);
 
         parcelNode.setTranslateX(-120.0);
 

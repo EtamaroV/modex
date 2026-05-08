@@ -54,7 +54,7 @@ public class GameController extends AnimationTimer {
         this.timeManager = new TimeManager();
         this.player = new Player(5000);
         this.currentUnlockCost = 1000;
-        this.currentQuota = 1000;
+        this.currentQuota = 200;
 
         this.provinceGraph = GraphLoader.loadFromJson("thailand_graph.json");
 
