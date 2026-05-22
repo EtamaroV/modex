@@ -16,6 +16,7 @@ public class TimeManager {
     public int getTickSpeedLevel() {
         return tickSpeedLevel;
     }
+
     public void changeTickSpeed(int level) {
         switch (level) {
             case 1:
@@ -51,7 +52,7 @@ public class TimeManager {
     public double getSmoothMinute(long now) {
         if (isPaused || lastUpdateTime == 0) return minute;
 
-        double progress = (double)(now - lastUpdateTime) / TICK_INTERVAL;
+        double progress = (double) (now - lastUpdateTime) / TICK_INTERVAL;
         return minute + progress;
     }
 
@@ -72,21 +73,32 @@ public class TimeManager {
         }
     }
 
+    public boolean isPaused() {
+        return isPaused;
+    }
+
     public void setPaused(boolean paused) {
         this.isPaused = paused;
         if (!paused) {
             lastUpdateTime = 0;
         }
     }
-    public boolean isPaused() { return isPaused; }
 
     public String getTimeString() {
         return String.format("Day %d | %02d:%02d", day, hour, minute);
     }
 
-    public int getHour() { return hour; }
-    public int getMinute() { return minute; }
-    public int getDay() { return day; }
+    public int getHour() {
+        return hour;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public int getDay() {
+        return day;
+    }
 
     public void setTime(int day, int hour, int minute) {
         this.day = day;
@@ -106,5 +118,7 @@ public class TimeManager {
         return hour >= 18 || hour <= 6;
     }
 
-    public long getTickInterval(){return TICK_INTERVAL;}
+    public long getTickInterval() {
+        return TICK_INTERVAL;
+    }
 }

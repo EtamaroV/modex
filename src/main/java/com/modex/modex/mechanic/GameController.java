@@ -1,55 +1,39 @@
 package com.modex.modex.mechanic;
 
+import com.modex.modex.datastruct.*;
+import com.modex.modex.loader.GraphLoader;
+import com.modex.modex.model.Player;
+import com.modex.modex.view.UIControl;
+import javafx.animation.AnimationTimer;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.modex.modex.datastruct.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.modex.modex.loader.GraphLoader;
-import com.modex.modex.model.Player;
-import com.modex.modex.view.UIControl;
-
-import javafx.animation.AnimationTimer;
-
-import static com.modex.modex.datastruct.Utility.dijkstra;
-
 public class GameController extends AnimationTimer {
 
-    private UIControl ui;
-    private TimeManager timeManager;
-    private Player player;
+    private final UIControl ui;
+    private final TimeManager timeManager;
+    private final Player player;
 
-    private Graph provinceGraph;
-
+    private final Graph provinceGraph;
+    private final List<Rider> activeRiders = new ArrayList<>();
     private int currentUnlockCost;
     private int currentQuota;
-
     private int latestSave = 0;
-
     private int latestParcelSpawn = 0;
-
     private int playerStartNode;
-
     private int unlockNodeCounts = 0;
-
     private Province startProvince;
-
     private int dailyParcelDelivered = 0;
     private double dailyCumulativeDistance = 0;
     private int dailyIncome = 0;
     private int dailyExpenses = 0;
 
-
-    public Graph getProvinceGraph(){
-        return provinceGraph;
-    }
-    public int getCurrentQuota(){return currentQuota;}
-
-    public GameController(UIControl ui) { // Init
+    public GameController(UIControl ui) {
         this.ui = ui;
         this.timeManager = new TimeManager();
         this.player = new Player(5000);
@@ -59,10 +43,18 @@ public class GameController extends AnimationTimer {
         this.provinceGraph = GraphLoader.loadFromJson("thailand_graph.json");
 
         if (!loadGame()) {
-            //IO.println("haeel");
+
             startProvince = spawnInitialProvince();
         }
 
+    }
+
+    public Graph getProvinceGraph() {
+        return provinceGraph;
+    }
+
+    public int getCurrentQuota() {
+        return currentQuota;
     }
 
     @Override
@@ -83,7 +75,7 @@ public class GameController extends AnimationTimer {
             System.out.println("SAVING TOTAL HOURS: " + totalHours);
         }
 
-        if ((totalHours > latestParcelSpawn) && (totalHours % 1 == 0)) { // ต้อง 8 นะ อันนี้เทส
+        if ((totalHours > latestParcelSpawn)) {
             latestParcelSpawn = totalHours;
             System.out.println("parcel Gen: " + totalHours);
             parcelGeneration();
@@ -96,8 +88,8 @@ public class GameController extends AnimationTimer {
             dailyCumulativeDistance = 0;
             dailyIncome = 0;
             dailyExpenses = 0;
-            currentQuota = (int)(currentQuota*1.1);
-            ui.updateQuotaLabel(0,currentQuota);
+            currentQuota = (int) (currentQuota * 1.1);
+            ui.updateQuotaLabel(0, currentQuota);
             System.out.println("--- เริ่มต้นวันที่ " + timeManager.getDay() + " ---");
         }
 
@@ -125,47 +117,42 @@ public class GameController extends AnimationTimer {
                 }
             }
 
-            //TRUCK
+
             java.util.Iterator<Rider> iterator = activeRiders.iterator();
             while (iterator.hasNext()) {
                 Rider rider = iterator.next();
 
-                // ถ้ารถยังทีเส้นทางถนนให้วิ่ง
-                if (rider.path != null && !rider.path.isEmpty()) {
-                    Edge currentEdge = rider.path.getFirst(); // ดึงถนนเส้นปัจจุบันที่กำลังวิ่งอยู่
 
-                    // ถ้าเปอร์เซ็นต์เพิ่งเป็น 0 แปลว่าเพิ่งเลี้ยวเข้าถนนเส้นนี้ ให้คำนวณความเร็วและหันหน้ารถ
+                if (rider.path != null && !rider.path.isEmpty()) {
+                    Edge currentEdge = rider.path.getFirst();
+
+
                     if (rider.edgeProgress == 0.0) {
                         rider.truckSprite.setRoute(currentEdge.source, currentEdge.target);
 
-                        // 🌟 1. ตั้งความเร็วรถให้ตรงกับสูตร ETA (เช่น 60 km/h)
-                        if (timeManager.getTickInterval() != 0){
-                            double averageSpeed = 60.0*((double)250_000_000L/(double) timeManager.getTickInterval());
-                            double distance = Math.max(1.0, currentEdge.distance); // ป้องกันการหาร 0
 
-                            // 🌟 2. คำนวณเปอร์เซ็นต์ที่รถจะวิ่งได้ใน 1 ชั่วโมงในเกม (Speed / Distance)
-                            // เช่น ถนนยาว 120 km รถวิ่ง 60 km/h -> edgeSpeed = 0.5 (คือ 1 ชั่วโมงวิ่งได้ 50%)
+                        if (timeManager.getTickInterval() != 0) {
+                            double averageSpeed = 60.0 * ((double) 250_000_000L / (double) timeManager.getTickInterval());
+                            double distance = Math.max(1.0, currentEdge.distance);
+
+
                             rider.edgeSpeed = averageSpeed / distance;
-                        }
-                        else {
+                        } else {
                             rider.edgeSpeed = 0;
                         }
 
                     }
 
-                    // 🌟 3. ขยับรถ (แปลงเวลาในเกมให้สัมพันธ์กับเฟรมเรต)
-                    // ตัวเลข 0.005 คือตัวคูณให้รถวิ่งสอดคล้องกับ TimeManager (สามารถปรับเพิ่ม/ลดให้พอดีกับเกมคุณได้)
-                    // โบนัส: ถ้าคุณดึงค่าเร่งเวลา x1, x2 จาก timeManager มาได้ ให้เอามาคูณตรงนี้ รถจะซิ่งตามปุ่มเร่งเวลาเลย!
+
                     rider.edgeProgress += rider.edgeSpeed * 0.005;
 
                     if (rider.edgeProgress >= 1.0) {
-                        // === วิ่งสุดถนนเส้นนี้แล้ว ===
-                        rider.truckSprite.updateProgress(1.0);
-                        rider.currentProvince = currentEdge.target; // อัปเดตตำแหน่งรถ
-                        rider.edgeProgress = 0.0; // รีเซ็ตเตรียมวิ่งถนนเส้นต่อไป
-                        rider.removeOldPath(); // โยนถนนเส้นนี้ทิ้ง
 
-                        // 📦 เช็คว่า "สุดถนนเส้นนี้" คือ "ปลายทางของพัสดุชิ้นบนสุด" หรือไม่?
+                        rider.truckSprite.updateProgress(1.0);
+                        rider.currentProvince = currentEdge.target;
+                        rider.edgeProgress = 0.0;
+                        rider.removeOldPath();
+
 
                         while (!rider.parcelList.isEmpty() && rider.currentProvince == rider.parcelList.getFirst().getTo()) {
 
@@ -179,11 +166,11 @@ public class GameController extends AnimationTimer {
                             rider.removePackage();
                         }
                     } else {
-                        // ถ้ายังวิ่งอยู่กลางถนน ก็อัปเดตภาพ
+
                         rider.truckSprite.updateProgress(rider.edgeProgress);
                     }
                 } else {
-                    // ถนนหมดแล้ว = ภารกิจเสร็จสิ้น (ส่งของครบหมดแล้ว)
+
                     rider.truckSprite.remove();
                     iterator.remove();
                     System.out.println("🚚 Rider วิ่งส่งของเสร็จสมบูรณ์ ถอนตัวกลับฐาน!");
@@ -345,9 +332,9 @@ public class GameController extends AnimationTimer {
     public Parcel parcelGeneration() {
         Random rand = new Random();
 
-        // 1. ตรวจสอบจุดเริ่มต้น (ป้องกัน Null)
+
         if (this.startProvince == null) {
-            // ดึงจังหวัดแรกใน Graph มาเป็นค่าเริ่มต้น
+
             this.startProvince = provinceGraph.getNodes().values().iterator().next();
         }
 
@@ -358,12 +345,12 @@ public class GameController extends AnimationTimer {
 
         List<Edge> path = this.provinceGraph.findShortestPath(this.startProvince, destination);
 
-        
+
         double distance = destination.distanceFormSource;
         int reward;
 
         if (distance >= 1000000.0) {
-            reward = 25; // กรณีหาทางไม่เจอจริงๆ ให้แค่ค่าธรรมเนียม
+            reward = 25;
         } else {
             reward = (int) (distance * 2) + 25;
         }
@@ -377,8 +364,6 @@ public class GameController extends AnimationTimer {
         ui.drawParcelOnConveyor(newParcel);
         return newParcel;
     }
-
-
 
     public int getCurrentUnlockCost() {
         return currentUnlockCost;
@@ -396,34 +381,32 @@ public class GameController extends AnimationTimer {
         return unlockNodeCounts;
     }
 
-    private List<Rider> activeRiders = new ArrayList<>();
-
     public void deliveryParcels(java.util.List<Parcel> parcels) {
         if (parcels == null || parcels.isEmpty()) return;
 
         double cumulativeDistance = 0;
-        double averageSpeed = 2000.0; // km/h
+        double averageSpeed = 2000.0;
 
         System.out.println("\n========== DELIVERY ROUTE SUMMARY ==========");
 
-        // เริ่มต้นจุดแรกด้วยตำแหน่งปัจจุบัน (from ของพัสดุกล่องแรก)
+
         Province lastStop = parcels.getFirst().getFrom();
 
         for (int i = 0; i < parcels.size(); i++) {
             Parcel currentParcel = parcels.get(i);
 
-            // Chaining Logic: อัปเดตจุดเริ่มให้ต่อจากจุดหมายก่อนหน้า
+
             currentParcel.setFrom(lastStop);
             currentParcel.setCurrentProvince(lastStop);
 
-            // 🌟 สำคัญมาก: ล้างค่า Graph ก่อนรัน Dijkstra ใหม่เสมอ ป้องกันทางตัน
+
             for (Province p : provinceGraph.getAllNodes()) {
                 p.isVisited = false;
                 p.distanceFormSource = Double.MAX_VALUE;
                 p.from = null;
             }
 
-            // คำนวณเส้นทางด้วย Dijkstra
+
             List<Edge> optimizedPath = this.provinceGraph.findShortestPath(lastStop, currentParcel.getTo());
             currentParcel.setPath(optimizedPath);
 
@@ -436,51 +419,51 @@ public class GameController extends AnimationTimer {
                 segmentDistance = currentParcel.getTo().distanceFormSource;
             }
 
-            // อัปเดตข้อมูลลงใน Parcel
+
             currentParcel.setDistanceDelivery(segmentDistance);
             cumulativeDistance += segmentDistance;
 
-            // 🌟 แก้ตัวแปรเป็น ชั่วโมง (hr) เพราะระยะทางเป็น km และความเร็วเป็น km/h
+
             double etaInHours = (cumulativeDistance / averageSpeed);
             currentParcel.setEstimatedArrivalTime(etaInHours);
 
-            // แสดงข้อมูลของแต่ละกล่อง
+
             System.out.printf("Box #%d: [%s -> %s]\n", (i + 1), currentParcel.getFrom().name, currentParcel.getTo().name);
             System.out.printf("   - Distance this leg: %.2f km\n", segmentDistance);
             System.out.printf("   - Total distance so far: %.2f km\n", cumulativeDistance);
-            System.out.printf("   - Est. Arrival Time: +%.2f hr\n", etaInHours); // โชว์ทศนิยม 2 ตำแหน่ง
+            System.out.printf("   - Est. Arrival Time: +%.2f hr\n", etaInHours);
             System.out.println("--------------------------------------------");
 
-            // อัปเดตจุดจอดเพื่อใช้คำนวณกล่องถัดไป
+
             lastStop = currentParcel.getTo();
         }
 
         System.out.println("Total Route Distance: " + String.format("%.2f", cumulativeDistance) + " km");
         System.out.println("============================================\n");
 
-        // 🌟 --- นำข้อมูลส่งให้ระบบ RIDER ออกไปขับรถจริงๆ ---
+
         Province startLocation = parcels.getFirst().getFrom();
         Rider newRider = new Rider(parcels, startLocation);
 
-        // ดึงถนนทั้งหมดจากพัสดุทุกกล่อง มารวมกันให้รถวิ่งรวดเดียว
+
         for (Parcel p : parcels) {
             if (p.getPath() != null) {
                 newRider.path.addAll(p.getPath());
             }
         }
 
-        // สร้างภาพรถ UI
+
         newRider.truckSprite = ui.new TruckSprite(startLocation, startLocation);
 
-        // โยนใส่ Game Loop ให้มันขยับรถ
+
         activeRiders.add(newRider);
 
-        // อัปเดต UI
+
         ui.removeTruckMenu();
         ui.drawTruckMenu();
 
-        //
-        int expense = 100 + (int)(cumulativeDistance*0.25);
+
+        int expense = 100 + (int) (cumulativeDistance * 0.25);
         dailyExpenses += expense;
         this.ui.moneyPopup(-expense);
         dailyCumulativeDistance += cumulativeDistance;
@@ -490,16 +473,16 @@ public class GameController extends AnimationTimer {
     public void completeDelivery(Parcel parcel) {
         if (parcel == null) return;
 
-        // 1. ดึงเงินรางวัลที่เก็บไว้ใน parcel ออกมา
+
         int moneyToEarn = parcel.getReward();
         dailyIncome += moneyToEarn;
 
-        // 2. เพิ่มเงินให้ตัวละคร (Player)
+
         this.player.addMoney(moneyToEarn);
 
-        // 3. อัปเดตเงินบนหน้าจอ UI
+
         this.ui.updateMoneyLabel(this.player.getMoney());
-        this.ui.updateQuotaLabel(dailyIncome,currentQuota);
+        this.ui.updateQuotaLabel(dailyIncome, currentQuota);
         this.ui.moneyPopup(moneyToEarn);
 
         System.out.println("💰 ภารกิจสำเร็จ! ส่งพัสดุถึง " + parcel.getTo().name + " ได้รับเงิน " + moneyToEarn + " บาท");

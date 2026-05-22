@@ -3,7 +3,7 @@ package com.modex.modex.datastruct;
 import java.util.*;
 
 public class Graph {
-    private Map<Integer, Province> nodes = new HashMap<>();
+    private final Map<Integer, Province> nodes = new HashMap<>();
 
     public void addNode(Province node) {
         nodes.put(node.id, node);
@@ -23,10 +23,10 @@ public class Graph {
 
         if (a == null || b == null) return;
 
-        a.edges.add(new Edge(a ,b, distance));
+        a.edges.add(new Edge(a, b, distance));
     }
 
-    public Map<Integer, Province> getNodes(){
+    public Map<Integer, Province> getNodes() {
         return nodes;
     }
 
@@ -66,19 +66,19 @@ public class Graph {
         int n = nodeList.size();
         double[][] matrix = new double[n][n];
 
-        // map node -> index
+
         Map<Province, Integer> indexMap = new HashMap<>();
         for (int i = 0; i < n; i++) {
             indexMap.put(nodeList.get(i), i);
         }
 
-        // ใส่ค่าเริ่มต้น (ไม่มีเส้นทาง = infinity)
+
         for (int i = 0; i < n; i++) {
             Arrays.fill(matrix[i], Double.POSITIVE_INFINITY);
             matrix[i][i] = 0;
         }
 
-        // เติม edge ลง matrix
+
         for (Province node : nodeList) {
             int i = indexMap.get(node);
 
@@ -88,7 +88,7 @@ public class Graph {
             }
         }
 
-        // 🖥️ แสดงผล
+
         System.out.print("      ");
         for (Province node : nodeList) {
             System.out.printf("%-12s", node.name);
@@ -108,66 +108,66 @@ public class Graph {
             System.out.println();
         }
     }
-    
+
     public List<Edge> findShortestPath(Province startNode, Province endNode) {
         if (startNode == null || endNode == null) return null;
 
-        // 1. Reset ข้อมูลพื้นฐานของทุก Node ใน Graph ก่อนเริ่มคำนวณ
+
         for (Province node : nodes.values()) {
-            node.distanceFormSource = 1000000.0; // เทียบเท่า Infinity
+            node.distanceFormSource = 1000000.0;
             node.from = null;
             node.isVisited = false;
         }
 
-        // 2. กำหนดระยะทางเริ่มต้นที่จุด Start
+
         startNode.distanceFormSource = 0.0;
 
         while (true) {
-            // ค้นหาจังหวัดที่ระยะทางน้อยที่สุด (Min Distance) และยังไม่ได้ถูก Visit
+
             Province u = null;
             double minDistance = 1000000.0;
 
             for (Province temp : nodes.values()) {
-                // เงื่อนไข: ต้อง Unlocked แล้ว และยังไม่เคยถูก Visit ในรอบนี้
+
                 if (temp.isUnlocked && !temp.isVisited && temp.distanceFormSource < minDistance) {
                     minDistance = temp.distanceFormSource;
                     u = temp;
                 }
             }
 
-            // ถ้าหาโหนดถัดไปไม่ได้ หรือถึงจุดหมายแล้วให้หยุด
+
             if (u == null || u == endNode) {
                 break;
             }
 
             u.isVisited = true;
 
-            // 3. ตรวจสอบเส้นทางที่เชื่อมจาก u ไปยังจังหวัดข้างเคียง (Relaxation)
+
             if (u.edges != null) {
                 for (Edge e : u.edges) {
                     Province v = e.target;
 
-                    // เดินผ่านได้เฉพาะจังหวัดที่ Unlocked แล้วเท่านั้น
+
                     if (v.isUnlocked && !v.isVisited) {
                         double alt = u.distanceFormSource + e.distance;
-                        
-                        // ถ้าเจอเส้นทางที่สั้นกว่าเดิม ให้ทำการ Update
+
+
                         if (alt < v.distanceFormSource) {
                             v.distanceFormSource = alt;
-                            v.from = u; // เก็บข้อมูลว่ามาจากจังหวัดไหน
+                            v.from = u;
                         }
                     }
                 }
             }
         }
 
-        // 4. สร้างรายการเส้นทาง (Build Path) ย้อนกลับจากปลายทางไปต้นทาง
+
         List<Edge> path = new ArrayList<>();
         Province curr = endNode;
-        
+
         while (curr != null && curr.from != null) {
             Province parent = curr.from;
-            // หา Edge ที่เชื่อมระหว่าง Parent มายัง Current
+
             for (Edge e : parent.edges) {
                 if (e.target == curr) {
                     path.add(e);
@@ -178,8 +178,8 @@ public class Graph {
         }
 
         Collections.reverse(path);
-        
-        
+
+
         if (endNode.distanceFormSource >= 1000000.0) {
             System.out.println("❌ No path found to: " + endNode.name);
         } else {

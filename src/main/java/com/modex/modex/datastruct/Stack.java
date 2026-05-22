@@ -1,20 +1,10 @@
 package com.modex.modex.datastruct;
 
 public class Stack<T> {
-    private Node<T> top; // โหนดบนสุด
+    private Node<T> top;
     private int size;
 
-    // คลาสโหนดสำหรับเก็บข้อมูลภายใน Stack
-    private static class Node<T> {
-        private T data;
-        private Node<T> next;
 
-        public Node(T data) {
-            this.data = data;
-        }
-    }
-
-    // เพิ่มข้อมูลลงบนสุดของ Stack (Push)
     public void push(T item) {
         Node<T> oldTop = top;
         top = new Node<>(item);
@@ -22,7 +12,7 @@ public class Stack<T> {
         size++;
     }
 
-    // เอาข้อมูลบนสุดออกจาก Stack (Pop)
+
     public T pop() {
         if (isEmpty()) return null;
         T data = top.data;
@@ -31,7 +21,7 @@ public class Stack<T> {
         return data;
     }
 
-    // ขอดูข้อมูลบนสุดแต่ไม่เอาออก (Peek)
+
     public T peek() {
         if (isEmpty()) return null;
         return top.data;
@@ -43,5 +33,15 @@ public class Stack<T> {
 
     public int size() {
         return size;
+    }
+
+
+    private static class Node<T> {
+        private final T data;
+        private Node<T> next;
+
+        public Node(T data) {
+            this.data = data;
+        }
     }
 }

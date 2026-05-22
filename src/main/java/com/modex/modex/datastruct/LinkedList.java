@@ -1,20 +1,10 @@
 package com.modex.modex.datastruct;
 
 public class LinkedList<T> {
-    private Node<T> head; // โหนดแรกของรายการ
+    private Node<T> head;
     private int size;
 
-    // คลาสโหนดสำหรับเก็บข้อมูลและที่อยู่ของโหนดถัดไป
-    private static class Node<T> {
-        private T data;
-        private Node<T> next;
 
-        public Node(T data) {
-            this.data = data;
-        }
-    }
-
-    // เพิ่มข้อมูลต่อท้ายรายการ (Add Last)
     public void add(T item) {
         Node<T> newNode = new Node<>(item);
         if (head == null) {
@@ -29,7 +19,7 @@ public class LinkedList<T> {
         size++;
     }
 
-    // ลบข้อมูลโดยระบุตำแหน่ง (Remove by Index)
+
     public void remove(int index) {
         if (index < 0 || index >= size || head == null) return;
 
@@ -45,7 +35,7 @@ public class LinkedList<T> {
         size--;
     }
 
-    // ดึงข้อมูลตามตำแหน่ง (Get by Index)
+
     public T get(int index) {
         if (index < 0 || index >= size) return null;
         Node<T> current = head;
@@ -61,5 +51,15 @@ public class LinkedList<T> {
 
     public boolean isEmpty() {
         return head == null;
+    }
+
+
+    private static class Node<T> {
+        private final T data;
+        private Node<T> next;
+
+        public Node(T data) {
+            this.data = data;
+        }
     }
 }

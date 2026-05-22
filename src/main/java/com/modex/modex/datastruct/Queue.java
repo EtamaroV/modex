@@ -1,21 +1,11 @@
 package com.modex.modex.datastruct;
 
 public class Queue<T> {
-    private Node<T> first; // หัวแถว
-    private Node<T> last;  // ท้ายแถว
+    private Node<T> first;
+    private Node<T> last;
     private int size;
 
-    // คลาสโหนดสำหรับเก็บข้อมูลภายใน Queue
-    private static class Node<T> {
-        private T data;
-        private Node<T> next;
 
-        public Node(T data) {
-            this.data = data;
-        }
-    }
-
-    // เพิ่มข้อมูลเข้าท้ายแถว (Enqueue)
     public void enqueue(T item) {
         Node<T> oldLast = last;
         last = new Node<>(item);
@@ -27,7 +17,7 @@ public class Queue<T> {
         size++;
     }
 
-    // เอาข้อมูลออกจากหัวแถว (Dequeue)
+
     public T dequeue() {
         if (isEmpty()) return null;
         T data = first.data;
@@ -48,5 +38,15 @@ public class Queue<T> {
 
     public int size() {
         return size;
+    }
+
+
+    private static class Node<T> {
+        private final T data;
+        private Node<T> next;
+
+        public Node(T data) {
+            this.data = data;
+        }
     }
 }

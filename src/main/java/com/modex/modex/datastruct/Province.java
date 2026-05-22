@@ -1,6 +1,7 @@
 package com.modex.modex.datastruct;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Province {
     public int id;
@@ -20,7 +21,6 @@ public class Province {
     public List<Edge> edges = new ArrayList<>();
 
 
-    //for dijkstra
     public boolean isVisited = false;
     public double distanceFormSource = 99999;
     public Province from = null;
@@ -41,8 +41,7 @@ public class Province {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Province)) return false;
-        Province that = (Province) o;
+        if (!(o instanceof Province that)) return false;
         return id == that.id;
     }
 

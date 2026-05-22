@@ -6,7 +6,7 @@ public class Edge {
     public double distance;
 
 
-    public Edge(Province source,Province target, double distance) {
+    public Edge(Province source, Province target, double distance) {
         this.target = target;
         this.distance = distance;
         this.source = source;
