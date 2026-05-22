@@ -23,23 +23,6 @@ public class Rider {
         this.path = new ArrayList<>();
     }
 
-    public void assignParcel() {
-        this.path.clear();
-        Province tempStart = this.currentProvince;
-
-        for (Parcel p : parcelList) {
-
-            List<Edge> routeToNext = Utility.dijkstra(tempStart, p.getTo());
-
-            if (routeToNext != null) {
-                this.path.addAll(routeToNext);
-                tempStart = p.getTo();
-            } else {
-                System.out.println("⚠️ หาเส้นทางไป " + p.getTo().name + " ไม่เจอ!");
-            }
-        }
-    }
-
     public void removePackage() {
         if (!parcelList.isEmpty()) {
             parcelList.removeFirst();
