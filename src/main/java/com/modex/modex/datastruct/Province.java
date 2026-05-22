@@ -1,8 +1,9 @@
 package com.modex.modex.datastruct;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ProvinceNode {
+public class Province {
     public int id;
     public String name;
     public double lat;
@@ -19,7 +20,13 @@ public class ProvinceNode {
 
     public List<Edge> edges = new ArrayList<>();
 
-    public ProvinceNode(int id, String name, double lat, double lon) {
+
+    public boolean isVisited = false;
+    public double distanceFormSource = 99999;
+    public Province from = null;
+    public Province QNext = null;
+
+    public Province(int id, String name, double lat, double lon) {
         this.id = id;
         this.name = name;
         this.lat = lat;
@@ -34,8 +41,7 @@ public class ProvinceNode {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ProvinceNode)) return false;
-        ProvinceNode that = (ProvinceNode) o;
+        if (!(o instanceof Province that)) return false;
         return id == that.id;
     }
 

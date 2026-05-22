@@ -11,12 +11,12 @@ public class Player {
         return money;
     }
 
-    public void addMoney(int amount) {
-        this.money += amount;
-    }
-
     public void setMoney(int amount) {
         this.money = amount;
+    }
+
+    public void addMoney(int amount) {
+        this.money += amount;
     }
 
     public boolean deductMoney(int amount) {
@@ -26,4 +26,6 @@ public class Player {
         }
         return false;
     }
+
+
 }

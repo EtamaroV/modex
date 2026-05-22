@@ -1,11 +1,11 @@
 package com.modex.modex.loader;
 
-import com.modex.modex.datastruct.*;
-
-import org.json.*;
+import com.modex.modex.datastruct.Graph;
+import com.modex.modex.datastruct.Province;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.InputStream;
-import java.nio.file.*;
 
 public class GraphLoader {
 
@@ -24,7 +24,7 @@ public class GraphLoader {
             String content = new String(is.readAllBytes());
             JSONArray arr = new JSONArray(content);
 
-            // 1. สร้าง node ก่อน
+
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
 
@@ -35,11 +35,11 @@ public class GraphLoader {
                 double lat = coord.getDouble("lat");
                 double lon = coord.getDouble("lon");
 
-                ProvinceNode node = new ProvinceNode(id, name, lat, lon);
+                Province node = new Province(id, name, lat, lon);
                 graph.addNode(node);
             }
 
-            // 2. สร้าง edge
+
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
 

@@ -1,45 +1,60 @@
 package com.modex.modex.mechanic;
 
-import com.modex.modex.datastruct.Edge;
-import com.modex.modex.datastruct.Graph;
-import com.modex.modex.datastruct.ProvinceNode;
+import com.modex.modex.datastruct.*;
 import com.modex.modex.loader.GraphLoader;
 import com.modex.modex.model.Player;
 import com.modex.modex.view.UIControl;
 import javafx.animation.AnimationTimer;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.json.*;
-
 public class GameController extends AnimationTimer {
 
-    private UIControl ui;
-    private TimeManager timeManager;
-    private Player player;
+    private final UIControl ui;
+    private final TimeManager timeManager;
+    private final Player player;
 
-    private Graph provinceGraph;
-
+    private final Graph provinceGraph;
+    private final List<Rider> activeRiders = new ArrayList<>();
     private int currentUnlockCost;
-
+    private int currentQuota;
     private int latestSave = 0;
-
+    private int latestParcelSpawn = 0;
     private int playerStartNode;
+    private int unlockNodeCounts = 0;
+    private Province startProvince;
+    private int dailyParcelDelivered = 0;
+    private double dailyCumulativeDistance = 0;
+    private int dailyIncome = 0;
+    private int dailyExpenses = 0;
 
-    public GameController(UIControl ui) { // Init
+    public GameController(UIControl ui) {
         this.ui = ui;
         this.timeManager = new TimeManager();
         this.player = new Player(5000);
         this.currentUnlockCost = 1000;
+        this.currentQuota = 200;
 
         this.provinceGraph = GraphLoader.loadFromJson("thailand_graph.json");
 
         if (!loadGame()) {
-            spawnInitialProvince();
+
+            startProvince = spawnInitialProvince();
         }
 
+    }
+
+    public Graph getProvinceGraph() {
+        return provinceGraph;
+    }
+
+    public int getCurrentQuota() {
+        return currentQuota;
     }
 
     @Override
@@ -60,14 +75,28 @@ public class GameController extends AnimationTimer {
             System.out.println("SAVING TOTAL HOURS: " + totalHours);
         }
 
+        if ((totalHours > latestParcelSpawn)) {
+            latestParcelSpawn = totalHours;
+            System.out.println("parcel Gen: " + totalHours);
+            parcelGeneration();
+        }
+
         if (timeManager.isNewDay()) {
+            ui.showDailySummary(dailyParcelDelivered, dailyIncome, dailyCumulativeDistance, dailyExpenses);
+
+            dailyParcelDelivered = 0;
+            dailyCumulativeDistance = 0;
+            dailyIncome = 0;
+            dailyExpenses = 0;
+            currentQuota = (int) (currentQuota * 1.1);
+            ui.updateQuotaLabel(0, currentQuota);
             System.out.println("--- เริ่มต้นวันที่ " + timeManager.getDay() + " ---");
         }
 
         if (ui != null && !timeManager.isPaused()) {
             int currentTotalHours = timeManager.getTotalHours();
 
-            for (ProvinceNode node : provinceGraph.getAllNodes()) {
+            for (Province node : provinceGraph.getAllNodes()) {
                 if (node.isConstructing && currentTotalHours >= node.constructionFinishHour) {
                     node.isConstructing = false;
                     node.isUnlocked = true;
@@ -78,7 +107,7 @@ public class GameController extends AnimationTimer {
                     if (ui != null) {
                         ui.updateNodeColor(node);
 
-                        for (ProvinceNode neighbor : provinceGraph.getNeighbors(node)) {
+                        for (Province neighbor : provinceGraph.getNeighbors(node)) {
                             if (neighbor.isUnlocked) {
                                 ui.updateEdgeColor(neighbor, node);
                             }
@@ -87,11 +116,76 @@ public class GameController extends AnimationTimer {
                     }
                 }
             }
+
+
+            java.util.Iterator<Rider> iterator = activeRiders.iterator();
+            while (iterator.hasNext()) {
+                Rider rider = iterator.next();
+
+
+                if (rider.path != null && !rider.path.isEmpty()) {
+                    Edge currentEdge = rider.path.getFirst();
+
+
+                    if (rider.edgeProgress == 0.0) {
+                        rider.truckSprite.setRoute(currentEdge.source, currentEdge.target);
+
+
+                        if (timeManager.getTickInterval() != 0) {
+                            double averageSpeed = 60.0 * ((double) 250_000_000L / (double) timeManager.getTickInterval());
+                            double distance = Math.max(1.0, currentEdge.distance);
+
+
+                            rider.edgeSpeed = averageSpeed / distance;
+                        } else {
+                            rider.edgeSpeed = 0;
+                        }
+
+                    }
+
+
+                    rider.edgeProgress += rider.edgeSpeed * 0.005;
+
+                    if (rider.edgeProgress >= 1.0) {
+
+                        rider.truckSprite.updateProgress(1.0);
+                        rider.currentProvince = currentEdge.target;
+                        rider.edgeProgress = 0.0;
+                        rider.removeOldPath();
+
+
+                        while (!rider.parcelList.isEmpty() && rider.currentProvince == rider.parcelList.getFirst().getTo()) {
+
+                            Parcel deliveredParcel = rider.parcelList.getFirst();
+
+                            System.out.println("📦 โยนของลงที่ " + deliveredParcel.getTo().name + " | รับเงิน ฿ " + deliveredParcel.getReward());
+
+                            completeDelivery(deliveredParcel);
+                            dailyParcelDelivered++;
+
+                            rider.removePackage();
+                        }
+                    } else {
+
+                        rider.truckSprite.updateProgress(rider.edgeProgress);
+                    }
+                } else {
+
+                    rider.truckSprite.remove();
+                    iterator.remove();
+                    System.out.println("🚚 Rider วิ่งส่งของเสร็จสมบูรณ์ ถอนตัวกลับฐาน!");
+                }
+            }
+
         }
     }
 
     public void saveGame() {
         SaveManager.saveGame(player, currentUnlockCost, provinceGraph, timeManager, playerStartNode);
+    }
+
+    public void deleteGameData() throws IOException {
+        SaveManager.deleteGameData();
     }
 
     public boolean loadGame() {
@@ -113,19 +207,24 @@ public class GameController extends AnimationTimer {
                 JSONObject nodeData = nodesArr.getJSONObject(i);
                 int id = nodeData.getInt("id");
 
-                ProvinceNode node = provinceGraph.getNode(id);
+                Province node = provinceGraph.getNode(id);
                 if (node != null) {
                     node.isUnlocked = nodeData.getBoolean("isUnlocked");
                     node.isConstructing = nodeData.getBoolean("isConstructing");
                     node.constructionFinishHour = nodeData.getInt("finishHour");
                     node.isStartNode = (id == playerStartNode);
+                    if (id == playerStartNode) {
+                        startProvince = node;
+                    }
                 }
             }
         }
 
         if (ui != null) {
-            for (ProvinceNode node : provinceGraph.getAllNodes()) {
+            for (Province node : provinceGraph.getAllNodes()) {
                 if (node.isUnlocked || node.isConstructing) {
+
+                    unlockNodeCounts++;
 
                     ui.drawProvinceNode(node);
                     node.isDrawn = true;
@@ -136,7 +235,7 @@ public class GameController extends AnimationTimer {
                     } else if (node.isUnlocked) {
                         ui.updateNodeColor(node);
 
-                        for (ProvinceNode neighbor : provinceGraph.getNeighbors(node)) {
+                        for (Province neighbor : provinceGraph.getNeighbors(node)) {
                             if (neighbor.isUnlocked) {
                                 ui.updateEdgeColor(neighbor, node);
                             }
@@ -152,17 +251,19 @@ public class GameController extends AnimationTimer {
         return true;
     }
 
-    private void spawnInitialProvince() {
-        List<ProvinceNode> allNodes = new ArrayList<>(provinceGraph.getAllNodes());
-        if (allNodes.isEmpty()) return;
+    private Province spawnInitialProvince() {
+        List<Province> allNodes = new ArrayList<>(provinceGraph.getAllNodes());
+        if (allNodes.isEmpty()) return null;
 
         Random rand = new Random();
-        ProvinceNode startNode = allNodes.get(rand.nextInt(allNodes.size()));
+        Province startNode = allNodes.get(rand.nextInt(allNodes.size()));
 
         startNode.isUnlocked = true;
         startNode.isStartNode = true;
 
         playerStartNode = startNode.id;
+
+        unlockNodeCounts++;
 
         if (ui != null) {
             ui.drawProvinceNode(startNode);
@@ -172,10 +273,12 @@ public class GameController extends AnimationTimer {
 
             ui.updateMoneyLabel(player.getMoney());
         }
+
+        return startNode;
     }
 
-    private void expandVision(ProvinceNode centerNode) {
-        for (ProvinceNode neighbor : provinceGraph.getNeighbors(centerNode)) {
+    private void expandVision(Province centerNode) {
+        for (Province neighbor : provinceGraph.getNeighbors(centerNode)) {
             if (!neighbor.isDrawn) {
                 ui.drawProvinceNode(neighbor);
                 neighbor.isDrawn = true;
@@ -184,11 +287,11 @@ public class GameController extends AnimationTimer {
         }
     }
 
-    public void tryUnlockProvince(ProvinceNode targetNode) {
+    public void tryUnlockProvince(Province targetNode) {
         if (targetNode.isUnlocked || targetNode.isConstructing) return;
 
         boolean hasUnlockedNeighbor = false;
-        for (ProvinceNode neighbor : provinceGraph.getNeighbors(targetNode)) {
+        for (Province neighbor : provinceGraph.getNeighbors(targetNode)) {
             if (neighbor.isUnlocked) {
                 hasUnlockedNeighbor = true;
                 break;
@@ -201,8 +304,16 @@ public class GameController extends AnimationTimer {
         }
 
         if (player.deductMoney(currentUnlockCost)) {
+            this.ui.moneyPopup(-currentUnlockCost);
             targetNode.isConstructing = true;
-            targetNode.constructionFinishHour = timeManager.getTotalHours() + 24;
+            if (unlockNodeCounts > 5) {
+                targetNode.constructionFinishHour = timeManager.getTotalHours() + 24;
+            } else {
+                targetNode.constructionFinishHour = timeManager.getTotalHours() + 1;
+            }
+
+
+            unlockNodeCounts++;
 
             currentUnlockCost = (int) (currentUnlockCost * 1.0562626);
             System.out.println("🚧 เริ่มก่อสร้าง " + targetNode.name + " (จะเสร็จในอีก 24 ชม.)");
@@ -218,6 +329,42 @@ public class GameController extends AnimationTimer {
         }
     }
 
+    public Parcel parcelGeneration() {
+        Random rand = new Random();
+
+
+        if (this.startProvince == null) {
+
+            this.startProvince = provinceGraph.getNodes().values().iterator().next();
+        }
+
+        List<Province> allNodes = provinceGraph.getUnlocks(this.startProvince);
+        if (allNodes.isEmpty()) return null;
+
+        Province destination = allNodes.get(rand.nextInt(allNodes.size()));
+
+        List<Edge> path = this.provinceGraph.findShortestPath(this.startProvince, destination);
+
+
+        double distance = destination.distanceFormSource;
+        int reward;
+
+        if (distance >= 1000000.0) {
+            reward = 25;
+        } else {
+            reward = (int) (distance * 2) + 25;
+        }
+
+        Parcel newParcel = new Parcel(this.startProvince, destination);
+        newParcel.setReward(reward);
+
+        System.out.println("From: " + this.startProvince.name + " -> To: " + destination.name);
+        System.out.println("Distance: " + distance + " km | Reward: " + reward + " Baht");
+
+        ui.drawParcelOnConveyor(newParcel);
+        return newParcel;
+    }
+
     public int getCurrentUnlockCost() {
         return currentUnlockCost;
     }
@@ -229,5 +376,117 @@ public class GameController extends AnimationTimer {
     public int getMoney() {
         return player.getMoney();
     }
+
+    public int getUnlockNodeCounts() {
+        return unlockNodeCounts;
+    }
+
+    public void deliveryParcels(java.util.List<Parcel> parcels) {
+        if (parcels == null || parcels.isEmpty()) return;
+
+        double cumulativeDistance = 0;
+        double averageSpeed = 2000.0;
+
+        System.out.println("\n========== DELIVERY ROUTE SUMMARY ==========");
+
+
+        Province lastStop = parcels.getFirst().getFrom();
+
+        for (int i = 0; i < parcels.size(); i++) {
+            Parcel currentParcel = parcels.get(i);
+
+
+            currentParcel.setFrom(lastStop);
+            currentParcel.setCurrentProvince(lastStop);
+
+
+            for (Province p : provinceGraph.getAllNodes()) {
+                p.isVisited = false;
+                p.distanceFormSource = Double.MAX_VALUE;
+                p.from = null;
+            }
+
+
+            List<Edge> optimizedPath = this.provinceGraph.findShortestPath(lastStop, currentParcel.getTo());
+            currentParcel.setPath(optimizedPath);
+
+            double segmentDistance = 0;
+            if (optimizedPath != null && !optimizedPath.isEmpty()) {
+                for (Edge edge : optimizedPath) {
+                    segmentDistance += edge.distance;
+                }
+            } else {
+                segmentDistance = currentParcel.getTo().distanceFormSource;
+            }
+
+
+            currentParcel.setDistanceDelivery(segmentDistance);
+            cumulativeDistance += segmentDistance;
+
+
+            double etaInHours = (cumulativeDistance / averageSpeed);
+            currentParcel.setEstimatedArrivalTime(etaInHours);
+
+
+            System.out.printf("Box #%d: [%s -> %s]\n", (i + 1), currentParcel.getFrom().name, currentParcel.getTo().name);
+            System.out.printf("   - Distance this leg: %.2f km\n", segmentDistance);
+            System.out.printf("   - Total distance so far: %.2f km\n", cumulativeDistance);
+            System.out.printf("   - Est. Arrival Time: +%.2f hr\n", etaInHours);
+            System.out.println("--------------------------------------------");
+
+
+            lastStop = currentParcel.getTo();
+        }
+
+        System.out.println("Total Route Distance: " + String.format("%.2f", cumulativeDistance) + " km");
+        System.out.println("============================================\n");
+
+
+        Province startLocation = parcels.getFirst().getFrom();
+        Rider newRider = new Rider(parcels, startLocation);
+
+
+        for (Parcel p : parcels) {
+            if (p.getPath() != null) {
+                newRider.path.addAll(p.getPath());
+            }
+        }
+
+
+        newRider.truckSprite = ui.new TruckSprite(startLocation, startLocation);
+
+
+        activeRiders.add(newRider);
+
+
+        ui.removeTruckMenu();
+        ui.drawTruckMenu();
+
+
+        int expense = 100 + (int) (cumulativeDistance * 0.25);
+        dailyExpenses += expense;
+        this.ui.moneyPopup(-expense);
+        dailyCumulativeDistance += cumulativeDistance;
+
+    }
+
+    public void completeDelivery(Parcel parcel) {
+        if (parcel == null) return;
+
+
+        int moneyToEarn = parcel.getReward();
+        dailyIncome += moneyToEarn;
+
+
+        this.player.addMoney(moneyToEarn);
+
+
+        this.ui.updateMoneyLabel(this.player.getMoney());
+        this.ui.updateQuotaLabel(dailyIncome, currentQuota);
+        this.ui.moneyPopup(moneyToEarn);
+
+        System.out.println("💰 ภารกิจสำเร็จ! ส่งพัสดุถึง " + parcel.getTo().name + " ได้รับเงิน " + moneyToEarn + " บาท");
+    }
+
 
 }

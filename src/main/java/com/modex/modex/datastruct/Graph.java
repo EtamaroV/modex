@@ -3,31 +3,35 @@ package com.modex.modex.datastruct;
 import java.util.*;
 
 public class Graph {
-    private Map<Integer, ProvinceNode> nodes = new HashMap<>();
+    private final Map<Integer, Province> nodes = new HashMap<>();
 
-    public void addNode(ProvinceNode node) {
+    public void addNode(Province node) {
         nodes.put(node.id, node);
     }
 
-    public ProvinceNode getNode(int id) {
+    public Province getNode(int id) {
         return nodes.get(id);
     }
 
-    public Collection<ProvinceNode> getAllNodes() {
+    public Collection<Province> getAllNodes() {
         return nodes.values();
     }
 
     public void addEdge(int id1, int id2, double distance) {
-        ProvinceNode a = nodes.get(id1);
-        ProvinceNode b = nodes.get(id2);
+        Province a = nodes.get(id1);
+        Province b = nodes.get(id2);
 
         if (a == null || b == null) return;
 
-        a.edges.add(new Edge(b, distance));
+        a.edges.add(new Edge(a, b, distance));
     }
 
-    public List<ProvinceNode> getNeighbors(ProvinceNode node) {
-        List<ProvinceNode> neighbors = new ArrayList<>();
+    public Map<Integer, Province> getNodes() {
+        return nodes;
+    }
+
+    public List<Province> getNeighbors(Province node) {
+        List<Province> neighbors = new ArrayList<>();
         if (node != null && node.edges != null) {
             for (Edge e : node.edges) {
                 neighbors.add(e.target);
@@ -36,8 +40,16 @@ public class Graph {
         return neighbors;
     }
 
+    public List<Province> getUnlocks(Province startProvince) {
+        List<Province> unlockProvinces = new ArrayList<>();
+        for (Province node : nodes.values()) {
+            if (node.isUnlocked && node.id != startProvince.id) unlockProvinces.add(node);
+        }
+        return unlockProvinces;
+    }
+
     public void printAdjacencyList() {
-        for (ProvinceNode node : nodes.values()) {
+        for (Province node : nodes.values()) {
             System.out.print(node.name + " -> ");
 
             for (Edge e : node.edges) {
@@ -49,25 +61,25 @@ public class Graph {
     }
 
     public void printAdjacencyMatrix() {
-        List<ProvinceNode> nodeList = new ArrayList<>(nodes.values());
+        List<Province> nodeList = new ArrayList<>(nodes.values());
 
         int n = nodeList.size();
         double[][] matrix = new double[n][n];
 
-        // map node -> index
-        Map<ProvinceNode, Integer> indexMap = new HashMap<>();
+
+        Map<Province, Integer> indexMap = new HashMap<>();
         for (int i = 0; i < n; i++) {
             indexMap.put(nodeList.get(i), i);
         }
 
-        // ใส่ค่าเริ่มต้น (ไม่มีเส้นทาง = infinity)
+
         for (int i = 0; i < n; i++) {
             Arrays.fill(matrix[i], Double.POSITIVE_INFINITY);
             matrix[i][i] = 0;
         }
 
-        // เติม edge ลง matrix
-        for (ProvinceNode node : nodeList) {
+
+        for (Province node : nodeList) {
             int i = indexMap.get(node);
 
             for (Edge e : node.edges) {
@@ -76,9 +88,9 @@ public class Graph {
             }
         }
 
-        // 🖥️ แสดงผล
+
         System.out.print("      ");
-        for (ProvinceNode node : nodeList) {
+        for (Province node : nodeList) {
             System.out.printf("%-12s", node.name);
         }
         System.out.println();
@@ -95,5 +107,85 @@ public class Graph {
             }
             System.out.println();
         }
+    }
+
+    public List<Edge> findShortestPath(Province startNode, Province endNode) {
+        if (startNode == null || endNode == null) return null;
+
+
+        for (Province node : nodes.values()) {
+            node.distanceFormSource = 1000000.0;
+            node.from = null;
+            node.isVisited = false;
+        }
+
+
+        startNode.distanceFormSource = 0.0;
+
+        while (true) {
+
+            Province u = null;
+            double minDistance = 1000000.0;
+
+            for (Province temp : nodes.values()) {
+
+                if (temp.isUnlocked && !temp.isVisited && temp.distanceFormSource < minDistance) {
+                    minDistance = temp.distanceFormSource;
+                    u = temp;
+                }
+            }
+
+
+            if (u == null || u == endNode) {
+                break;
+            }
+
+            u.isVisited = true;
+
+
+            if (u.edges != null) {
+                for (Edge e : u.edges) {
+                    Province v = e.target;
+
+
+                    if (v.isUnlocked && !v.isVisited) {
+                        double alt = u.distanceFormSource + e.distance;
+
+
+                        if (alt < v.distanceFormSource) {
+                            v.distanceFormSource = alt;
+                            v.from = u;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        List<Edge> path = new ArrayList<>();
+        Province curr = endNode;
+
+        while (curr != null && curr.from != null) {
+            Province parent = curr.from;
+
+            for (Edge e : parent.edges) {
+                if (e.target == curr) {
+                    path.add(e);
+                    break;
+                }
+            }
+            curr = parent;
+        }
+
+        Collections.reverse(path);
+
+
+        if (endNode.distanceFormSource >= 1000000.0) {
+            System.out.println("❌ No path found to: " + endNode.name);
+        } else {
+            System.out.printf("✅ Path found! Total Distance to %s: %.2f km\n", endNode.name, endNode.distanceFormSource);
+        }
+
+        return path;
     }
 }

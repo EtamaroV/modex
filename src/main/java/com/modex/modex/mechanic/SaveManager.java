@@ -1,14 +1,13 @@
 package com.modex.modex.mechanic;
 
 import com.modex.modex.datastruct.Graph;
-import com.modex.modex.datastruct.ProvinceNode;
-
+import com.modex.modex.datastruct.Province;
 import com.modex.modex.model.Player;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,7 +16,7 @@ public class SaveManager {
 
     private static final String GAME_FOLDER_NAME = "MODEx";
     private static final String SAVE_FILE_NAME = "playerData.json";
-    
+
     private static Path getSaveDirectory() {
         String os = System.getProperty("os.name").toLowerCase();
         String userHome = System.getProperty("user.home");
@@ -58,7 +57,7 @@ public class SaveManager {
             saveObj.put("time", timeObj);
 
             JSONArray nodesArr = new JSONArray();
-            for (ProvinceNode node : graph.getAllNodes()) {
+            for (Province node : graph.getAllNodes()) {
                 if (node.isUnlocked || node.isConstructing) {
                     JSONObject nodeData = new JSONObject();
                     nodeData.put("id", node.id);
@@ -72,7 +71,9 @@ public class SaveManager {
 
             Files.writeString(getSaveFilePath(), saveObj.toString(4));
             System.out.println("💾 บันทึกเกมสำเร็จ!");
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static JSONObject loadGameData() {
@@ -80,7 +81,7 @@ public class SaveManager {
             Path savePath = getSaveFilePath();
             if (Files.exists(savePath)) {
                 String content = Files.readString(savePath);
-                System.out.println("📂 โหลดเซฟเกมสำเร็จ! จาก: " + savePath.toString());
+                System.out.println("📂 โหลดเซฟเกมสำเร็จ! จาก: " + savePath);
                 return new JSONObject(content);
             } else {
                 System.out.println("⚠️ ไม่พบไฟล์เซฟเกม (กำลังเริ่มเกมใหม่...)");
@@ -90,5 +91,15 @@ public class SaveManager {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void deleteGameData() throws IOException {
+        Path path = getSaveFilePath();
+        if (Files.exists(path)) {
+            Files.delete(path);
+            System.out.println("Save data deleted successfully.");
+        } else {
+            System.out.println("No save data found to delete.");
+        }
     }
 }
