@@ -86,7 +86,8 @@ public class GameController extends AnimationTimer {
         }
 
         int totalHours = timeManager.getTotalHours();
-        if ((totalHours > latestSave) && (totalHours % 6 == 0)) {
+
+        if ((totalHours > latestSave) && (totalHours % AUTOSAVE_INTERVAL_HOURS == 0)) {
             latestSave = totalHours;
             saveGame();
             System.out.println("SAVING TOTAL HOURS: " + totalHours);
@@ -105,7 +106,8 @@ public class GameController extends AnimationTimer {
             dailyCumulativeDistance = 0;
             dailyIncome = 0;
             dailyExpenses = 0;
-            currentQuota = (int) (currentQuota * 1.1);
+
+            currentQuota = (int) (currentQuota * QUOTA_MULTIPLIER);
             ui.updateQuotaLabel(0, currentQuota);
             System.out.println("--- เริ่มต้นวันที่ " + timeManager.getDay() + " ---");
         }
@@ -139,9 +141,9 @@ public class GameController extends AnimationTimer {
             while (iterator.hasNext()) {
                 Rider rider = iterator.next();
 
-
-                if (rider.path != null && !rider.path.isEmpty()) {
-                    Edge currentEdge = rider.path.getFirst();
+                // [แก้แล้ว] เปลี่ยนมาใช้ pathQueue และ peek()
+                if (rider.pathQueue != null && !rider.pathQueue.isEmpty()) {
+                    Edge currentEdge = rider.pathQueue.peek();
 
 
                     if (rider.edgeProgress == 0.0) {
@@ -149,6 +151,7 @@ public class GameController extends AnimationTimer {
 
 
                         if (timeManager.getTickInterval() != 0) {
+                            //BASE_TICK_INTERVAL =  250_000_000L
                             double averageSpeed = 60.0 * ((double) 250_000_000L / (double) timeManager.getTickInterval());
                             double distance = Math.max(1.0, currentEdge.distance);
 
@@ -160,8 +163,8 @@ public class GameController extends AnimationTimer {
 
                     }
 
-
-                    rider.edgeProgress += rider.edgeSpeed * 0.005;
+                    // [แก้แล้ว] ใช้ RIDER_PROGRESS_STEP แทน 0.005
+                    rider.edgeProgress += rider.edgeSpeed * RIDER_PROGRESS_STEP;
 
                     if (rider.edgeProgress >= 1.0) {
 
@@ -171,9 +174,9 @@ public class GameController extends AnimationTimer {
                         rider.removeOldPath();
 
 
-                        while (!rider.parcelList.isEmpty() && rider.currentProvince == rider.parcelList.getFirst().getTo()) {
-
-                            Parcel deliveredParcel = rider.parcelList.getFirst();
+                        // [แก้แล้ว] เปลี่ยนมาใช้ parcelQueue และ peek()
+                        while (!rider.parcelQueue.isEmpty() && rider.currentProvince == rider.parcelQueue.peek().getTo()) {
+                            Parcel deliveredParcel = rider.parcelQueue.peek();
 
                             System.out.println("📦 โยนของลงที่ " + deliveredParcel.getTo().name + " | รับเงิน ฿ " + deliveredParcel.getReward());
 
@@ -452,10 +455,12 @@ public class GameController extends AnimationTimer {
         Province startLocation = parcels.getFirst().getFrom();
         Rider newRider = new Rider(parcels, startLocation);
 
-
+        // 🚨 [แก้ 12] วนลูปจับเส้นทางยัดลง Queue ของคุณทีละอันด้วยคำสั่ง enqueue (เพราะ Queue ไม่มีคำสั่ง addAll)
         for (Parcel p : parcels) {
             if (p.getPath() != null) {
-                newRider.path.addAll(p.getPath());
+                for (Edge e : p.getPath()) {
+                    newRider.pathQueue.enqueue(e);
+                }
             }
         }
 
