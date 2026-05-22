@@ -109,32 +109,35 @@ public class Graph {
         }
     }
 
-    public List<Edge> findShortestPath(Province startNode, Province endNode) {
-        if (startNode == null || endNode == null) return null;
-
-
+    // 1. แยก Method สำหรับเคลียร์ค่า Graph ออกมาต่างหาก (Clean Code)
+    public void resetGraphPaths() {
         for (Province node : nodes.values()) {
-            node.distanceFormSource = 1000000.0;
+            node.distanceFormSource = Double.MAX_VALUE;
             node.from = null;
             node.isVisited = false;
         }
+    }
 
+    public List<Edge> findShortestPath(Province startNode, Province endNode) {
+        if (startNode == null || endNode == null) return null;
+
+        // เรียกใช้ Method ที่แยกไว้ เพื่อลดความยาวของโค้ด
+        this.resetGraphPaths();
 
         startNode.distanceFormSource = 0.0;
 
+        // --- ส่วนที่ 1: ค้นหาเส้นทางด้วย Dijkstra ---
         while (true) {
-
             Province u = null;
-            double minDistance = 1000000.0;
+            double minDistance = Double.MAX_VALUE;
 
             for (Province temp : nodes.values()) {
-
+                // อนาคตถ้าทำ Encapsulation เปลี่ยนเป็น: temp.isUnlocked() && !temp.isVisited()
                 if (temp.isUnlocked && !temp.isVisited && temp.distanceFormSource < minDistance) {
                     minDistance = temp.distanceFormSource;
                     u = temp;
                 }
             }
-
 
             if (u == null || u == endNode) {
                 break;
@@ -142,15 +145,12 @@ public class Graph {
 
             u.isVisited = true;
 
-
             if (u.edges != null) {
                 for (Edge e : u.edges) {
                     Province v = e.target;
 
-
                     if (v.isUnlocked && !v.isVisited) {
                         double alt = u.distanceFormSource + e.distance;
-
 
                         if (alt < v.distanceFormSource) {
                             v.distanceFormSource = alt;
@@ -161,8 +161,9 @@ public class Graph {
             }
         }
 
-
-        List<Edge> path = new ArrayList<>();
+        // --- ส่วนที่ 2: โชว์การใช้ Custom Data Structure (Stack) ---
+        // 2.1 ใช้ Stack ของคุณเพื่อเก็บเส้นทางจาก "ปลายทาง ย้อนกลับไป ต้นทาง"
+        Stack<Edge> pathStack = new Stack<>();
         Province curr = endNode;
 
         while (curr != null && curr.from != null) {
@@ -170,18 +171,25 @@ public class Graph {
 
             for (Edge e : parent.edges) {
                 if (e.target == curr) {
-                    path.add(e);
+                    pathStack.push(e); // ดันเข้า Stack
                     break;
                 }
             }
             curr = parent;
         }
 
-        Collections.reverse(path);
+        // 2.2 โอนย้ายข้อมูลจาก Stack ลง List (การ Pop จะทำให้มันกลับมาเรียงจาก ต้นทาง -> ปลายทาง อัตโนมัติ)
+        List<Edge> path = new ArrayList<>();
+        while (!pathStack.isEmpty()) {
+            path.add(pathStack.pop()); 
+        }
 
+        // ไม่ต้องใช้ Collections.reverse(path); อีกต่อไป!
 
-        if (endNode.distanceFormSource >= 1000000.0) {
-            System.out.println("❌ No path found to: " + endNode.name);
+        // --- ส่วนที่ 3: สรุปผล ---
+        if (endNode.distanceFormSource >= Double.MAX_VALUE) {
+            // (แนะนำ) ปิด Log ส่วนนี้เมื่อทำเกมเสร็จเพื่อลดการใช้ทรัพยากร
+            System.out.println("❌ No path found to: " + endNode.name); 
         } else {
             System.out.printf("✅ Path found! Total Distance to %s: %.2f km\n", endNode.name, endNode.distanceFormSource);
         }

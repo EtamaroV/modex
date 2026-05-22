@@ -19,6 +19,23 @@ public class GameController extends AnimationTimer {
     private final TimeManager timeManager;
     private final Player player;
 
+    // --- [ GAME CONFIGURATIONS ] ---
+    private static final int INITIAL_MONEY = 5000;
+    private static final int INITIAL_UNLOCK_COST = 1000;
+    private static final int INITIAL_QUOTA = 200;
+    private static final double QUOTA_MULTIPLIER = 1.1;
+    private static final double UNLOCK_COST_MULTIPLIER = 1.0562626;
+    
+    private static final int AUTOSAVE_INTERVAL_HOURS = 6;
+    private static final int BASE_REWARD = 25;
+    private static final double REWARD_DISTANCE_MULTIPLIER = 2.0;
+    private static final double DELIVERY_EXPENSE_MULTIPLIER = 0.25;
+    private static final int BASE_DELIVERY_EXPENSE = 100;
+    
+    private static final double RIDER_PROGRESS_STEP = 0.005;
+    private static final double AVERAGE_TRUCK_SPEED = 2000.0;
+    // -------------------------------
+
     private final Graph provinceGraph;
     private final List<Rider> activeRiders = new ArrayList<>();
     private int currentUnlockCost;
@@ -36,9 +53,9 @@ public class GameController extends AnimationTimer {
     public GameController(UIControl ui) {
         this.ui = ui;
         this.timeManager = new TimeManager();
-        this.player = new Player(5000);
-        this.currentUnlockCost = 1000;
-        this.currentQuota = 200;
+        this.player = new Player(INITIAL_MONEY);
+        this.currentUnlockCost = INITIAL_UNLOCK_COST;
+        this.currentQuota = INITIAL_QUOTA;
 
         this.provinceGraph = GraphLoader.loadFromJson("thailand_graph.json");
 
@@ -315,7 +332,7 @@ public class GameController extends AnimationTimer {
 
             unlockNodeCounts++;
 
-            currentUnlockCost = (int) (currentUnlockCost * 1.0562626);
+            currentUnlockCost = (int) (currentUnlockCost * UNLOCK_COST_MULTIPLIER);
             System.out.println("🚧 เริ่มก่อสร้าง " + targetNode.name + " (จะเสร็จในอีก 24 ชม.)");
 
             saveGame();
@@ -349,10 +366,10 @@ public class GameController extends AnimationTimer {
         double distance = destination.distanceFormSource;
         int reward;
 
-        if (distance >= 1000000.0) {
-            reward = 25;
+        if (distance >= Double.MAX_VALUE) {
+            reward = BASE_REWARD;
         } else {
-            reward = (int) (distance * 2) + 25;
+            reward = (int) (distance * REWARD_DISTANCE_MULTIPLIER) + BASE_REWARD;
         }
 
         Parcel newParcel = new Parcel(this.startProvince, destination);
@@ -385,7 +402,7 @@ public class GameController extends AnimationTimer {
         if (parcels == null || parcels.isEmpty()) return;
 
         double cumulativeDistance = 0;
-        double averageSpeed = 2000.0;
+        double averageSpeed = AVERAGE_TRUCK_SPEED;
 
         System.out.println("\n========== DELIVERY ROUTE SUMMARY ==========");
 
@@ -399,14 +416,6 @@ public class GameController extends AnimationTimer {
             currentParcel.setFrom(lastStop);
             currentParcel.setCurrentProvince(lastStop);
 
-
-            for (Province p : provinceGraph.getAllNodes()) {
-                p.isVisited = false;
-                p.distanceFormSource = Double.MAX_VALUE;
-                p.from = null;
-            }
-
-
             List<Edge> optimizedPath = this.provinceGraph.findShortestPath(lastStop, currentParcel.getTo());
             currentParcel.setPath(optimizedPath);
 
@@ -419,10 +428,8 @@ public class GameController extends AnimationTimer {
                 segmentDistance = currentParcel.getTo().distanceFormSource;
             }
 
-
             currentParcel.setDistanceDelivery(segmentDistance);
             cumulativeDistance += segmentDistance;
-
 
             double etaInHours = (cumulativeDistance / averageSpeed);
             currentParcel.setEstimatedArrivalTime(etaInHours);
@@ -463,7 +470,7 @@ public class GameController extends AnimationTimer {
         ui.drawTruckMenu();
 
 
-        int expense = 100 + (int) (cumulativeDistance * 0.25);
+        int expense = BASE_DELIVERY_EXPENSE + (int) (cumulativeDistance * DELIVERY_EXPENSE_MULTIPLIER);
         dailyExpenses += expense;
         this.ui.moneyPopup(-expense);
         dailyCumulativeDistance += cumulativeDistance;
