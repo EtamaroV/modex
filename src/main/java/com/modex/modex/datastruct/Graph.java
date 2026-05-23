@@ -109,7 +109,7 @@ public class Graph {
         }
     }
 
-    // 1. แยก Method สำหรับเคลียร์ค่า Graph ออกมาต่างหาก (Clean Code)
+    
     public void resetGraphPaths() {
         for (Province node : nodes.values()) {
             node.distanceFormSource = Double.MAX_VALUE;
@@ -121,18 +121,18 @@ public class Graph {
     public List<Edge> findShortestPath(Province startNode, Province endNode) {
         if (startNode == null || endNode == null) return null;
 
-        // เรียกใช้ Method ที่แยกไว้ เพื่อลดความยาวของโค้ด
+        
         this.resetGraphPaths();
 
         startNode.distanceFormSource = 0.0;
 
-        // --- ส่วนที่ 1: ค้นหาเส้นทางด้วย Dijkstra ---
+        
         while (true) {
             Province u = null;
             double minDistance = Double.MAX_VALUE;
 
             for (Province temp : nodes.values()) {
-                // อนาคตถ้าทำ Encapsulation เปลี่ยนเป็น: temp.isUnlocked() && !temp.isVisited()
+                
                 if (temp.isUnlocked && !temp.isVisited && temp.distanceFormSource < minDistance) {
                     minDistance = temp.distanceFormSource;
                     u = temp;
@@ -161,8 +161,8 @@ public class Graph {
             }
         }
 
-        // --- ส่วนที่ 2: โชว์การใช้ Custom Data Structure (Stack) ---
-        // 2.1 ใช้ Stack ของคุณเพื่อเก็บเส้นทางจาก "ปลายทาง ย้อนกลับไป ต้นทาง"
+        
+        
         Stack<Edge> pathStack = new Stack<>();
         Province curr = endNode;
 
@@ -171,24 +171,24 @@ public class Graph {
 
             for (Edge e : parent.edges) {
                 if (e.target == curr) {
-                    pathStack.push(e); // ดันเข้า Stack
+                    pathStack.push(e); 
                     break;
                 }
             }
             curr = parent;
         }
 
-        // 2.2 โอนย้ายข้อมูลจาก Stack ลง List (การ Pop จะทำให้มันกลับมาเรียงจาก ต้นทาง -> ปลายทาง อัตโนมัติ)
+        
         List<Edge> path = new ArrayList<>();
         while (!pathStack.isEmpty()) {
             path.add(pathStack.pop()); 
         }
 
-        // ไม่ต้องใช้ Collections.reverse(path); อีกต่อไป!
+        
 
-        // --- ส่วนที่ 3: สรุปผล ---
+        
         if (endNode.distanceFormSource >= Double.MAX_VALUE) {
-            // (แนะนำ) ปิด Log ส่วนนี้เมื่อทำเกมเสร็จเพื่อลดการใช้ทรัพยากร
+            
             System.out.println("❌ No path found to: " + endNode.name); 
         } else {
             System.out.printf("✅ Path found! Total Distance to %s: %.2f km\n", endNode.name, endNode.distanceFormSource);
