@@ -2,17 +2,18 @@ package com.modex.modex.datastruct;
 
 import java.util.List;
 
-public class Parcel {
-    private final Province to;
-    private Province from;
-    private Province currentProvince;
-    private List<Edge> path;
-    private int reward;
+public class Parcel {//เอาไว้เก็บข้อมูลพัสดุ 
+    private final Province to; // จังหวัดปลายทาง (final เพราะปลายทางไม่ควรเปลี่ยนกลางทาง)
+    private Province from; // จังหวัดต้นทาง
+    private Province currentProvince; // จังหวัดที่พัสดุอยู่ ณ ปัจจุบัน
+    private List<Edge> path; // รายการเส้นทาง (Edge/ถนน) ที่พัสดุต้องเดินทางผ่าน
+    private int reward; // รายได้/รางวัลจากการส่งพัสดุชิ้นนี้
 
-    private double estimatedArrivalTime;
-    private double distance_delivery;
+    // ข้อมูลเกี่ยวกับการเดินทาง
+    private double estimatedArrivalTime; // เวลาที่คาดว่าจะส่งถึงปลายทาง
+    private double distance_delivery; // ระยะทางในการจัดส่ง
 
-    public Parcel(Province From, Province To) {
+    public Parcel(Province From, Province To) {// init
         from = From;
         to = To;
         currentProvince = From;
@@ -20,6 +21,7 @@ public class Parcel {
         reward = 0;
     }
 
+    // Getters และ Setters สำหรับเข้าถึงและแก้ไขข้อมูล
     public Province getFrom() {
         return from;
     }
@@ -36,8 +38,8 @@ public class Parcel {
     public Province getCurrentProvince() {
         return currentProvince;
     }
-
-    public void setCurrentProvince(Province currentProvince) {
+    
+    public void setCurrentProvince(Province currentProvince) { //อัปเดตตำแหน่งปัจจุบันของพัสดุเมื่อเดินทางไปถึงจังหวัดใหม่
         this.currentProvince = currentProvince;
     }
 
@@ -45,7 +47,7 @@ public class Parcel {
         return path;
     }
 
-    public void setPath(List<Edge> path) {
+    public void setPath(List<Edge> path) { // กำหนดเส้นทางการเดินทางของพัสดุ
         this.path = path;
     }
 
@@ -53,7 +55,7 @@ public class Parcel {
         return reward;
     }
 
-    public void setReward(int reward) {
+    public void setReward(int reward) { // กำหนดรายได้/รางวัลการส่งพัสดุชินนี้
         this.reward = reward;
     }
 
