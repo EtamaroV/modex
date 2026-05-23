@@ -201,7 +201,7 @@ public class UIControl extends Application { // ส่วนแสดงผล U
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // เชื่อม style.css (ใน resource)
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/ModEx.png"))); // ใส่ icon
         stage.setFullScreen(true); // fullscreen
-        stage.setTitle("MODEx"); // title
+        stage.setTitle("ModEx"); // title
         stage.setScene(scene); // set scene
         stage.show(); // แสดงผล
 
