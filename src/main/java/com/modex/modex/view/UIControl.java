@@ -1277,22 +1277,22 @@ public class UIControl extends Application { // ส่วนแสดงผล U
         separator.setStrokeWidth(2);
 
         Button btnContinue;
-        if (metTheQuota) { // ถ้าทำถึงดควต้า
-            btnContinue = new Button("CONTINUE");
+        if (metTheQuota) { // ถ้าทำถึงโควต้า
+            btnContinue = new Button("CONTINUE"); // ปุ่มดำเนินการต่อ
             btnContinue.getStyleClass().add("primary-btn");
-            btnContinue.setOnAction(e -> {
+            btnContinue.setOnAction(e -> { // กดปุ่ม
                 FadeTransition fadeOut = new FadeTransition(Duration.millis(200), summaryOverlay);
                 fadeOut.setToValue(0);
                 fadeOut.setOnFinished(ev -> root.getChildren().remove(summaryOverlay));
                 fadeOut.play();
 
                 gameController.getTimeManager().setPaused(false);
-                gameController.saveGame();
+                gameController.saveGame(); // เซฟเกม
             });
         } else { // ทำไม่ถึง
-            btnContinue = new Button("Exit game");
+            btnContinue = new Button("Exit game"); // ปุ่มออกเกม
             btnContinue.getStyleClass().add("primary-btn");
-            btnContinue.setOnAction(e -> {
+            btnContinue.setOnAction(e -> { // กดปุ่ม
                 FadeTransition fadeOut = new FadeTransition(Duration.millis(200), summaryOverlay);
                 fadeOut.setToValue(0);
                 fadeOut.setOnFinished(ev -> root.getChildren().remove(summaryOverlay));
@@ -1300,7 +1300,7 @@ public class UIControl extends Application { // ส่วนแสดงผล U
 
                 gameController.getTimeManager().setPaused(false);
                 try {
-                    gameController.deleteGameData();
+                    gameController.deleteGameData(); // ลบเซฟเกม
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }

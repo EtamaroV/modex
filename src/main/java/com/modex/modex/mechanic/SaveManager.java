@@ -12,40 +12,42 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class SaveManager {
+public class SaveManager { // ตัวเซฟข้อมูลผู้เล่น
 
-    private static final String GAME_FOLDER_NAME = "MODEx";
-    private static final String SAVE_FILE_NAME = "playerData.json";
+    private static final String GAME_FOLDER_NAME = "ModEx"; // Folder name
+    private static final String SAVE_FILE_NAME = "playerData.json"; // File name
 
-    private static Path getSaveDirectory() {
-        String os = System.getProperty("os.name").toLowerCase();
-        String userHome = System.getProperty("user.home");
+    private static Path getSaveDirectory() { // ดึงค่าที่ที่จะเอาข้อมูลไปเก็บ
+        String os = System.getProperty("os.name").toLowerCase(); // ดึงค่า os
+        String userHome = System.getProperty("user.home"); // ดึง user.home
         Path saveDir;
 
-        if (os.contains("win")) {
-            String appData = System.getenv("LOCALAPPDATA");
-            saveDir = Paths.get(appData, GAME_FOLDER_NAME);
-        } else if (os.contains("mac")) {
-            saveDir = Paths.get(userHome, "Library", "Application Support", GAME_FOLDER_NAME);
-        } else {
-            saveDir = Paths.get(userHome, "." + GAME_FOLDER_NAME);
+        if (os.contains("win")) { // Windows
+            String appData = System.getenv("LOCALAPPDATA"); // ดึง path LocalAppData
+            saveDir = Paths.get(appData, GAME_FOLDER_NAME); // path สำหรับเซฟ
+        } else if (os.contains("mac")) { // macOS
+            saveDir = Paths.get(userHome, "Library", "Application Support", GAME_FOLDER_NAME); // path สำหรับเซฟ
+        } else { // Linux, อื่นๆ
+            saveDir = Paths.get(userHome, "." + GAME_FOLDER_NAME); // path สำหรับเซฟ
         }
 
         File dir = saveDir.toFile();
-        if (!dir.exists()) {
-            dir.mkdirs();
+        if (!dir.exists()) { // folder ไม่มี
+            dir.mkdirs(); // สร้าง folder
         }
 
-        return saveDir;
+        return saveDir; // คืนค่า
     }
 
-    private static Path getSaveFilePath() {
+    private static Path getSaveFilePath() { // ดึง save game path
         return getSaveDirectory().resolve(SAVE_FILE_NAME);
     }
 
+    // Save game
     public static void saveGame(Player player, int currentCost, Graph graph, TimeManager time, int startNode) {
         try {
-            JSONObject saveObj = new JSONObject();
+            JSONObject saveObj = new JSONObject(); // สร้าง json object
+            // นำข้อมูลผู้เล่นใน json
             saveObj.put("money", player.getMoney());
             saveObj.put("currentUnlockCost", currentCost);
             saveObj.put("startNode", startNode);
@@ -69,20 +71,21 @@ public class SaveManager {
             }
             saveObj.put("provincesData", nodesArr);
 
-            Files.writeString(getSaveFilePath(), saveObj.toString(4));
+            Files.writeString(getSaveFilePath(), saveObj.toString(4)); // เขียนลงในไฟล์
             System.out.println("💾 บันทึกเกมสำเร็จ!");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    // load save game
     public static JSONObject loadGameData() {
         try {
-            Path savePath = getSaveFilePath();
-            if (Files.exists(savePath)) {
-                String content = Files.readString(savePath);
+            Path savePath = getSaveFilePath(); // ดึงไฟล์ save game
+            if (Files.exists(savePath)) { // ถ้ามี
+                String content = Files.readString(savePath); // อ่านไฟล์
                 System.out.println("📂 โหลดเซฟเกมสำเร็จ! จาก: " + savePath);
-                return new JSONObject(content);
+                return new JSONObject(content); // คืน Json object ของข้อมูลในไฟล์
             } else {
                 System.out.println("⚠️ ไม่พบไฟล์เซฟเกม (กำลังเริ่มเกมใหม่...)");
             }
@@ -93,10 +96,11 @@ public class SaveManager {
         return null;
     }
 
+    // ลบ save game
     public static void deleteGameData() throws IOException {
-        Path path = getSaveFilePath();
-        if (Files.exists(path)) {
-            Files.delete(path);
+        Path path = getSaveFilePath(); // save game path
+        if (Files.exists(path)) { // มี
+            Files.delete(path); // ลบ
             System.out.println("Save data deleted successfully.");
         } else {
             System.out.println("No save data found to delete.");

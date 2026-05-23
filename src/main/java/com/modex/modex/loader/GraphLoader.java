@@ -7,10 +7,10 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 
-public class GraphLoader {
+public class GraphLoader { // Json ไปเป็น Graph จังหวัด
 
-    public static Graph loadFromJson(String path) {
-        Graph graph = new Graph();
+    public static Graph loadFromJson(String path) { // load from json
+        Graph graph = new Graph(); // สร้าง Graph
 
         try {
             InputStream is = GraphLoader.class
@@ -21,38 +21,37 @@ public class GraphLoader {
                 throw new RuntimeException("File not found: " + path);
             }
 
-            String content = new String(is.readAllBytes());
-            JSONArray arr = new JSONArray(content);
+            String content = new String(is.readAllBytes()); // อ่านไฟล์
+            JSONArray arr = new JSONArray(content); // ทำเป็น json array
 
 
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject obj = arr.getJSONObject(i);
+            for (int i = 0; i < arr.length(); i++) { // วนทั้ง json array (Vertex)
+                JSONObject obj = arr.getJSONObject(i); // ดึง json object จากใน array
 
-                int id = obj.getInt("id");
-                String name = obj.getString("name_en");
+                int id = obj.getInt("id"); // id
+                String name = obj.getString("name_en"); // ชื่อ eng
 
-                JSONObject coord = obj.getJSONObject("coordinates");
-                double lat = coord.getDouble("lat");
-                double lon = coord.getDouble("lon");
+                JSONObject coord = obj.getJSONObject("coordinates"); // json object ใน object อีกที
+                double lat = coord.getDouble("lat"); // ละติจูด
+                double lon = coord.getDouble("lon"); // ลองจิจูด
 
-                Province node = new Province(id, name, lat, lon);
-                graph.addNode(node);
+                Province node = new Province(id, name, lat, lon); // สร้าง Node
+                graph.addNode(node); // เอาใส่ Graph
             }
 
+            for (int i = 0; i < arr.length(); i++) { // วนซ้ำ สร้าง Edge
+                JSONObject obj = arr.getJSONObject(i); // JsonObject จาก Json Array
 
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject obj = arr.getJSONObject(i);
+                int id = obj.getInt("id"); // id
+                JSONArray adj = obj.getJSONArray("adjacent"); // ปลายทาง Json Array
 
-                int id = obj.getInt("id");
-                JSONArray adj = obj.getJSONArray("adjacent");
+                for (int j = 0; j < adj.length(); j++) { // วนซ้ำทุกตัว
+                    JSONObject a = adj.getJSONObject(j); // Json object ข้างในอีกที
 
-                for (int j = 0; j < adj.length(); j++) {
-                    JSONObject a = adj.getJSONObject(j);
+                    int targetId = a.getInt("id"); // id
+                    double distance = a.getDouble("distance_km"); // distance (weight)
 
-                    int targetId = a.getInt("id");
-                    double distance = a.getDouble("distance_km");
-
-                    graph.addEdge(id, targetId, distance);
+                    graph.addEdge(id, targetId, distance); // เพิ่ม edge ถนน
                 }
             }
 
@@ -60,6 +59,6 @@ public class GraphLoader {
             e.printStackTrace();
         }
 
-        return graph;
+        return graph; // คืนค่า graph ที่มีจังหวัดและเชื่อมถนน
     }
 }
