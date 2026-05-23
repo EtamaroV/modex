@@ -3,7 +3,7 @@ package com.modex.modex.mechanic;
 public class TimeManager { // ตัวจัดการเวลาในเกม
     private long lastUpdateTime = 0; // เวลาที่ล่าสุด
 
-    private long TICK_INTERVAL = 250_000_000L; // ระยะเวลาต่อ Tick
+    private long TICK_INTERVAL = 250_000_000L; // ระยะเวลาต่อ Tick (nanosecond)
     private int tickSpeedLevel = 1; // tick speed level
 
     private int minute = 0; // นาที
@@ -20,11 +20,11 @@ public class TimeManager { // ตัวจัดการเวลาในเ�
     public void changeTickSpeed(int level) { // เปลี่ยน Tick Speed
         switch (level) {
             case 1: // level 1
-                TICK_INTERVAL = 250_000_000L;
+                TICK_INTERVAL = 250_000_000L; // 0.25 วินาทีต่อ 1 Tick
                 tickSpeedLevel = 1;
                 break;
             case 2: // level 2
-                TICK_INTERVAL = 25_000_000L;
+                TICK_INTERVAL = 25_000_000L; // 0.025 วินาทีต่อ 1 Tick
                 tickSpeedLevel = 2;
                 break;
             default: // default
