@@ -1,47 +1,48 @@
 package com.modex.modex.datastruct;
 
-public class Queue<T> {
-    private Node<T> first;
-    private Node<T> last;
-    private int size;
+public class Queue<T> { //โครงสร้างข้อมูลแบบคิว
+    private Node<T> first; // ชี้ไปยังโหนดแรกสุด
+    private Node<T> last; // ชี้ไปยังโหนดสุดท้าย
+    private int size;  // จำนวนสมาชิกที่อยู่ในคิว
 
 
-    public void enqueue(T item) {
-        Node<T> oldLast = last;
-        last = new Node<>(item);
-        if (isEmpty()) {
+    public void enqueue(T item) { //เพิ่มข้อมูลใหม่เข้าสู่คิว
+        Node<T> oldLast = last;  // เก็บตำแหน่งของคิวสุดท้าย
+        last = new Node<>(item); // สร้างโหนดใหม่และกำหนดให้เป็นคิวสุดท้าย
+
+        if (isEmpty()) { //คิวว่าง
             first = last;
-        } else {
-            oldLast.next = last;
+        } else { //
+            oldLast.next = last; //นำคิวใหม่ไปต่อท้าย
         }
-        size++;
-    }
+        size++; // เพิ่มจำนวนสมาชิก
+    } 
 
 
-    public T dequeue() {
-        if (isEmpty()) return null;
-        T data = first.data;
-        first = first.next;
-        size--;
-        if (isEmpty()) last = null;
+    public T dequeue() { // ลบโหนดแรกสุดออกจากคิว
+        if (isEmpty()) return null; // ถ้าคิวว่างให้รีเทิน null
+        T data = first.data; //เก็บคิวแรก
+        first = first.next; //เลื่อนคิวไปยังคิวถัดไป
+        size--;  // ลดจำนวนสมาชิก
+        if (isEmpty()) last = null;  // หากลบข้อมูลออกไปแล้วทำให้คิวว่างเปล่า ต้องเคลียร์สุดท้าย (last) ให้เป็น null ด้วย
         return data;
     }
 
-    public T peek() {
+    public T peek() { //ดูข้อมูลที่อยู่หน้าสุดของคิว
         if (isEmpty()) return null;
         return first.data;
     }
 
-    public boolean isEmpty() {
+    public boolean isEmpty() { //ตรวจสอบว่าคิวว่างเปล่าหรือไม่
         return first == null;
     }
 
-    public int size() {
+    public int size() { //รีเทิร์นจำนวนสมาชิกทั้งหมดที่อยู่ในคิว
         return size;
     }
 
 
-    private static class Node<T> {
+    private static class Node<T> { // คลาสภายในสำหรับสร้างโหนด
         private final T data;
         private Node<T> next;
 
